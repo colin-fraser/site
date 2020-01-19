@@ -1,0 +1,10 @@
+---
+title: In 2020, we're doing our own websites
+author: Colin Fraser
+date: '2020-01-19'
+slug: first-post
+categories: []
+tags: []
+---
+
+I've written a lot in other places—mostly [Medium](https://medium.com/@colin.fraser), but I think in 2020 we're doing our own websites. [Blogdown](https://bookdown.org/yihui/blogdown/) has gotten so good that it feels like a big waste of time to write posts in RMarkdown and translate them over to Medium like I've been doing. So this is where I'm going to write my stuff now. I'll probably spend some time migrating some of the existing posts over to this site too.
