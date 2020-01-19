@@ -1,0 +1,16 @@
+---
+title: Radlibrary
+author: Colin Fraser
+date: '2020-01-19'
+slug: radlibrary
+categories: []
+tags: [Radlibrary]
+---
+
+My main job at Facebook is working with hate speech, but Radlibrary is a side project that I maintain. Radlibrary is an R package for querying the [Facebook Ad Library API](https://www.facebook.com/ads/library/api/), and transforming the results into tidy dataframes suitable for statistical analysis.
+
+You can find the project on [Github](https://github.com/facebookreasearch/Radlibrary), and it's easy to install using `devtools` with `devtools::install_github("facebookresearch/Radlibrary")`. 
+
+The full documentation is [here](http://facebookresearch.github.io/Radlibrary/), which includes a guide to obtaining the necessary access credentials.
+
+If you're using the package, I'd love to hear from you! You can tweet at me, or feel free to open an issue on Github.

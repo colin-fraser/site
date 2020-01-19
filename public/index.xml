@@ -21,6 +21,17 @@
     </item>
     
     <item>
+      <title>Radlibrary</title>
+      <link>/2020/01/19/radlibrary/</link>
+      <pubDate>Sun, 19 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/01/19/radlibrary/</guid>
+      <description>My main job at Facebook is working with hate speech, but Radlibrary is a side project that I maintain. Radlibrary is an R package for querying the Facebook Ad Library API, and transforming the results into tidy dataframes suitable for statistical analysis.
+You can find the project on Github, and it’s easy to install using devtools with devtools::install_github(&amp;quot;facebookresearch/Radlibrary&amp;quot;).
+The full documentation is here, which includes a guide to obtaining the necessary access credentials.</description>
+    </item>
+    
+    <item>
       <title>About</title>
       <link>/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

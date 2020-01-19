@@ -20,7 +20,6 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     url = "https://twitter.com/colin_fraser"
 [[menu.main]]
     name = "Radlibrary"
-    url = "https://github.com/facebookresearch/Radlibrary"
 
 [params]
     description = "Colin Fraser's website"
