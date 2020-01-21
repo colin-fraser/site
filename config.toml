@@ -8,18 +8,31 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [permalinks]
     post = "/:year/:month/:day/:slug/"
+    
+[social]
+    github  = "https://github.com/colin-fraser"
+    twitter = "https://twitter.com/colin_fraser"
 
+[[menu.main]]
+    name = "Posts"
+    url = "/"
+    weight = -1
 [[menu.main]]
     name = "About"
     url = "/about/"
+    weight = 1
 [[menu.main]]
     name = "GitHub"
     url = "https://github.com/colin-fraser"
+    weight = 3
 [[menu.main]]
     name = "Twitter"
     url = "https://twitter.com/colin_fraser"
+    weight = 2
 [[menu.main]]
     name = "Radlibrary"
+    url = "/2020/01/19/radlibrary/"
+    weight = 4
 
 [params]
     description = "Colin Fraser's website"
@@ -36,9 +49,9 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     # path to the favicon, under "static"
     favicon = "favicon.ico"
 
-    [params.logo]
-    url = "logo.png"
-    width = 50
-    height = 50
-    alt = "Logo"
+    # [params.logo]
+    # url = "logo.png"
+    # width = 50
+    # height = 50
+    # alt = "Logo"
 
