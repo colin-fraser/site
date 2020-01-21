@@ -5,6 +5,7 @@ theme = "ghostwriter"
 googleAnalytics = "UA-156563898-1"
 disqusShortname = ""
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+copyright = "Colin Fraser"
 
 [permalinks]
     post = "/:year/:month/:day/:slug/"
