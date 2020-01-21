@@ -1,7 +1,7 @@
-baseurl = "/"
+baseurl = "https://colin-fraser.net/"
 languageCode = "en-us"
-title = "Colin Fraser"
-theme = "hugo-lithium"
+title = "Colin Fraser's Website"
+theme = "ghostwriter"
 googleAnalytics = "UA-156563898-1"
 disqusShortname = ""
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
@@ -12,23 +12,12 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 [social]
     github  = "https://github.com/colin-fraser"
     twitter = "https://twitter.com/colin_fraser"
+    linkedin = "https://www.linkedin.com/in/colin-fraser-a8692210/"
 
-[[menu.main]]
-    name = "Posts"
-    url = "/"
-    weight = -1
 [[menu.main]]
     name = "About"
     url = "/about/"
     weight = 1
-[[menu.main]]
-    name = "GitHub"
-    url = "https://github.com/colin-fraser"
-    weight = 3
-[[menu.main]]
-    name = "Twitter"
-    url = "https://twitter.com/colin_fraser"
-    weight = 2
 [[menu.main]]
     name = "Radlibrary"
     url = "/2020/01/19/radlibrary/"
@@ -48,6 +37,13 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
     # path to the favicon, under "static"
     favicon = "favicon.ico"
+    
+    github = "https://github.com/colin-fraser"
+    twitter = "https://www.twitter.com/colin-fraser"
+    linkedin = "https://www.linkedin.com/in/colin-fraser-a8692210/"
+    
+    dateformat = "2006-01-02"
+
 
     # [params.logo]
     # url = "logo.png"
