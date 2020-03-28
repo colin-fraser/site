@@ -1,0 +1,218 @@
+---
+title: Tracking the COVID-19 outbreak in Canada
+author: Colin Fraser
+date: '2020-03-27'
+slug: tracking-covid-19-in-canada
+categories: []
+tags: []
+description: ''
+---
+
+```{r include = FALSE}
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(fs)
+library(purrr)
+library(stringr)
+library(lubridate)
+
+project_path <- path_expand("~/projects")
+
+load_all_raw_data2 <- function() {
+  data_path <- fs::path(project_path, 'COVID-19/csse_covid_19_data/csse_covid_19_daily_reports')
+  files <- dir_ls(data_path)
+  chunk_1 <- files[1:11] %>%
+    map_df(read_csv, col_types = 'cccnnn', skip = 1,
+        col_names = c('province_state', 'country_region', 'last_update', 'confirmed', 'deaths', 'recovered'),
+        .id = 'date') %>%
+    mutate(date = str_extract(date, '\\d+-\\d+-\\d+')) %>%
+    mutate(date = mdy(date), last_update = lubridate::mdy_hm(last_update))
+
+  chunk_2 <- files[12:39] %>%
+    map_df(read_csv, skip = 1, col_names= c('province_state', 'country_region', 'last_update', 'confirmed', 'deaths', 'recovered'),
+           col_types = 'ccTnnn',
+           .id = 'date') %>%
+    mutate(date = str_extract(date, '\\d+-\\d+-\\d+')) %>%
+    mutate(date = mdy(date))
+
+  chunk_3 <- files[40:60] %>%
+    map_df(read_csv, skip = 1, c('province_state', 'country_region', 'last_update', 'confirmed', 'deaths', 'recovered', 'lat', 'lon'),
+           .id = 'date', col_types = 'ccTnnnnn') %>%
+    mutate(date = str_extract(date, '\\d+-\\d+-\\d+')) %>%
+    mutate(date = mdy(date))
+
+  chunk_4 <- files[61:(length(files)-1)] %>%
+    map_df(read_csv, skip = 1, c('fips', 'admin2', 'province_state', 'country_region', 'last_update', 'lat', 'lon', 'confirmed', 'deaths', 'recovered',
+                                 'active', 'combined_key'),
+           .id = 'date', col_types = 'ccccTnnnnnnc') %>%
+    mutate(date = str_extract(date, '\\d+-\\d+-\\d+')) %>%
+    mutate(date = mdy(date))
+
+  bind_rows(chunk_1, chunk_2, chunk_3, chunk_4)
+}
+
+canada_provinces <- load_all_raw_data2() %>%
+    # filter(country_region == "Canada") %>%
+    mutate(
+      province =
+        case_when(
+          str_detect(province_state, "British Columbia") ~ "British Columbia",
+          str_detect(province_state, "Ontario|ON$") ~ "Ontario",
+          str_detect(province_state, "Quebec|QC$") ~ "Quebec",
+          str_detect(province_state, "Alberta") ~ "Alberta",
+          str_detect(province_state, "Manitoba") ~ "Manitoba",
+          str_detect(province_state, "New Brunswick") ~ "New Brunswick",
+          str_detect(province_state, "Newfoundland") ~ "Newfoundland",
+          str_detect(province_state, "Northwest") ~ "Northwest Territories",
+          str_detect(province_state, "Saskatchewan") ~ "Saskatchewan",
+          str_detect(province_state, "Yukon") ~ "Yukon",
+          str_detect(province_state, "Prince Ed") ~ "Prince Edward Island",
+          str_detect(province_state, 'Washington$|WA$') ~ 'Washington State',
+          str_detect(province_state, 'New York$|NY$') ~ 'New York State'
+        )
+    ) %>%
+    filter(!is.na(province))
+
+canada_plot <- function(variable = confirmed, x = first, filter = 10) {
+  
+  if(substitute(variable) == 'confirmed') {
+    title <- 'Confirmed Cases'
+  } else if (substitute(variable) == 'deaths') {
+    title <- 'Deaths'
+  }
+  
+  if(substitute(x) == 'first') {
+    x_axis <- glue::glue('Days Since {filter} {title}')
+  } else if (substitute(x) == 'date') {
+    x_axis <- 'Date'
+  }
+
+  plot_data <- canada_provinces %>%
+    group_by(province, date) %>%
+    summarise(confirmed = sum(confirmed), deaths = sum(deaths, na.rm = T)) %>%
+    filter({{variable}} >= filter) %>%
+    mutate(first = as.numeric(date - min(date)))
+
+  label_data <- plot_data %>%
+    filter(first == max(first))
+
+  M <- max(plot_data$first) + 5
+
+  p <- plot_data %>%
+    mutate(
+      day2 = filter * 2^(first / 2),
+      day3 = filter * 2^(first / 3),
+      day4 = filter * 2^(first / 4)
+    ) %>%
+    ggplot(aes(x = {{x}}, y = {{variable}}, color = province)) +
+    geom_point() +
+    geom_line() +
+    scale_y_log10(labels = scales::comma) +
+    ggrepel::geom_text_repel(data = label_data, aes(label = province), size = 4) +
+    labs(
+      x = x_axis,
+      y = glue::glue("Total {title}"),
+      title = glue::glue("{title} By Province and US State"),
+      caption = glue::glue("Data from https://github.com/CSSEGISandData/COVID-19, updated {maxdate}", maxdate = max(plot_data$date))
+    ) +
+    ggthemes::theme_few() +
+    theme(legend.position = "none", panel.grid = element_line("grey95"))
+
+  if (substitute(x) == 'first') {
+    p <- p + 
+    geom_line(aes(y = day2, color = NULL), linetype = "dashed", color = "grey40") +
+    geom_line(aes(y = day3, color = NULL), linetype = "dashed", color = "grey40") +
+    geom_line(aes(y = day4, color = NULL), linetype = "dashed", color = "grey40") +
+    annotate("text", x = M - 5.5, y = filter * 2^((M - 5) / 2:4 - .25), label = paste(2:4, "days"), color = "grey", hjust = 0)
+  }
+  
+  p
+}
+
+```
+_Last updated `r Sys.Date()`_
+
+The Financial Times [has a nice COVID-19 dashboard](https://www.ft.com/coronavirus-latest) that shows the growth in confirmed COVID-19 cases around the world, including for US states, but I haven't seen a great version of these charts for Canadian provinces. I borrowed some of the methodology from that page to come up with some Canada-centric charts. Hopefully these will be helpful for some people. The data comes from the [Johns Hopkins COVID-19 resource center](https://coronavirus.jhu.edu/map.html), which they've shared publicly in [this Github repo](https://github.com/CSSEGISandData/COVID-19).
+
+I can't guarantee the accuracy of the information here, but it should be consistent with what you can find on the Johns Hopkins dashboard. Please send me a message on Twitter if you find anything that seems suspicious.
+
+## Confirmed Cases
+
+### Confirmed Cases Since The 10th Case
+
+This chart shows the number of confirmed cases in each province, with the number of days since the 10th case on the x-axis. I've included New York State and Washington State for comparison, since those are two of the major US outbreaks. The dashed lines indicate how this chart would look if doubling the number of cases took 2, 3, or 4 days.
+
+```{r echo=FALSE, warning=FALSE}
+canada_plot()
+```
+
+### Confirmed Cases Over Time
+
+This chart shows the number of confirmed cases on each date.
+
+```{r echo=FALSE, warning=FALSE}
+canada_plot(x = date)
+```
+
+## Deaths
+
+### Deaths Since 3rd Death
+
+This chart shows the number of deaths since the third date in each province or state.
+
+```{r echo=FALSE, warning=FALSE}
+canada_plot(deaths, filter = 3)
+```
+
+### Deaths Over Time
+
+This shows the number of deaths on each date (min 3 deaths). Note, I am not sure why Quebec dips for a few days, but this is consistent with the data provided by the JHU dashboard.
+
+```{r echo=FALSE, warning=FALSE}
+canada_plot(deaths, date, filter = 3)
+```
+
+## Country Totals
+
+This chart shows the number of confirmed cases since the tenth confirmed cases in a few selected countries.
+
+```{r echo=FALSE, warning=FALSE}
+filter <- 10
+dat <-load_all_raw_data2() %>% 
+  filter(country_region %in% c('US', 'United States', 'Canada', 'United Kingdom', 'UK', 'China', 'Mainland China', 'Italy')) %>% 
+  mutate(country_region = case_when(
+    country_region == 'UK' ~ 'United Kingdom',
+    country_region == 'Mainland China' ~ 'China',
+    TRUE ~ country_region
+  )
+  ) %>% 
+  group_by(country_region, date) %>% 
+  summarise(confirmed = sum(confirmed)) %>% 
+  filter(confirmed > filter) %>% 
+  mutate(first = as.numeric(date - min(date)))
+
+label_data <- dat %>%
+    filter(first == max(first))
+
+M <- max(dat$first) + 5
+dat %>% 
+  mutate(
+      day2 = filter * 2^(first / 2),
+      day3 = filter * 2^(first / 3),
+      day4 = filter * 2^(first / 4)
+    ) %>% 
+  ggplot(aes(x = first, y = confirmed, color = country_region)) +
+  geom_point() +
+  geom_line() +
+  scale_y_log10(label = scales::comma) +
+    geom_line(aes(y = day3, color = NULL), linetype = "dashed", color = "grey40") +
+    geom_line(aes(y = day4, color = NULL), linetype = "dashed", color = "grey40") +
+    annotate("text", x = M - 10, y = filter * 2^((M - 5) / 3:4 - .25), label = paste(3:4, "days"), color = "grey", hjust = 0) +
+  ggthemes::theme_few() +
+  ggrepel::geom_text_repel(data = label_data, aes(label = country_region)) +
+  theme(legend.position = "none", panel.grid = element_line("grey95")) +
+  labs(y = "Confirmed Cases", x = "Days Since 10th Confirmed Case",
+       title = "Confirmed Cases by Country")
+```
+

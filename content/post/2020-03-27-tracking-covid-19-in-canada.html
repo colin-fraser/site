@@ -1,0 +1,46 @@
+---
+title: Tracking the COVID-19 outbreak in Canada
+author: Colin Fraser
+date: '2020-03-27'
+slug: tracking-covid-19-in-canada
+categories: []
+tags: []
+description: ''
+---
+
+
+
+<p><em>Last updated 2020-03-27</em></p>
+<p>The Financial Times <a href="https://www.ft.com/coronavirus-latest">has a nice COVID-19 dashboard</a> that shows the growth in confirmed COVID-19 cases around the world, including for US states, but I haven’t seen a great version of these charts for Canadian provinces. I borrowed some of the methodology from that page to come up with some Canada-centric charts. Hopefully these will be helpful for some people. The data comes from the <a href="https://coronavirus.jhu.edu/map.html">Johns Hopkins COVID-19 resource center</a>, which they’ve shared publicly in <a href="https://github.com/CSSEGISandData/COVID-19">this Github repo</a>.</p>
+<p>I can’t guarantee the accuracy of the information here, but it should be consistent with what you can find on the Johns Hopkins dashboard. Please send me a message on Twitter if you find anything that seems suspicious.</p>
+<div id="confirmed-cases" class="section level2">
+<h2>Confirmed Cases</h2>
+<div id="confirmed-cases-since-the-10th-case" class="section level3">
+<h3>Confirmed Cases Since The 10th Case</h3>
+<p>This chart shows the number of confirmed cases in each province, with the number of days since the 10th case on the x-axis. I’ve included New York State and Washington State for comparison, since those are two of the major US outbreaks. The dashed lines indicate how this chart would look if doubling the number of cases took 2, 3, or 4 days.</p>
+<p><img src="/post/2020-03-27-tracking-covid-19-in-canada_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="confirmed-cases-over-time" class="section level3">
+<h3>Confirmed Cases Over Time</h3>
+<p>This chart shows the number of confirmed cases on each date.</p>
+<p><img src="/post/2020-03-27-tracking-covid-19-in-canada_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+</div>
+<div id="deaths" class="section level2">
+<h2>Deaths</h2>
+<div id="deaths-since-3rd-death" class="section level3">
+<h3>Deaths Since 3rd Death</h3>
+<p>This chart shows the number of deaths since the third date in each province or state.</p>
+<p><img src="/post/2020-03-27-tracking-covid-19-in-canada_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="deaths-over-time" class="section level3">
+<h3>Deaths Over Time</h3>
+<p>This shows the number of deaths on each date (min 3 deaths). Note, I am not sure why Quebec dips for a few days, but this is consistent with the data provided by the JHU dashboard.</p>
+<p><img src="/post/2020-03-27-tracking-covid-19-in-canada_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+</div>
+<div id="country-totals" class="section level2">
+<h2>Country Totals</h2>
+<p>This chart shows the number of confirmed cases since the tenth confirmed cases in a few selected countries.</p>
+<p><img src="/post/2020-03-27-tracking-covid-19-in-canada_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
