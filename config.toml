@@ -23,6 +23,10 @@ copyright = "Colin Fraser"
     name = "Radlibrary"
     url = "/2020/01/19/radlibrary/"
     weight = 4
+[[menu.main]]
+    name = "COVID-19 In Canada"
+    url = "/2020/03/27/tracking-covid-19-in-canada/"
+    weight = 5
 
 [params]
     description = "Colin Fraser. Data scientist at Facebook."
