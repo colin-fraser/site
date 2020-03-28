@@ -207,7 +207,7 @@ canada_provinces %>%
   geom_line(color = '#E87D72') +
   facet_wrap(~province, scales = 'free_y') +
   scale_y_continuous(labels = scales::comma) +
-  labs(y = 'Active Cases', x = 'Days Since 10th Confirmed Case', title = '"The Curve" for selected Canadian Provinces and US States')
+  labs(y = 'Active Cases', x = 'Days Since 10th Confirmed Case', title = '"The Curve" for selected Canadian Provinces and US States', caption = glue::glue("Data from https://github.com/CSSEGISandData/COVID-19, updated {maxdate}", maxdate = max(canada_provinces$date)))
 
 ```
 
@@ -252,7 +252,7 @@ dat %>%
   ggrepel::geom_text_repel(data = label_data, aes(label = country_region)) +
   theme(legend.position = "none", panel.grid = element_line("grey95")) +
   labs(y = "Confirmed Cases", x = "Days Since 10th Confirmed Case",
-       title = "Confirmed Cases by Country")
+       title = "Confirmed Cases by Country", caption = glue::glue("Data from https://github.com/CSSEGISandData/COVID-19, updated {maxdate}", maxdate = max(dat$date)))
 ```
 
 ## Data
