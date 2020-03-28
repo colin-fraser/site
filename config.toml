@@ -44,6 +44,7 @@ copyright = "Colin Fraser"
     linkedin = "https://www.linkedin.com/in/colin-fraser-a8692210/"
     
     dateformat = "2006-01-02"
+    shareGooglePlus = false
 
 
     # [params.logo]
