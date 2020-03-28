@@ -20,8 +20,13 @@ library(fs)
 library(purrr)
 library(stringr)
 library(lubridate)
+library(tidyr)
+library(forcats)
 
 project_path <- path_expand("~/projects")
+
+theme_set(ggthemes::theme_few() +
+    theme(legend.position = "none", panel.grid = element_line("grey95")))
 
 load_all_raw_data2 <- function() {
   data_path <- fs::path(project_path, 'COVID-19/csse_covid_19_data/csse_covid_19_daily_reports')
@@ -46,14 +51,22 @@ load_all_raw_data2 <- function() {
     mutate(date = str_extract(date, '\\d+-\\d+-\\d+')) %>%
     mutate(date = mdy(date))
 
-  chunk_4 <- files[61:(length(files)-1)] %>%
+  chunk_4 <- files[61] %>%
+    map_df(read_csv, skip = 1, c('fips', 'admin2', 'province_state', 'country_region', 'last_update', 'lat', 'lon', 'confirmed', 'deaths', 'recovered',
+                                 'active', 'combined_key'),
+           .id = 'date', col_types = 'cccccnnnnnnc') %>%
+    mutate(last_update = mdy_hm(last_update)) %>% 
+    mutate(date = str_extract(date, '\\d+-\\d+-\\d+')) %>%
+    mutate(date = mdy(date))
+  
+  chunk_5 <- files[62:(length(files)-1)] %>%
     map_df(read_csv, skip = 1, c('fips', 'admin2', 'province_state', 'country_region', 'last_update', 'lat', 'lon', 'confirmed', 'deaths', 'recovered',
                                  'active', 'combined_key'),
            .id = 'date', col_types = 'ccccTnnnnnnc') %>%
     mutate(date = str_extract(date, '\\d+-\\d+-\\d+')) %>%
     mutate(date = mdy(date))
 
-  bind_rows(chunk_1, chunk_2, chunk_3, chunk_4)
+  bind_rows(chunk_1, chunk_2, chunk_3, chunk_4, chunk_5)
 }
 
 canada_provinces <- load_all_raw_data2() %>%
@@ -119,9 +132,8 @@ canada_plot <- function(variable = confirmed, x = first, filter = 10) {
       y = glue::glue("Total {title}"),
       title = glue::glue("{title} By Province and US State"),
       caption = glue::glue("Data from https://github.com/CSSEGISandData/COVID-19, updated {maxdate}", maxdate = max(plot_data$date))
-    ) +
-    ggthemes::theme_few() +
-    theme(legend.position = "none", panel.grid = element_line("grey95"))
+    ) 
+    
 
   if (substitute(x) == 'first') {
     p <- p + 
@@ -177,6 +189,29 @@ This shows the number of deaths on each date (min 3 deaths). Note, I am not sure
 canada_plot(deaths, date, filter = 3)
 ```
 
+## "The Curve"
+
+This plot shows the number of active cases (cumulative confirmed cases minus deaths and recoveries) over time since the date of the tenth confirmed case in each location. This is "the curve" that you've heard about trying to flatten. Note that a different y-axis is drawn for each location.
+
+```{r echo=FALSE, warning=FALSE}
+canada_provinces %>% 
+  group_by(province, date) %>% 
+  tidyr::replace_na(list(deaths=0, recovered=0)) %>% 
+  summarise(active = sum(confirmed) - sum(deaths) - sum(recovered),
+            confirmed = sum(confirmed)) %>% 
+  filter(confirmed >= 10) %>% 
+  filter(n() > 5) %>% 
+  mutate(days_since_10 = as.numeric(date - min(date))) %>% 
+  mutate(active = zoo::rollmean(active, 5, NA)) %>% 
+  ggplot(aes(x = days_since_10, y = active)) +
+  geom_line(color = '#E87D72') +
+  facet_wrap(~province, scales = 'free_y') +
+  scale_y_continuous(labels = scales::comma) +
+  labs(y = 'Active Cases', x = 'Days Since 10th Confirmed Case', title = '"The Curve" for selected Canadian Provinces and US States')
+
+```
+
+
 ## Country Totals
 
 This chart shows the number of confirmed cases since the tenth confirmed cases in a few selected countries.
@@ -220,3 +255,37 @@ dat %>%
        title = "Confirmed Cases by Country")
 ```
 
+## Data
+
+The data that I used to produce these charts is below.
+
+```{r echo=FALSE, warning=FALSE}
+dt <- canada_provinces %>%
+  group_by(country = country_region, province, date) %>%
+  summarise(deaths = sum(deaths), confirmed = sum(confirmed)) %>%
+  mutate(days_since_10 = date - as_date(min(ifelse(confirmed >= 10, date, NA), na.rm = T))) %>%
+  ungroup() %>%
+  transmute(date, country, province,
+    days_since_10_cases = ifelse(days_since_10 >= 0, days_since_10, NA),
+    confirmed, deaths
+  ) %>%
+  arrange(country, province, date) %>%
+  DT::datatable(
+    extensions = "Buttons", options = list(
+      dom = "Bfrtip",
+      buttons =
+        list("copy", list(
+          extend = "collection",
+          buttons = c("csv", "excel"),
+          text = "Download"
+        ))
+    )
+  )
+
+widgetframe::frameWidget(dt)
+```
+
+
+## References
+
+* Dong E, Du H, Gardner L. An interactive web-based dashboard to track COVID-19 in real time. Lancet Infect Dis; published online Feb 19. https://doi.org/10.1016/S1473-3099(20)30120-1.
