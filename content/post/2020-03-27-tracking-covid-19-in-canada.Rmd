@@ -207,6 +207,46 @@ This chart shows the number of confirmed cases in each province, with the number
 canada_plot()
 ```
 
+### Growth Rate in Confirmed Cases Since 10th Confirmed Case
+
+This plot shows the daily growth rate of confirmed cases since the 10th confirmed case. We want this to go to zero.
+
+```{r}
+plotdata <- canada_provinces %>% 
+  group_by(province, date) %>% 
+  summarise(confirmed = sum(confirmed)) %>% 
+  mutate(diff = confirmed/lag(confirmed, fill = NA) - 1) %>% 
+  mutate(diff = zoo::rollmean(diff, 3, fill = NA)) %>% 
+  filter(confirmed >= 10) %>% 
+  mutate(days_since_10 = as.numeric(date - min(date)))
+label_data <- plotdata %>% 
+  filter(!is.na(diff)) %>% 
+  filter(date == max(date))
+
+update_date <- max(plotdata$date)
+
+provinces <- unique(plotdata$province)
+provinces %>% 
+  map_df(~ plotdata %>% 
+          mutate(highlight = province == .x,
+                 panel = .x)) %>% 
+  filter(!(province %in% c('New York State', 'Washington State')),
+         !(panel %in% c('New York State', 'Washington State'))) %>% 
+  ggplot(aes(x = days_since_10, y = diff, color = highlight, group = province, alpha = highlight, size = highlight)) +
+  geom_line() +
+  facet_wrap(~panel) +
+  scale_alpha_manual(values = c(0.5, 1)) +
+  scale_size_manual(values = c(1, 2)) +
+  scale_color_manual(values = c('grey', '#E87D72')) +
+  geom_hline(yintercept = 0, linetype = 'dashed') +
+  labs(y = 'Growth Rate', 
+       x = 'Days since 10th confirmed case',
+       caption = glue::glue("Data from https://github.com/CSSEGISandData/COVID-19, updated {update_date}"),
+       title = 'Daily growth rate by province since 10th confirmed case.') +
+  scale_y_continuous(labels = scales::percent)
+```
+
+
 ### Confirmed Cases Over Time
 
 This chart shows the number of confirmed cases on each date.
