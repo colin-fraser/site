@@ -211,7 +211,7 @@ canada_plot()
 
 This plot shows the daily growth rate of confirmed cases since the 10th confirmed case. We want this to go to zero.
 
-```{r}
+```{r growth_rate, echo=FALSE, warning=FALSE}
 plotdata <- canada_provinces %>% 
   group_by(province, date) %>% 
   summarise(confirmed = sum(confirmed)) %>% 
