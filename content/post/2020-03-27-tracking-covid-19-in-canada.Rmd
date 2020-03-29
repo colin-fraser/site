@@ -203,7 +203,7 @@ canada_provinces %>%
 
 This chart shows the number of confirmed cases in each province, with the number of days since the 10th case on the x-axis. I've included New York State and Washington State for comparison, since those are two of the major US outbreaks. The dashed lines indicate how this chart would look if doubling the number of cases took 2, 3, or 4 days.
 
-```{r echo=FALSE, warning=FALSE}
+```{r confirmed_since_start, echo=FALSE, warning=FALSE}
 canada_plot()
 ```
 
@@ -211,7 +211,7 @@ canada_plot()
 
 This chart shows the number of confirmed cases on each date.
 
-```{r echo=FALSE, warning=FALSE}
+```{r confirmed_by_time, echo=FALSE, warning=FALSE}
 canada_plot(x = date)
 ```
 
@@ -221,7 +221,7 @@ canada_plot(x = date)
 
 This chart shows the number of deaths since the third date in each province or state.
 
-```{r echo=FALSE, warning=FALSE}
+```{r deaths_since_3rd, echo=FALSE, warning=FALSE}
 canada_plot(deaths, filter = 3)
 ```
 
@@ -229,7 +229,7 @@ canada_plot(deaths, filter = 3)
 
 This shows the number of deaths on each date (min 3 deaths). Note, I am not sure why Quebec dips for a few days, but this is consistent with the data provided by the JHU dashboard.
 
-```{r echo=FALSE, warning=FALSE}
+```{r deaths_by_time, echo=FALSE, warning=FALSE}
 canada_plot(deaths, date, filter = 3)
 ```
 
@@ -237,7 +237,7 @@ canada_plot(deaths, date, filter = 3)
 
 This plot shows the number of active cases (cumulative confirmed cases minus deaths and recoveries) over time since the date of the tenth confirmed case in each location. This is "the curve" that you've heard about trying to flatten. Note that a different y-axis is drawn for each location.
 
-```{r echo=FALSE, warning=FALSE}
+```{r the_curve, echo=FALSE, warning=FALSE}
 canada_provinces %>% 
   group_by(province, date) %>% 
   tidyr::replace_na(list(deaths=0, recovered=0)) %>% 
@@ -259,7 +259,7 @@ canada_provinces %>%
 
 This chart shows the number of confirmed cases since the tenth confirmed cases in a few selected countries.
 
-```{r echo=FALSE, warning=FALSE}
+```{r countries, echo=FALSE, warning=FALSE}
 filter <- 10
 dat <-load_all_raw_data2() %>% 
   filter(country_region %in% c('US', 'United States', 'Canada', 'United Kingdom', 'UK', 'China', 'Mainland China', 'Italy')) %>% 
@@ -302,7 +302,7 @@ dat %>%
 
 The data that I used to produce these charts is below.
 
-```{r echo=FALSE, warning=FALSE}
+```{r download_data, echo=FALSE, warning=FALSE}
 dt <- canada_provinces %>%
   group_by(country = country_region, province, date) %>%
   summarise(deaths = sum(deaths), confirmed = sum(confirmed)) %>%
