@@ -4,6 +4,8 @@ author: Colin Fraser
 date: '2020-01-19'
 slug: radlibrary
 categories: []
+aliases:
+  - /Radlibrary
 tags: [Radlibrary]
 ---
 
