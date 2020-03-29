@@ -147,7 +147,7 @@ canada_plot <- function(variable = confirmed, x = first, filter = 10) {
 }
 
 ```
-_Last updated `r Sys.Date()`_
+_Last updated `r strftime(Sys.time(), usetz = T)`._
 
 The Financial Times [has a nice COVID-19 dashboard](https://www.ft.com/coronavirus-latest) that shows the growth in confirmed COVID-19 cases around the world, including for US states, but I haven't seen a great version of these charts for Canadian provinces. I borrowed some of the methodology from that page to come up with some Canada-centric charts. Hopefully these will be helpful for some people. The data comes from the [Johns Hopkins COVID-19 resource center](https://coronavirus.jhu.edu/map.html), which they've shared publicly in [this Github repo](https://github.com/CSSEGISandData/COVID-19).
 
