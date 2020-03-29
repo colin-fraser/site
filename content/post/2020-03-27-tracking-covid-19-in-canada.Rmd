@@ -153,6 +153,50 @@ The Financial Times [has a nice COVID-19 dashboard](https://www.ft.com/coronavir
 
 I can't guarantee the accuracy of the information here, but it should be consistent with what you can find on the Johns Hopkins dashboard. Please send me a message on Twitter if you find anything that seems suspicious.
 
+## Current Tally
+
+### Confirmed Cases
+
+```{r echo=FALSE, warning=FALSE}
+canada_provinces %>% 
+  filter(country_region == 'Canada') %>% 
+  group_by(province, date) %>% 
+  summarise(confirmed = sum(confirmed), deaths = sum(deaths)) %>%
+  filter(date >= max(date) - 7) %>% 
+  mutate(dc = c(NA, diff(confirmed))/lag(confirmed),
+         dd = c(NA, diff(deaths))/lag(deaths)) %>% 
+  summarise(date = last(date),
+    confirmed = last(confirmed), 
+    dc = mean(dc, na.rm = T)) %>% 
+  mutate(confirmed = scales::comma(confirmed, accuracy = 1),
+         dc = scales::percent(dc, accuracy = .1)) %>% 
+  knitr::kable(col.names = c('Province', 'Most Recent Data', 'Confirmed Cases',
+                             'Average Daily Growth Rate (Last 7 days)'))
+  
+```
+
+### Deaths
+
+```{r echo=FALSE, warning=FALSE}
+canada_provinces %>% 
+  filter(country_region == 'Canada') %>% 
+  group_by(province, date) %>% 
+  summarise(confirmed = sum(confirmed), deaths = sum(deaths)) %>%
+  filter(date >= max(date) - 7) %>% 
+  mutate(dc = c(NA, diff(confirmed))/lag(confirmed),
+         dd = c(NA, diff(deaths))/lag(deaths)) %>% 
+  summarise(date = last(date),
+    deaths = last(deaths), 
+    dc = mean(dd, na.rm = T)) %>% 
+  mutate(dc = ifelse(dc == Inf, NA, dc)) %>% 
+  mutate(deaths = scales::comma(deaths, accuracy = 1),
+         dc = scales::percent(dc, accuracy = .1)) %>% 
+  filter(deaths > 0) %>% 
+  knitr::kable(col.names = c('Province', 'Most Recent Data', 'Deaths',
+                             'Average Daily Growth Rate (Last 7 days)'))
+  
+```
+
 ## Confirmed Cases
 
 ### Confirmed Cases Since The 10th Case
@@ -210,7 +254,6 @@ canada_provinces %>%
   labs(y = 'Active Cases', x = 'Days Since 10th Confirmed Case', title = '"The Curve" for selected Canadian Provinces and US States', caption = glue::glue("Data from https://github.com/CSSEGISandData/COVID-19, updated {maxdate}", maxdate = max(canada_provinces$date)))
 
 ```
-
 
 ## Country Totals
 
