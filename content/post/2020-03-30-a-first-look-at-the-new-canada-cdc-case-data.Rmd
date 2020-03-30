@@ -158,13 +158,14 @@ coviddf %>%
   geom_text(nudge_y = .01) +
   labs(title = 'Proportion of hospitalized cases requiring intensive care by age group',
          y = 'Proportion requiring intensive care',
-         x = 'Age Group') +
+         x = 'Age Group',
+       caption = CITATION) +
   scale_y_continuous(labels = scales::percent)
 ```
 
 # Download Data
 
-The dataset that I'm using can be viewed and downloaded below.
+The dataset that I'm using can be viewed and downloaded below. Feel free to use this for your own analysis.
 
 ```{r download, echo=FALSE, warning=FALSE}
 dt <- coviddf %>% 
