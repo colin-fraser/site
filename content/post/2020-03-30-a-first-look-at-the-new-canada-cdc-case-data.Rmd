@@ -1,0 +1,192 @@
+---
+title: A first look at the new Public Health Agency of Canada case-level data
+author: Colin Fraser
+date: '2020-03-30'
+slug: case-data-first-look
+categories: []
+tags: []
+description: ''
+---
+
+```{r include=FALSE}
+library(tidyverse)
+library(lubridate)
+
+CITATION <- 'Source: Public Health Agency of Canada, COVID-19 epidemiological reports,\nwith contribution from Provincial/Territorial Ministries of Health.'
+
+theme_set(ggthemes::theme_few() + theme(panel.grid = element_line("grey95")))
+coviddf <- read_csv('~/Downloads/1310076701-eng.csv', skip = 7, 
+                   col_names = c('case_id', 'ref_year', 'ref_month', 'ref_day',
+                                 'ep_month', 'ep_day',
+                                 'gender', 'age_group', 'transmission',
+                                 'hospitalization', 'intensive',
+                                 'status')) %>% 
+  slice(1:3093) %>% 
+  transmute(
+    case_id,
+    last_updated = ymd(str_c(ref_year, ref_month, ref_day, sep = '-')),
+    episode_date = ymd(str_c(ref_year, ep_month, ep_day, sep = '-')),
+    gender = case_when(
+      gender == 1 ~ "Male",
+      gender == 2 ~ "Female", 
+      gender == 3 ~ "Other",
+      gender == 7 ~ "Unknown", 
+      gender == 9 ~ "Not stated"
+    ),
+    age_group = case_when(
+      age_group == 1 ~ '[0,20)',
+      age_group == 2 ~ '[20,40)',
+      age_group == 3 ~ '[40,50)',
+      age_group == 4 ~ '[50,60)',
+      age_group == 5 ~ '[60,70)',
+      age_group == 6 ~ '[70,80)',
+      age_group == 7 ~ '[80,Inf)',
+      age_group == 9 ~ 'Not Stated'
+    ),
+    transmission = case_when(
+      transmission == 1 ~ "Travel",
+      transmission == 2 ~ "Community",
+      transmission == 3 ~ "Pending"
+    ),
+    hospitalization = case_when(
+      hospitalization == 1 ~ "Yes",
+      hospitalization == 2 ~ "No",
+      hospitalization == 7 ~ "Unknown",
+      hospitalization == 9 ~ "Not Stated"
+    ),
+    intensive = case_when(
+      intensive == 1 ~ "Yes",
+      intensive == 2 ~ "No",
+      intensive == 7 ~ "Unknown",
+      intensive == 9 ~ "Not Stated"
+    ),
+    status = case_when(
+      status == 1 ~ "Deceased",
+      status == 9 ~ "Not Stated"
+    )
+  )
+```
+
+Statistics Canada [has made a case-level dataset](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1310076701) available of COVID-19 cases in Canada. The dataset comprises information on cases for which a case report was submitted to the Public Health Agency of Canada (PHAC). 3,093 cases are included, which at the time of publication accounts for just under half of the total reported cases in Canada. The website for the dataset includes the following disclaimer.
+
+> Because the COVID-19 pandemic is rapidly evolving, these data are considered preliminary. The data published by Statistics Canada only account for those where a detailed case report was provided by the provincial or territorial jurisdiction to the Public Health Agency of Canada (PHAC). Statistics Canada’s detailed preliminary confirmed cases will not match the total case reporting done at the provincial and territorial levels which are reported daily by each jurisdiction and compiled by the PHAC. The discrepancy is due to delays associated with the submission of the detailed information, its capture and coding. Hence, Statistics Canada’s file on detailed case reporting is a subset of the total counts reported by the health authorities across Canada.
+
+It's important to remember that we don't know what the criteria are for a case to be submitted to PHAC. Since the data doesn't include information about geography, it's quite possible that some regions are over-or-underrepresented. It's also possible that severe or otherwise noteable cases are overrepresented. Despite these caveats, it's possible that this dataset can provide useful insights on the situation in Canada.
+
+
+## Transmission types over time 
+
+The dataset includes a transmission type column which indicates for each case an inferred transmission type. These values include "Travel", which indicates that the individual had contact with a travel-related case, or had travelled outside of Canada within 14 days prior of illness onset, and "Community" which indicates that the case could not be attributed to Travel.
+
+The following chart plots the proportion of new cases attributed to community spread over time. The size of each point indicates the number of new cases on that date. I've also highlighted March 18th, which is the date that strong travel restrictions were enacted.
+
+```{r transmission-types, echo=FALSE, warning=FALSE}
+coviddf %>% 
+  count(episode_date, transmission) %>% 
+  group_by(episode_date) %>% 
+  mutate(community_percent = weighted.mean(transmission == 'Community', n)) %>% 
+  ungroup %>% 
+  mutate(community_percent = zoo::rollmean(community_percent, 3, fill = NA)) %>% 
+  ggplot(aes(x = episode_date, y = community_percent, size = n)) +
+  geom_point() +
+  labs(y = '% Community Spread', x = 'Episode Date', title = 'Fraction of reported cases attributed to community spread', caption = CITATION, size = 'New Cases') +
+  geom_vline(xintercept = ymd(20200318), linetype = 'dashed', color = 'grey') +
+  scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
+  annotate(geom = 'text', x = ymd(20200318), y = 0, label = 'Travel restrictions\nenacted', size = 2,
+           hjust = 0)
+```
+
+## Hospitalization Rates by Age, and Age Rates by Hospitalization
+
+In this section I look at how hospitalization rates vary by age group, and vice versa. The following table shows the number of cases falling into each age bucket and hospitalization status.
+
+```{r hosp_age, echo=FALSE, warning=FALSE}
+coviddf %>% 
+  # filter(hospitalization %in% c('Yes', 'No')) %>% 
+  count(age_group, hospitalization) %>% 
+  spread(hospitalization, n) %>% 
+  transmute(age_group, Yes, No, Unknown = `Unknown` + `Not Stated`) %>% 
+  knitr::kable()
+```
+
+A large number of hospitalization statuses have not been recorded. In the next two charts I filter out the unknown statuses, but it's important to note that this missing data could affect these estimates.
+
+This chart shows the proportion of each age group that was hospitalized, out of cases where hospitalization data was recorded.
+
+```{r hosp_rates, echo=FALSE, warning=FALSE}
+coviddf %>% 
+  filter(hospitalization %in% c('Yes', 'No')) %>% 
+  group_by(age_group) %>% 
+  summarise(hospitalization = mean(hospitalization == 'Yes')) %>% 
+  ggplot(aes(x = age_group, y = hospitalization, label = scales::percent(hospitalization, accuracy = 1))) +
+  geom_col() +
+  geom_text(nudge_y = .02) +
+  scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
+  labs(title = 'Hospitalization Rates by Age Group In Canada',
+       y = 'Hospitalization Rate',
+       x = 'Age Group',
+       caption = CITATION)
+```
+
+The next chart shows the cumulative proportion of hospitalizations made up by each age bucket. The This shows that, for instance, 18.3% of hospitalizations are people under 50, and 35.4% of hospitalizations are people under 60. Again, it's important to remember that a large 
+
+```{r age_hosp_rates, echo=FALSE, warning=FALSE}
+coviddf %>% 
+  filter(hospitalization == 'Yes') %>% 
+  count(age_group) %>% 
+  mutate(freq = n / sum(n)) %>% 
+  ggplot(aes(x = age_group, y = cumsum(freq), label = scales::percent(cumsum(freq)))) +
+  geom_col() +
+  geom_text(nudge_y = .03) +
+  labs(x = 'Age Group', y = 'Cumulative Proportion of Hospitalizations',
+       title = "Cumulative proportion of hospitalizations by age group", 
+       caption = CITATION) +
+  scale_y_continuous(labels = scales::percent)
+```
+
+## Intensive Cases
+
+The following chart shows the rates of intensive care for hospitalized cases by age bucket. Here I am not omitting cases where the intensive care status was not recorded.
+
+```{r}
+coviddf %>% 
+  filter(hospitalization == 'Yes') %>%
+  group_by(age_group) %>% 
+  summarise(intensive = mean(intensive == 'Yes')) %>% 
+  ggplot(aes(x = age_group, y = intensive, label = scales::percent(intensive, accuracy = 1))) +
+  geom_col() +
+  geom_text(nudge_y = .01) +
+  labs(title = 'Proportion of hospitalized cases requiring intensive care by age group',
+         y = 'Proportion requiring intensive care',
+         x = 'Age Group') +
+  scale_y_continuous(labels = scales::percent)
+```
+
+# Download Data
+
+The dataset that I'm using can be viewed and downloaded below.
+
+```{r download, echo=FALSE, warning=FALSE}
+dt <- coviddf %>% 
+  DT::datatable(
+    extensions = "Buttons", options = list(
+      dom = "Bfrtip",
+      buttons =
+        list("copy", list(
+          extend = "collection",
+          buttons = c("csv", "excel"),
+          text = "Download"
+        ))
+    )
+  )
+
+widgetframe::frameWidget(dt)
+```
+
+
+# Code
+
+You can view the source code for this post [on GitHub](http://github.com/colin-fraser/site/tree/master/content/post/2020-03-30-case-data-first-look.Rmd).
+
+# References
+* `r CITATION`
