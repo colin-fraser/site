@@ -17,11 +17,12 @@ description: ''
 <script src="/rmarkdown-libs/widgetframe-binding/widgetframe.js"></script>
 
 
-<p><em>Last updated 2020-03-29 14:46:41 PDT.</em></p>
+<p><em>Last updated 2020-03-29 18:22:54 PDT.</em></p>
 <p>The Financial Times <a href="https://www.ft.com/coronavirus-latest">has a nice COVID-19 dashboard</a> that shows the growth in confirmed COVID-19 cases around the world, including for US states, but I haven’t seen a great version of these charts for Canadian provinces. I borrowed some of the methodology from that page to come up with some Canada-centric charts. Hopefully these will be helpful for some people. The data comes from the <a href="https://coronavirus.jhu.edu/map.html">Johns Hopkins COVID-19 resource center</a>, which they’ve shared publicly in <a href="https://github.com/CSSEGISandData/COVID-19">this GitHub repo</a>.</p>
 <p>I can’t guarantee the accuracy of the information here, but it should be consistent with what you can find on the Johns Hopkins dashboard. Please <a href="https://twitter.com/colin_fraser">send me a message on Twitter</a> if you find anything that seems suspicious.</p>
 <div id="current-tally" class="section level2">
 <h2>Current Tally</h2>
+<p>According to the latest data, as of 2020-03-29 there have been 6,267 confirmed cases reported in Canada, resulting in 63 deaths. Breakdowns by province are below.</p>
 <div id="confirmed-cases" class="section level3">
 <h3>Confirmed Cases</h3>
 <table>
@@ -30,75 +31,94 @@ description: ''
 <th align="left">Province</th>
 <th align="left">Most Recent Data</th>
 <th align="left">Confirmed Cases</th>
+<th align="right">New Cases</th>
 <th align="left">Average Daily Growth Rate (Last 7 days)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">Alberta</td>
-<td align="left">2020-03-28</td>
-<td align="left">542</td>
-<td align="left">16.5%</td>
+<td align="left">2020-03-29</td>
+<td align="left">621</td>
+<td align="right">79</td>
+<td align="left">13.9%</td>
 </tr>
 <tr class="even">
 <td align="left">British Columbia</td>
-<td align="left">2020-03-28</td>
+<td align="left">2020-03-29</td>
 <td align="left">884</td>
+<td align="right">0</td>
 <td align="left">11.6%</td>
 </tr>
 <tr class="odd">
 <td align="left">Manitoba</td>
-<td align="left">2020-03-28</td>
-<td align="left">64</td>
-<td align="left">22.6%</td>
+<td align="left">2020-03-29</td>
+<td align="left">72</td>
+<td align="right">8</td>
+<td align="left">22.8%</td>
 </tr>
 <tr class="even">
 <td align="left">New Brunswick</td>
-<td align="left">2020-03-28</td>
-<td align="left">51</td>
-<td align="left">19.8%</td>
+<td align="left">2020-03-29</td>
+<td align="left">66</td>
+<td align="right">15</td>
+<td align="left">24.0%</td>
 </tr>
 <tr class="odd">
 <td align="left">Newfoundland</td>
-<td align="left">2020-03-28</td>
-<td align="left">120</td>
-<td align="left">62.7%</td>
+<td align="left">2020-03-29</td>
+<td align="left">135</td>
+<td align="right">15</td>
+<td align="left">57.3%</td>
 </tr>
 <tr class="even">
 <td align="left">Northwest Territories</td>
-<td align="left">2020-03-28</td>
+<td align="left">2020-03-29</td>
 <td align="left">1</td>
+<td align="right">0</td>
 <td align="left">0.0%</td>
 </tr>
 <tr class="odd">
+<td align="left">Nova Scotia</td>
+<td align="left">2020-03-29</td>
+<td align="left">122</td>
+<td align="right">12</td>
+<td align="left">24.0%</td>
+</tr>
+<tr class="even">
 <td align="left">Ontario</td>
-<td align="left">2020-03-28</td>
-<td align="left">1,144</td>
-<td align="left">17.2%</td>
+<td align="left">2020-03-29</td>
+<td align="left">1,355</td>
+<td align="right">211</td>
+<td align="left">18.1%</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Prince Edward Island</td>
-<td align="left">2020-03-28</td>
+<td align="left">2020-03-29</td>
 <td align="left">11</td>
-<td align="left">31.3%</td>
-</tr>
-<tr class="odd">
-<td align="left">Quebec</td>
-<td align="left">2020-03-28</td>
-<td align="left">2,498</td>
-<td align="left">52.9%</td>
+<td align="right">0</td>
+<td align="left">24.1%</td>
 </tr>
 <tr class="even">
-<td align="left">Saskatchewan</td>
-<td align="left">2020-03-28</td>
-<td align="left">134</td>
-<td align="left">29.9%</td>
+<td align="left">Quebec</td>
+<td align="left">2020-03-29</td>
+<td align="left">2,840</td>
+<td align="right">342</td>
+<td align="left">51.9%</td>
 </tr>
 <tr class="odd">
+<td align="left">Saskatchewan</td>
+<td align="left">2020-03-29</td>
+<td align="left">156</td>
+<td align="right">22</td>
+<td align="left">17.9%</td>
+</tr>
+<tr class="even">
 <td align="left">Yukon</td>
-<td align="left">2020-03-28</td>
+<td align="left">2020-03-29</td>
 <td align="left">4</td>
-<td align="left">16.7%</td>
+<td align="right">0</td>
+<td align="left">11.1%</td>
 </tr>
 </tbody>
 </table>
@@ -110,40 +130,46 @@ description: ''
 <tr class="header">
 <th align="left">Province</th>
 <th align="left">Most Recent Data</th>
-<th align="left">Deaths</th>
+<th align="left">Total Deaths</th>
+<th align="right">New Deaths</th>
 <th align="left">Average Daily Growth Rate (Last 7 days)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">Alberta</td>
-<td align="left">2020-03-28</td>
+<td align="left">2020-03-29</td>
 <td align="left">2</td>
+<td align="right">0</td>
 <td align="left">14.3%</td>
 </tr>
 <tr class="even">
 <td align="left">British Columbia</td>
-<td align="left">2020-03-28</td>
+<td align="left">2020-03-29</td>
 <td align="left">17</td>
+<td align="right">0</td>
 <td align="left">8.4%</td>
 </tr>
 <tr class="odd">
 <td align="left">Manitoba</td>
-<td align="left">2020-03-28</td>
+<td align="left">2020-03-29</td>
 <td align="left">1</td>
+<td align="right">0</td>
 <td align="left">NA</td>
 </tr>
 <tr class="even">
 <td align="left">Ontario</td>
-<td align="left">2020-03-28</td>
-<td align="left">18</td>
-<td align="left">31.2%</td>
+<td align="left">2020-03-29</td>
+<td align="left">21</td>
+<td align="right">3</td>
+<td align="left">24.1%</td>
 </tr>
 <tr class="odd">
 <td align="left">Quebec</td>
-<td align="left">2020-03-28</td>
+<td align="left">2020-03-29</td>
 <td align="left">22</td>
-<td align="left">30.1%</td>
+<td align="right">0</td>
+<td align="left">32.9%</td>
 </tr>
 </tbody>
 </table>
