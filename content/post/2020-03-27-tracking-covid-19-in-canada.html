@@ -17,7 +17,7 @@ description: ''
 <script src="/rmarkdown-libs/widgetframe-binding/widgetframe.js"></script>
 
 
-<p><em>Last updated 2020-04-02 08:26:42 PDT.</em></p>
+<p><em>Last updated 2020-04-02 08:48:57 PDT.</em></p>
 <p>The Financial Times <a href="https://www.ft.com/coronavirus-latest">has a nice COVID-19 dashboard</a> that shows the growth in confirmed COVID-19 cases around the world, including for US states, but I haven’t seen a great version of these charts for Canadian provinces. I borrowed some of the methodology from that page to come up with some Canada-centric charts. Hopefully these will be helpful for some people. The data comes from the <a href="https://coronavirus.jhu.edu/map.html">Johns Hopkins COVID-19 resource center</a>, which they’ve shared publicly in <a href="https://github.com/CSSEGISandData/COVID-19">this GitHub repo</a>.</p>
 <p>I can’t guarantee the accuracy of the information here, but it should be consistent with what you can find on the Johns Hopkins dashboard. Please <a href="https://twitter.com/colin_fraser">send me a message on Twitter</a> if you find anything that seems suspicious.</p>
 <div id="current-tally" class="section level2">
@@ -218,12 +218,25 @@ description: ''
 <h3>Deaths Over Time</h3>
 <p>This shows the number of deaths on each date (min 3 deaths). Note, I am not sure why Quebec dips for a few days, but this is consistent with the data provided by the JHU dashboard.</p>
 <p><img src="/post/2020-03-27-tracking-covid-19-in-canada_files/figure-html/deaths_by_time-1.png" width="672" /></p>
+<!-- ## "The Curve" -->
+<!-- This plot shows the number of active cases (cumulative confirmed cases minus deaths and recoveries) over time since the date of the tenth confirmed case in each location. This is "the curve" that you've heard about trying to flatten. Note that a different y-axis is drawn for each location. -->
+<!-- ```{r the_curve, echo=FALSE, warning=FALSE} -->
+<!-- canada_provinces %>%  -->
+<!--   group_by(province, date) %>%  -->
+<!--   tidyr::replace_na(list(deaths=0, recovered=0)) %>%  -->
+<!--   summarise(active = sum(confirmed) - sum(deaths) - sum(recovered), -->
+<!--             confirmed = sum(confirmed)) %>%  -->
+<!--   filter(confirmed >= 10) %>%  -->
+<!--   filter(n() > 5) %>%  -->
+<!--   mutate(days_since_10 = as.numeric(date - min(date))) %>%  -->
+<!--   mutate(active = zoo::rollmean(active, 5, NA)) %>%  -->
+<!--   ggplot(aes(x = days_since_10, y = active)) + -->
+<!--   geom_line(color = '#E87D72') + -->
+<!--   facet_wrap(~province, scales = 'free_y') + -->
+<!--   scale_y_continuous(labels = scales::comma) + -->
+<!--   labs(y = 'Active Cases', x = 'Days Since 10th Confirmed Case', title = '"The Curve" for selected Canadian Provinces and US States', caption = glue::glue("Data from https://github.com/CSSEGISandData/COVID-19, updated {maxdate}", maxdate = max(canada_provinces$date))) -->
+<!-- ``` -->
 </div>
-</div>
-<div id="the-curve" class="section level2">
-<h2>“The Curve”</h2>
-<p>This plot shows the number of active cases (cumulative confirmed cases minus deaths and recoveries) over time since the date of the tenth confirmed case in each location. This is “the curve” that you’ve heard about trying to flatten. Note that a different y-axis is drawn for each location.</p>
-<p><img src="/post/2020-03-27-tracking-covid-19-in-canada_files/figure-html/the_curve-1.png" width="672" /></p>
 </div>
 <div id="country-totals" class="section level2">
 <h2>Country Totals</h2>

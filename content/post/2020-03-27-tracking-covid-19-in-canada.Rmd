@@ -283,27 +283,27 @@ This shows the number of deaths on each date (min 3 deaths). Note, I am not sure
 canada_plot(deaths, date, filter = 3)
 ```
 
-## "The Curve"
+<!-- ## "The Curve" -->
 
-This plot shows the number of active cases (cumulative confirmed cases minus deaths and recoveries) over time since the date of the tenth confirmed case in each location. This is "the curve" that you've heard about trying to flatten. Note that a different y-axis is drawn for each location.
+<!-- This plot shows the number of active cases (cumulative confirmed cases minus deaths and recoveries) over time since the date of the tenth confirmed case in each location. This is "the curve" that you've heard about trying to flatten. Note that a different y-axis is drawn for each location. -->
 
-```{r the_curve, echo=FALSE, warning=FALSE}
-canada_provinces %>% 
-  group_by(province, date) %>% 
-  tidyr::replace_na(list(deaths=0, recovered=0)) %>% 
-  summarise(active = sum(confirmed) - sum(deaths) - sum(recovered),
-            confirmed = sum(confirmed)) %>% 
-  filter(confirmed >= 10) %>% 
-  filter(n() > 5) %>% 
-  mutate(days_since_10 = as.numeric(date - min(date))) %>% 
-  mutate(active = zoo::rollmean(active, 5, NA)) %>% 
-  ggplot(aes(x = days_since_10, y = active)) +
-  geom_line(color = '#E87D72') +
-  facet_wrap(~province, scales = 'free_y') +
-  scale_y_continuous(labels = scales::comma) +
-  labs(y = 'Active Cases', x = 'Days Since 10th Confirmed Case', title = '"The Curve" for selected Canadian Provinces and US States', caption = glue::glue("Data from https://github.com/CSSEGISandData/COVID-19, updated {maxdate}", maxdate = max(canada_provinces$date)))
+<!-- ```{r the_curve, echo=FALSE, warning=FALSE} -->
+<!-- canada_provinces %>%  -->
+<!--   group_by(province, date) %>%  -->
+<!--   tidyr::replace_na(list(deaths=0, recovered=0)) %>%  -->
+<!--   summarise(active = sum(confirmed) - sum(deaths) - sum(recovered), -->
+<!--             confirmed = sum(confirmed)) %>%  -->
+<!--   filter(confirmed >= 10) %>%  -->
+<!--   filter(n() > 5) %>%  -->
+<!--   mutate(days_since_10 = as.numeric(date - min(date))) %>%  -->
+<!--   mutate(active = zoo::rollmean(active, 5, NA)) %>%  -->
+<!--   ggplot(aes(x = days_since_10, y = active)) + -->
+<!--   geom_line(color = '#E87D72') + -->
+<!--   facet_wrap(~province, scales = 'free_y') + -->
+<!--   scale_y_continuous(labels = scales::comma) + -->
+<!--   labs(y = 'Active Cases', x = 'Days Since 10th Confirmed Case', title = '"The Curve" for selected Canadian Provinces and US States', caption = glue::glue("Data from https://github.com/CSSEGISandData/COVID-19, updated {maxdate}", maxdate = max(canada_provinces$date))) -->
 
-```
+<!-- ``` -->
 
 ## Country Totals
 
