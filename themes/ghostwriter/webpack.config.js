@@ -7,7 +7,8 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
   entry: {
-    styles: path.join(__dirname, 'static', 'styles'),
+    site: path.join(__dirname, 'static', 'styles', 'site'),
+    syntax: path.join(__dirname, 'static', 'styles', 'syntax'),
   },
   resolve: {
     modules: [
