@@ -1,0 +1,20 @@
+[[socials]]
+    id = "twitter"
+    url = "https://twitter.com/colin_fraser"
+    icon = "twitter"
+    title = "Twitter"
+    weight = 1
+
+[[socials]]
+    id = "github"
+    url = "https://github.com/reuixiy"
+    icon = "github"
+    title = "GitHub"
+    weight = 2
+
+[[socials]]
+    id = "linkedin"
+    url = "https://www.linkedin.com/in/colin-fraser/"
+    icon = "linkedin"
+    title = "Telegram"
+    weight = 5
