@@ -4,6 +4,7 @@ author: "Colin Fraser"
 slug: about
 tags: []
 categories: []
+layout: staticpage
 ---
 <img src="/./about_files/image.jpg" width="40%"  style="float: left; padding-right: 30px;" alt="Me standing in front of the ocean in Tofino, BC." />
 My name is Colin. I currently work as a Data Scientist at Facebook in Seattle, Washington. I work on the Community Integrity team, primarily on the problem of hate speech. I do a whole lot of my work with R, but I also like to use Python for some things. I do a little bit of teaching on the side. I’ll write about all kinds of different things here.

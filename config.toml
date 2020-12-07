@@ -195,9 +195,15 @@ uglyURLs = false
     [[menu.main]]
         url = "/post/"
         name = "Posts"
-        weight = 2
+        weight = 1
         pre = "internal"
         post = "archive"
+    [[menu.main]]
+        url = "/projects/"
+        name = "Projects"
+        weight = 2
+        pre = "internal"
+        post = "testtube"
     [[menu.main]]
         url = "/about/"
         name = "About"
@@ -230,7 +236,7 @@ uglyURLs = false
     displayHeaderInHome = true
     # Note: invalid for header layout flex
 
-    headerBackground = "linear-gradient(90deg, #f795331a 0, #f370551a 15%, #ef4e7b1a 30%, #a166ab1a 44%, #5073b81a 58%, #1098ad1a 72%, #07b39b1a 86%, #6dba821a 100%)"
+    headerBackground = "grey90"
     # Note: https://developer.mozilla.org/en-US/docs/Web/CSS/background
 
     headerLayout = "flex"
@@ -240,7 +246,7 @@ uglyURLs = false
     # on narrow screen?
     enableNavToggle = true
 
-    navHeight = "10em"
+    navHeight = "6em"
     # Note: menu bar height when it’s
     #       toggled
 
@@ -697,7 +703,7 @@ uglyURLs = false
 
     # The color change duration of the
     # hyperlink (in seconds)
-    duration = 0.5
+    duration = 0.2
 
     # Primary color of light mode
     primaryColorLight = "220, 90%, 56%"
@@ -740,15 +746,15 @@ uglyURLs = false
     # Note: valid for the `posts` and
     #       `page` homepage layout only
 
-    postMetaDateFormat = "2006.1.2"
+    postMetaDateFormat = "2006-01-02"
     # ATTENTION: be sure to follow the
     #            specified format
     #            https://gohugo.io/functions/format/
 
     displayPublishedDate = true
     publishedDateIcon = "calendar-alt"
-
-    displayModifiedDate = true
+    
+    displayModifiedDate = false
     modifiedDateIcon = "calendar-check"
 
     displayExpiredDate = true
@@ -912,15 +918,15 @@ uglyURLs = false
     #       brand.
 
     # Site brand
-    fontFamilySiteBrand = ""
+    fontFamilySiteBrand = "'Roboto Condensed', sans-serif"
     # Menu bar
-    fontFamilyMenu = ""
+    fontFamilyMenu = "'Roboto Condensed', sans-serif"
     # Post title, post subtitle, list title, year and month title of the list, related posts title, previous/next post title, header of table, term/name in a definition list
-    fontFamilyTitle = "'Comfortaa', sans-serif"
+    fontFamilyTitle = "'Roboto Condensed', sans-serif"
     # Headings, toc title
-    fontFamilyHeadings = "'Comfortaa', sans-serif"
+    fontFamilyHeadings = "'Roboto Condensed', sans-serif"
     # Code, superscript, post meta info, post updated badge, post gitinfo, minimal footer, busuanzi site view counter
-    fontFamilyCode = "'Source Code Pro', monospace"
+    fontFamilyCode = "'JetBrains Mono', monospace"
     # Blockquotes
     fontFamilyQuote = ""
     # Table of contents
@@ -930,10 +936,10 @@ uglyURLs = false
     # Footer
     fontFamilyFooter = ""
     # Body
-    fontFamilyBody = "'IBM Plex Serif', serif"
+    fontFamilyBody = "'Roboto Slab', serif"
 
     # Embed fonts link
-    fontsLink = "https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,700;1,400;1,700&family=Source+Code+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Comfortaa:wght@700&display=swap"
+    fontsLink = "https://fonts.googleapis.com/css2?family=JetBrains+Mono&family=Raleway:wght@100&family=Roboto+Condensed:wght@300;400&family=Roboto+Slab:wght@400;700&display=swap"
     # Note: In order for the reader to
     #       experience the fonts you set,
     #       it is best to use web fonts.
@@ -1010,7 +1016,7 @@ uglyURLs = false
     ######################################
     ## Small Caps
 
-    enableSmallCaps = true
+    enableSmallCaps = false
     # Note: apply to headings & post toc
     #       title only
     #       *global settings*
@@ -1034,7 +1040,7 @@ uglyURLs = false
     ######################################
     # Post Copyright
 
-    enablePostCopyright = true
+    enablePostCopyright = false
 
     displayPostCopyright = true
     # Note: *global settings*
