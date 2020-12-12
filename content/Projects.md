@@ -2,7 +2,7 @@
 title: "Projects"
 date: 2020-12-05T17:32:55-08:00
 draft: true
-layout: staticpage
+layout: post
 dropCap: false
 ---
 
