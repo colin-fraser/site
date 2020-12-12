@@ -1,0 +1,151 @@
+---
+title: A quick tutorial on importing data from _Advent Of Code_ into R
+author: ~
+date: '2020-12-12'
+slug: a-quick-tutorial-on-importing-data-from-advent-of-code-into-r
+categories: []
+tags: [advent-of-code, code-tutorial, Rstats]
+---
+
+```{r, setup, include=FALSE}
+library(magrittr)
+```
+
+
+Well, I have a few days off in between leaving my old job and starting my new job, and am under mandatory 14 day isolation, so I thought I might try out [Advent of Code](https://adventofcode.com/), or write some posts on my stupid website, or even a combination of the two! One thing I wanted to make sure I did with all of my solutions is have the scripts be as self-contained as possible, with no hard-coded data. This means having scripts that can fetch the data so that I'm not copying and pasting. So here's a tutorial on how to do that. This is going to be pretty simple stuff, but hopefully it will be helpful to someone out there with some R familiarity, but less familiarity with scraping data from the web.
+
+## Building the URL
+
+Each puzzle has input data conveniently stored at a URL that looks like `adventofcode.com/{year}/day/{day}/input` where `year` is the year you're working on and `day` is the day you're working on.
+
+![A screenshot of the Google Chrome showing sample input data](/post/2020-12-07-a-quick-tutorial-on-importing-data-from-advent-of-code-into-r_files/advent_of_code1.png)
+
+I'll start by writing a function that gives me the URL for whichever day I want. The `glue` package is really handy for this kind of thing.
+
+```{r eval=TRUE}
+library(glue)
+aoc_build_url <- function(day, year = 2020) {
+  formatted_url <- glue("adventofcode.com/{year}/day/{day}/input")
+  return(formatted_url)
+}
+
+aoc_build_url(1)
+```
+
+Perfect. 
+
+## Getting the Data
+
+Now I'll write a function that takes the day and year, builds the URL, and uses `httr` to get the data.
+
+```{r}
+library(httr)
+aoc_get_response <- function(day, year = 2020) {
+  aoc_url <- aoc_build_url(day, year)
+  response <- GET(aoc_url)
+  return(response)
+}
+
+aoc_get_response(1)
+```
+
+Ah! You can only get the data when you're logged in.
+
+Luckily it's not too hard to get around this. The way that AoC remembers you when you login on your browser is by setting a cookie that uniquely identifies you. If you can find the cookie, you can pass it as part of your get request to let AoC know that it's you asking for the data.
+
+The inspector on Google Chrome is really good for this kind of thing. If you've never done it, you can get to the Inspector by right-clicking on anything on Chrome and clicking "Inspect".
+
+To find the cookie, go to some puzzle data in Chrome, open the Inspector, and go to the Network tab. 
+
+![A screenshot of the Google Chrome inspector](/post/2020-12-07-a-quick-tutorial-on-importing-data-from-advent-of-code-into-r_files/advent_of_code2.png)
+
+The network tab shows you what data is being transmitted between your browser and the website you're looking at. Now if you reload the page, it will show you the request that gets sent to AoC in order to receive the data. You want to duplicate this request from R in order to tell AoC who's asking for the data.
+
+![A screenshot of the Google Chrome inspector showing the headers](/post/2020-12-07-a-quick-tutorial-on-importing-data-from-advent-of-code-into-r_files/advent_of_code3.png)
+
+To load this page, two requests were sent: one for `favicon.ico` which is how Chrome gets the little image in the tab, and one for `input` which is what we're interested in here. When you click "input", there are a bunch of tabs to the right. The information we want is in Headers, which is the name for extra metadata that gets sent alongside http requests. The relevant object that we are looking for is a cookie called "session", which I've obfuscated in the screenshot so that you don't hack into my Advent of Code account.
+
+The `httr::GET` function makes it very easy to add headers and cookies. I'll rewrite the aoc_get_response function to do this.
+
+```{r}
+aoc_get_response <- function(day, session_cookie, year = 2020) {
+  aoc_url <- aoc_build_url(day, year)
+  cookie <- set_cookies(session = session_cookie)
+  response <- GET(aoc_url, cookie)
+  return(response)
+}
+```
+
+Now you can copy the session cookie from the inspector and pass it to this function to get a response. However, this is still not perfect—we should figure out a secure way to pass the session cookie to `aoc_get_response`. It's generally a very bad practice to hard-code authentication secrets in a script. If you're using RStudio, there's a convenient function that you can use for this: `rstudioapi::askForSecret`. This will open a secure dialog box that you can type a secret into, and it gives you an option to store the secret in your keychain (or whatever your operating system uses for secrets) so that you only have to get it once. Adding this to the function is super straightforward:
+
+```{r}
+aoc_get_response <- function(day, 
+                             session_cookie = rstudioapi::askForSecret("Advent of Code Session Cookie"), 
+                             year = 2020) {
+  aoc_url <- aoc_build_url(day, year)
+  cookie <- set_cookies(session = session_cookie)
+  response <- GET(aoc_url, cookie)
+  return(response)
+}
+```
+
+Having already run this once myself and checked off the "Remember with Keyring" option, I already have the session cookie saved to my local credential and can retrieve it directly with `keyring::key_get("RStudio Keyring Secrets", "Advent of Code Session Cookie")`. You don't have to do this—you could just ask each time—but fetching it directly from the keyring can be useful if you're executing code outside of RStudio (like, for instance, when you're knitting an .Rmd file).
+
+```{r}
+library(readr) # for the read_lines function
+aoc_get_response(1, session_cookie = keyring::key_get("RStudio Keyring Secrets", "Advent of Code Session Cookie")) %>% 
+  content(encoding = 'UTF-8') %>% 
+  read_lines() %>% 
+  as.numeric()
+```
+
+Perfect
+
+## Memoisation for politeness
+
+What I have here works great for _me_, but [Eric](https://twitter.com/ericwastl) might not like it. That's because every time I run `aoc_get_response(1)` it hits his server asking for data that the server already gave me. This is wasteful and costs him money. I don't think this is as much of a problem this year as this project seems to have some pretty good sponsorship this year, but it's still good manners to minimize the number of times we hit people's servers.
+
+The [`memoise` package](https://github.com/r-lib/memoise) is wonderful for this kind of problem. For a function `f(x)`, this package lets you easily create a new function `mf(x)` that stores the value of function calls. What I'll do is rename my existing `aoc_get_response` function to `.aoc_get_response`, with the leading period to indicate that I don't intend it to ever call it directly, and create a new function `aoc_get_response` using `memoise`.
+
+```{r}
+.aoc_get_response <- function(day, 
+                             session_cookie = rstudioapi::askForSecret("Advent of Code Session Cookie"), 
+                             year = 2020) {
+  aoc_url <- aoc_build_url(day, year)
+  cookie <- set_cookies(session = session_cookie)
+  response <- GET(aoc_url, cookie)
+  return(response)
+}
+aoc_get_response <- memoise::memoise(.aoc_get_response)
+```
+
+Now the first time I call `aoc_get_response(1)` it will hit Eric's server, but subsequent times it will remember what the value was for 1 and just return that. The only time it will hit the server is when it's being called with a new value. This is also great for speeding up your scripts—there's no sense in waiting for a server to give you the same data more than once.
+
+```{r}
+cookie <- keyring::key_get("RStudio Keyring Secrets", "Advent of Code Session Cookie")
+aoc_get_response(1, cookie)
+```
+
+
+There's one more optimization we can make here: by default `memoise` uses an _in-memory_ cache, which means that whenever you restart R you'll lose the cache and start hitting the server again. It would be better if we could save the memoised values to disk, since we know they won't change between R sessions. Thankfully, `memoise` also makes this easy.
+
+```{r}
+.aoc_get_response <- function(day, 
+                             session_cookie = rstudioapi::askForSecret("Advent of Code Session Cookie"), 
+                             year = 2020) {
+  aoc_url <- aoc_build_url(day, year)
+  cookie <- set_cookies(session = session_cookie)
+  response <- GET(aoc_url, cookie)
+  return(response)
+}
+aoc_get_response <- memoise::memoise(.aoc_get_response, cache = memoise::cache_filesystem('~/.aoc'))
+```
+
+This creates a directory `~/.aoc/` that will store the memoised values of `aoc_get_response`, so that they persist between R sessions until you delete that directory—or until you run `memoise::forget(aoc_get_response)`.
+
+And that's it folks. I wanted to write this out because this pattern is actually super common. Any time you want to scrape data from a web page or API you'll probably want to implement something very similar to this, and it took me a while for all the steps to become second nature. Just to recap, the key steps are
+
+1. Figure out what HTTP request you need to send  
+2. Store secrets in a way that you can retrieve them securely
+3. Use memoisation to cache responses
+
