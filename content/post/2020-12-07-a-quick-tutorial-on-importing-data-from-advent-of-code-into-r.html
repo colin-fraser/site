@@ -40,7 +40,7 @@ aoc_get_response &lt;- function(day, year = 2020) {
 
 aoc_get_response(1)</code></pre>
 <pre><code>## Response [https://adventofcode.com/2020/day/1/input]
-##   Date: 2020-12-13 00:11
+##   Date: 2020-12-13 00:14
 ##   Status: 400
 ##   Content-Type: text/plain
 ##   Size: 71 B
@@ -95,7 +95,6 @@ aoc_get_response(1, session_cookie = keyring::key_get(&quot;RStudio Keyring Secr
 ## [166] 1380 1745 1908 1785 1646 1824 1418 1258 1664 1631 1459 1901 1838 1794 1815
 ## [181] 1388 1809 1920 1411 1593 1676 1610 1629 1512 1522 1649 1740 1695 1504 1856
 ## [196] 1791 1898 1661 1806 1851</code></pre>
-<p>Perfect</p>
 </div>
 <div id="memoisation-for-politeness-speed" class="section level2">
 <h2>Memoisation for politeness (&amp; speed)</h2>
@@ -114,7 +113,7 @@ aoc_get_response &lt;- memoise::memoise(.aoc_get_response)</code></pre>
 <pre class="r"><code>cookie &lt;- keyring::key_get(&quot;RStudio Keyring Secrets&quot;, &quot;Advent of Code Session Cookie&quot;)
 aoc_get_response(1, cookie)</code></pre>
 <pre><code>## Response [https://adventofcode.com/2020/day/1/input]
-##   Date: 2020-12-13 00:11
+##   Date: 2020-12-13 00:14
 ##   Status: 200
 ##   Content-Type: text/plain
 ##   Size: 992 B

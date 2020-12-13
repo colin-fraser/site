@@ -99,8 +99,6 @@ aoc_get_response(1, session_cookie = keyring::key_get("RStudio Keyring Secrets",
   as.numeric()
 ```
 
-Perfect
-
 ## Memoisation for politeness (& speed)
 
 What I have here works great for _me_, but [Eric](https://twitter.com/ericwastl) might not like it. That's because every time I run `aoc_get_response(1)` it hits his server asking for data that the server already gave me. This is wasteful and costs him money. I don't think this is as much of a problem this year as this project seems to have some pretty good sponsorship this year, but it's still good manners to minimize the number of times we hit people's servers.
