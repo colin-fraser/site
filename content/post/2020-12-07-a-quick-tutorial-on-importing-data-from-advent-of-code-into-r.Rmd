@@ -16,7 +16,7 @@ Well, I have a few days off in between leaving my old job and starting my new jo
 
 ## Building the URL
 
-Each puzzle has input data conveniently stored at a URL that looks like `adventofcode.com/{year}/day/{day}/input` where `year` is the year you're working on and `day` is the day you're working on.
+Each puzzle has input data conveniently stored at a URL that looks like `adventofcode.com/{year}/{day}/input` where `year` is the year you're working on and `day` is the day you're working on.
 
 ![A screenshot of the Google Chrome showing sample input data](/post/2020-12-07-a-quick-tutorial-on-importing-data-from-advent-of-code-into-r_files/advent_of_code1.png)
 

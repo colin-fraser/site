@@ -12,7 +12,7 @@ tags: [advent-of-code, code-tutorial, Rstats]
 <p>Well, I have a few days off in between leaving my old job and starting my new job, and am under mandatory 14 day isolation, so I thought I might try out <a href="https://adventofcode.com/">Advent of Code</a>, or write some posts on my stupid website, or even a combination of the two! One thing I wanted to make sure I did with all of my solutions is have the scripts be as self-contained as possible, with no hard-coded data. This means having scripts that can fetch the data so that I’m not copying and pasting. So here’s a tutorial on how to do that. This is going to be pretty simple stuff, but hopefully it will be helpful to someone out there with some R familiarity, but less familiarity with scraping data from the web.</p>
 <div id="building-the-url" class="section level2">
 <h2>Building the URL</h2>
-<p>Each puzzle has input data conveniently stored at a URL that looks like <code>adventofcode.com/{year}/day/{day}/input</code> where <code>year</code> is the year you’re working on and <code>day</code> is the day you’re working on.</p>
+<p>Each puzzle has input data conveniently stored at a URL that looks like <code>adventofcode.com/{year}/{day}/input</code> where <code>year</code> is the year you’re working on and <code>day</code> is the day you’re working on.</p>
 <div class="figure">
 <img src="/post/2020-12-07-a-quick-tutorial-on-importing-data-from-advent-of-code-into-r_files/advent_of_code1.png" alt="" />
 <p class="caption">A screenshot of the Google Chrome showing sample input data</p>
@@ -40,7 +40,7 @@ aoc_get_response &lt;- function(day, year = 2020) {
 
 aoc_get_response(1)</code></pre>
 <pre><code>## Response [https://adventofcode.com/2020/day/1/input]
-##   Date: 2020-12-13 00:05
+##   Date: 2020-12-13 00:11
 ##   Status: 400
 ##   Content-Type: text/plain
 ##   Size: 71 B
@@ -114,7 +114,7 @@ aoc_get_response &lt;- memoise::memoise(.aoc_get_response)</code></pre>
 <pre class="r"><code>cookie &lt;- keyring::key_get(&quot;RStudio Keyring Secrets&quot;, &quot;Advent of Code Session Cookie&quot;)
 aoc_get_response(1, cookie)</code></pre>
 <pre><code>## Response [https://adventofcode.com/2020/day/1/input]
-##   Date: 2020-12-13 00:05
+##   Date: 2020-12-13 00:11
 ##   Status: 200
 ##   Content-Type: text/plain
 ##   Size: 992 B
