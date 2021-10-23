@@ -7,7 +7,7 @@ languageCode = "en"
 hasCJKLanguage = false
 # Copyright information (Markdown supported)
 copyright = "[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en)"
-ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
 
 # Name of theme
 theme = "meme"
@@ -596,7 +596,7 @@ uglyURLs = false
     ######################################
     # MathJax (chemical equation supported)
 
-    enableMathJax = false
+    enableMathJax = true
     # Note: *global settings*
     #       `mathjax` in post’s Front Matter
     #       has a higher priority than here

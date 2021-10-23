@@ -7,7 +7,7 @@ categories: []
 layout: staticpage
 ---
 <img src="/./about_files/image.jpg" width="40%"  style="float: left; padding-right: 30px;" alt="Me standing in front of the ocean in Tofino, BC." />
-My name is Colin. I currently work as a Data Scientist at Facebook in Seattle, Washington. I work on the Community Integrity team, primarily on the problem of hate speech. I do a whole lot of my work with R, but I also like to use Python for some things. I do a little bit of teaching on the side. I’ll write about all kinds of different things here.
+My name is Colin. I currently work as a Data Science Manager at Twitter. I work on the team that tries to keep the conversation on Twitter healthy, and I primarily deal with the problems of misinformation and election safety I do a whole lot of my work with R, but I also like to use Python for some things. I do a little bit of teaching on the side. I’ll write about all kinds of different things here.
 
 If you want to get in touch with me, you can email me at `colin dot r dot fraser at g mail dot com`, [tweet at me](https://twitter.com/colin_fraser), or, I don’t know, it’s pretty easy to get in touch with people on the internet these days.
 

@@ -3,3 +3,11 @@ a {
   font-weight: 700;
   color: #7F7F7F;
 }
+
+table > tbody > tr:nth-of-type(odd) {
+    background-color: unset;
+}
+
+table > tbody > tr:hover {
+    background-color: unset;
+}
