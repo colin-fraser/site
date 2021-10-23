@@ -16,7 +16,7 @@ library(tidyverse)
 - How to balance false positive rates and false negative rates is a problem that confronts anyone who does anything with machine learning, or even predicting more generally
 - In this post, I explore how to make an optimal choice of FPR and FNR given your relative valuation of a false positive and a false negative
 - I found it surprising that the optimal choice is determined _not only_ by your preferences over false positives and false negatives, but also by the probability distribution of the positive class
-- Specifically, I show that of $\pi$ is the prevalence of the positive class and $u_{TP}, u_{TN}, u_{FP}, u_{FN}$ are utilities associated with True Positives, True Negatives, False Positives, and False Negatives, then you should choose a point on the ROC curve which satisfies
+- Specifically, I show that if $\pi$ is the prevalence of the positive class and $u_{TP}, u_{TN}, u_{FP}, u_{FN}$ are utilities associated with True Positives, True Negatives, False Positives, and False Negatives, then you should choose a point on the ROC curve which satisfies
 
 $$\text{ROC Slope} = \frac{1-\pi}{\pi} \frac{u_{TN}-u_{FP}}{u_{TP}-u_{FN}}$$
 
@@ -26,7 +26,7 @@ $$\text{ROC Slope} = \frac{1-\pi}{\pi} \frac{u_{TN}-u_{FP}}{u_{TP}-u_{FN}}$$
 
 # Introduction
 
-In a recent Slack thread at my work, a question was posed about whether we should prefer precision to accuracy. A long discussion ensued which eventually shifted to discussing the tradeoff between types of errors in predictive models. It's fairly well known that there is a trade-off between preventing false positives and allowing false negatives. Metaphorically, you can cast a very wide net, and you'll catch a lot of fish, but also a lot of boots. Or you can fish with a sphere, which will get you a lot less boots, but also a lot less fish. Casting a wide net gets you high _recall_, but the price you pay is a high _false positive rate_. Spearfishing gets you a much lower false positive rate, but lower recall, too.
+In a recent Slack thread at my work, a question was posed about whether we should prefer precision to accuracy. A long discussion ensued which eventually shifted to discussing the tradeoff between types of errors in predictive models. It's fairly well known that there is a trade-off between preventing false positives and allowing false negatives. Metaphorically, you can cast a very wide net, and you'll catch a lot of fish, but also a lot of boots. Or you can fish with a spear, which will get you a lot less boots, but also a lot less fish. Casting a wide net gets you high _recall_, but the price you pay is a high _false positive rate_. Spearfishing gets you a much lower false positive rate, but lower recall, too.
 
 This tradeoff is everywhere. In almost any situation where you are using some automated process to identify some class of thing, you'll be faced with this tradeoff. This applies to systems that make guesses about whether your login attempt to a website is fraudulent, whether your image is contained in a photograph, whether your Facebook post is against Facebook's community standards, whether you're likely to renew your cell phone contract, and in all kinds of other ways that we're not even aware of. In each of these cases, the engineers building the systems have to made a decision about how many false positives they want to permit.
 
@@ -451,7 +451,7 @@ library(patchwork)
 p1+p2
 ```
 
-This type of result was a little bit surprising and counterintuitive to me when I first came across it. Intuitively I feel like if a false negative is more costly than a false positive, then I should be willing to give up some false positives in order in order to get a high recall. But in this example, we have a case where false negatives are costlier than false positives, and yet the optimal recall is only 0.03. The reason, again, is that it is not simply the relative valuation of false positives and false negatives that determines the total expected utility, _but also their relative frequencies_—which is determined by prevalence. Even if a single false positive doesn't cost very much, a flood of false positives can add up. If my classifier is permitting a flood of false positives, I might be able to do better by choosing a lower false positive rate at the expense of permitting some true negatives.
+This type of result was a little bit surprising and counterintuitive to me when I first came across it. Intuitively I feel like if a false negative is more costly than a false positive, then I should be willing to give up some false positives in order in order to get a high recall. But in this example, we have a case where false negatives are costlier than false positives, and yet the optimal recall is only 0.03. The reason, again, is that it is not simply the relative valuation of false positives and false negatives that determines the total expected utility, _but also their relative frequencies_—which is determined by prevalence. Even if a single false positive doesn't cost very much, a flood of false positives can add up. If my classifier is permitting a flood of false positives, I might be able to do better by choosing a lower false positive rate at the expense of permitting some false negatives.
 
 # The Complicated Real World
 
