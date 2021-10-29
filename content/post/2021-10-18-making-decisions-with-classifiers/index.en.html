@@ -374,6 +374,7 @@ EER &amp;= \frac{2.06}{19} = 0.108
 <div id="finding-an-optimal-point-given-explicit-preferences" class="section level2">
 <h2>Finding an optimal point given explicit preferences</h2>
 <p>Suppose we use these predictions to send out a promotional offer to customers who we think are likely to churn. In this case, it might be feasible to explicitly price false positives and false negatives (this is, of course, rare!).</p>
+<p>Say that the regular price of our service is \$1,000, and the promotional offer gives the customer \$100 off. Let’s also suppose that a customer who wasn’t going to cancel anyway would always take the offer if we give it to them, but a customer who would otherwise leave takes the offer half the time This is enough information to price the outcomes. A true positive means we send the offer to a customer who would have canceled. Half the time they take it, and the other half the cancel, so we get <span class="math inline">\(U_{TP}=.5\times 900=450\)</span>. A true negative means we correctly withhold the offer from a customer who pays full price, so <span class="math inline">\(U_{TN}=1000\)</span>. A false positive means we send the offer to a customer who was going to stay anyway, so <span class="math inline">\(U_{FP}=900\)</span>, and finally a false negative means we miss sending the offer to a customer who leaves which gives us <span class="math inline">\(U_{FN}=0\)</span>.</p>
 <table class="table-no-highlight">
 <thead>
 <tr>
