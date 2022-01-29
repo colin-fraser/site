@@ -276,7 +276,3 @@ ggplot(df, aes(x = year, y = gdp_growth, fill = year == 2021)) +
         panel.grid.major.y = element_line(color = WHITE, size = 0.1),
   )
 ```
-
-## What was the point of all of this?
-
-I would strongly recommend against ever having a plot axis which changes scales abruptly partway through the axis. However, I do think it's valuable to peek inside ggplot2 and figure out how everything works, and there are lots of transformations you could apply to a plot that would be valuable and insightful.

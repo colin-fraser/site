@@ -131,7 +131,7 @@ ggplot(diamonds, aes(x = carat, y = price)) +
 ## {
 ##     scale_y_continuous(..., trans = log10_trans())
 ## }
-## &lt;bytecode: 0x7f980fb800e0&gt;
+## &lt;bytecode: 0x7fc60bcc7b68&gt;
 ## &lt;environment: namespace:ggplot2&gt;</code></pre>
 <p>Interesting! A bit of digging reveals that <code>log10_trans()</code> comes from the <code>scales</code> package. Let’s go deeper.</p>
 <pre class="r"><code>library(scales)
@@ -140,7 +140,7 @@ log10_trans</code></pre>
 ## {
 ##     log_trans(10)
 ## }
-## &lt;bytecode: 0x7f980fb110e8&gt;
+## &lt;bytecode: 0x7fc60bc65820&gt;
 ## &lt;environment: namespace:scales&gt;</code></pre>
 <p>Deeper.</p>
 <pre class="r"><code>log_trans</code></pre>
@@ -152,7 +152,7 @@ log10_trans</code></pre>
 ##     trans_new(paste0(&quot;log-&quot;, format(base)), trans, inv, log_breaks(base = base), 
 ##         domain = c(1e-100, Inf))
 ## }
-## &lt;bytecode: 0x7f980fb109e8&gt;
+## &lt;bytecode: 0x7fc60bc64f28&gt;
 ## &lt;environment: namespace:scales&gt;</code></pre>
 <p>Fascinating and really very elegant, in my opinion. The <code>log_trans</code> function invokes this <code>trans_new</code> function, which is the constructor for something called a <code>trans</code> object. From <code>?trans_new</code>:</p>
 <blockquote>
@@ -256,8 +256,4 @@ ggplot(df, aes(x = year, y = gdp_growth, fill = year == 2021)) +
         panel.grid.major.y = element_line(color = WHITE, size = 0.1),
   )</code></pre>
 <p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
-</div>
-<div id="what-was-the-point-of-all-of-this" class="section level2">
-<h2>What was the point of all of this?</h2>
-<p>I would strongly recommend against ever having a plot axis which changes scales abruptly partway through the axis. However, I do think it’s valuable to peek inside ggplot2 and figure out how everything works, and there are lots of transformations you could apply to a plot that would be valuable and insightful.</p>
 </div>
