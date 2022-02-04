@@ -1,8 +1,7 @@
 ---
 title: Recreating The Bad White House Chart In ggplot2
-author: Colin Fraser
 date: '2022-01-29'
-slug: []
+slug: recreating-the-bad-white-house-chart
 categories:
   - r-tutorial
 tags:
@@ -22,7 +21,7 @@ tags:
 <p>In case you don’t see it the first time around, the chart is bad because the vertical axis counts by 1’s up to 5.0, and then inexplicably switches to .5’s. This just so happens to have the effect of stretching only the bar that they wanted to highlight, making the recovery look bigger by comparison than it ought to have. I tweeted that I would not even know how to make such a chart.</p>
 <p>{{% tweet "1486773908502024192" %}}</p>
 <p>Unless the White House is drawing charts manually in PowerPoint or something (which, to be honest, it seems like they probably are), it would actually very hard to make a chart that does this. Most plotting software works hard to make sure that plot axes are drawn to some scale, and that that scale doesn’t change midway through the axis. Continuing on riffing as we like to do on Twitter, I tweeted that in ggplot2, it might look something like this.</p>
-<blockquote class="twitter-tweet" data-conversation="none">
+<blockquote class="twitter-tweet tw-align-cente" data-conversation="none">
 <p lang="tl" dir="ltr">
 gdp_plot +<br> scale_y_propaganda()
 </p>
@@ -30,13 +29,13 @@ gdp_plot +<br> scale_y_propaganda()
 </blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <p>Curiosity then took over, and I began to wonder how one would actually go about creating the <code>scale_y_propaganda()</code> function. It turns out that it is possible, and although you have to really shoehorn it in there, ggplot2 is flexible enough to do it relatively straightforwardly. In recreating the plot I also learned a thing or two about how ggplot2 axis labeling works, so I thought it might be worth writing up a little thing about it.</p>
-<p><strong>Note:</strong> <em>Although I use the term “propaganda” a lot in this piece, it is tongue-in-cheek and I am not accusing anyone of malicious wrongdoing of any kind in the creation of the original plot. The point of this post is not to make any kind of political statement; it’s just to do kind of a wacky R tutorial and learn something about ggplot. I completely buy that it was an error due to a failure to proofread as they later stated.</em></p>
+<p><strong>Note:</strong> <em>Although I use the term “propaganda” a lot in this piece, it is tongue-in-cheek and I am not accusing anyone of malicious wrongdoing of any kind in the creation of the original plot. The point of this post is not to make any kind of political statement; it’s just to do kind of a wacky R tutorial and learn something about <code>ggplot</code>. I completely buy that it was an error due to a failure to proofread as they later stated.</em></p>
 <p>{{% tweet "1486838940707524617" %}}</p>
 <p><em>It’s a little hard for me to imagine how an error like this would be made, but I believe it. If anyone from The White House is reading, I’m happy to jump on Zoom and do a quick ggplot2 tutorial to help avoid this kind of thing in the future.</em></p>
 <div id="the-data" class="section level2">
 <h2>The data</h2>
 <p>I found a time series of the US annual GDP growth rate from World Bank.</p>
-<iframe src="https://data.worldbank.org/share/widget?end=2020&amp;indicators=NY.GDP.MKTP.KD.ZG&amp;locations=US&amp;start=1961&amp;view=chart" width="450" height="300" frameBorder="1" scrolling="no">
+<iframe src="https://data.worldbank.org/share/widget?end=2020&amp;indicators=NY.GDP.MKTP.KD.ZG&amp;locations=US&amp;start=1961&amp;view=chart" width="450" height="300" frameBorder="1" scrolling="no" style="margin: 0 auto;">
 </iframe>
 <p>It doesn’t have 2021, so I just stuck that onto the end. I’ll spare you the hassle of recreating the dataset on your own; here’s a block of code that recreates the data that I work with here.</p>
 <pre class="r"><code>library(tibble)
@@ -53,7 +52,8 @@ df &lt;- tibble(
 <div id="understanding-the-bad-chart" class="section level2">
 <h2>Understanding The Bad Chart</h2>
 <p>The first step in recreating the Bad Chart is to understand it, so that we can describe it to ggplot2. In ggplot2, we think about data visualization as mapping numeric variables to the aesthetic dimensions of the <code>geom</code>s. In this case, we’re going to work with a bar chart (<a href="https://ggplot2.tidyverse.org/reference/geom_bar.html"><code>geom_col</code></a>), with the year mapped to the horizontal position, and the height of the bars mapped to the GDP growth variable. But somehow, at <code>gdp_growth</code>=5, the mapping changes to double the rate at which height increases with GDP growth.</p>
-<pre><code>6.0 \  
+<pre><code class="nohighlight">
+6.0 \  
 5.5  | - height increases at 2 units per GDP growth percentage point
 5.0 /
 4.0  \
@@ -61,7 +61,9 @@ df &lt;- tibble(
 2.0   | - height increases at 1 unit per GDP growth percentage point
 1.0   |
 0     |
--1.0 /</code></pre>
+-1.0 /
+</code>
+</pre>
 <p>The most obvious way to describe this relationship is using a piecewise linear function. Letting <span class="math inline">\(p(x)\)</span> represent the propagandized bar height for a <code>gdp_growth</code> of <code>x</code>, we can write:</p>
 <p><span class="math display">\[p(x)=\begin{cases}x &amp; x&lt;5 \\ 2x-5 &amp; x \geq 5\end{cases}\]</span>
 However as we will see later, it’s actually more convenient to express this in a slightly different format, making use of an indicator variable rather than using distinct cases.</p>
@@ -131,7 +133,7 @@ ggplot(diamonds, aes(x = carat, y = price)) +
 ## {
 ##     scale_y_continuous(..., trans = log10_trans())
 ## }
-## &lt;bytecode: 0x7fc60bcc7b68&gt;
+## &lt;bytecode: 0x7fd9cae14fe0&gt;
 ## &lt;environment: namespace:ggplot2&gt;</code></pre>
 <p>Interesting! A bit of digging reveals that <code>log10_trans()</code> comes from the <code>scales</code> package. Let’s go deeper.</p>
 <pre class="r"><code>library(scales)
@@ -140,7 +142,7 @@ log10_trans</code></pre>
 ## {
 ##     log_trans(10)
 ## }
-## &lt;bytecode: 0x7fc60bc65820&gt;
+## &lt;bytecode: 0x7fd9cadb2c98&gt;
 ## &lt;environment: namespace:scales&gt;</code></pre>
 <p>Deeper.</p>
 <pre class="r"><code>log_trans</code></pre>
@@ -152,7 +154,7 @@ log10_trans</code></pre>
 ##     trans_new(paste0(&quot;log-&quot;, format(base)), trans, inv, log_breaks(base = base), 
 ##         domain = c(1e-100, Inf))
 ## }
-## &lt;bytecode: 0x7fc60bc64f28&gt;
+## &lt;bytecode: 0x7fd9cadb62b0&gt;
 ## &lt;environment: namespace:scales&gt;</code></pre>
 <p>Fascinating and really very elegant, in my opinion. The <code>log_trans</code> function invokes this <code>trans_new</code> function, which is the constructor for something called a <code>trans</code> object. From <code>?trans_new</code>:</p>
 <blockquote>

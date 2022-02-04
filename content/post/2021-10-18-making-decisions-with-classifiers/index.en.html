@@ -10,6 +10,17 @@ tags: []
 <script src="{{< blogdown/postref >}}index.en_files/header-attrs/header-attrs.js"></script>
 
 
+<style>
+table {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid grey;
+}
+td {
+   border: 1px solid #DCDCDC;
+}
+</style>
 <div id="tldr" class="section level1">
 <h1>TL;DR</h1>
 <ul>
@@ -73,11 +84,11 @@ Classifier Payoff Matrix
 <tr>
 <td colspan="2" rowspan="2">
 </td>
-<td colspan="2">
+<td colspan="2" style>
 <strong>Predicted</strong>
 </td>
 </tr>
-<tr>
+<tr style="border-bottom: 1px solid blue;">
 <td>
 <span class="math inline">\(\hat{Y}=1\)</span>
 </td>
@@ -112,7 +123,7 @@ Classifier Payoff Matrix
 </tr>
 </tbody>
 </table>
-<p>The utilities associated with each outcome can vary significantly by domain. Fo instance, if the classifier is a COVID-19 test, then we might attach a higher cost to a false negative than to a false positive. While both are certainly costly, the damage done by a false positive is likely confined to the individual, who may be forced to unnecessarily quarantine—whereas, a false negative may lead the individual to infect others.</p>
+<p>The utilities associated with each outcome can vary significantly by domain. For instance, if the classifier is a COVID-19 test, then we might attach a higher cost to a false negative than to a false positive. While both are certainly costly, the damage done by a false positive is likely confined to the individual, who may be forced to unnecessarily quarantine—whereas, a false negative may lead the individual to infect others.</p>
 <table class="table-no-highlight">
 <thead>
 <tr>
@@ -169,7 +180,7 @@ Hypothetical COVID-19 Test Payoff Matrix
 </tbody>
 </table>
 <p>On the other hand, many for many applications a false positive might be significantly more costly than a false negative. For example, imagine the model behind Face ID on an iPhone. A false negative means that the model incorrectly fails to identify your face as a match to what you’ve stored. This causes annoyance; you may have to scan again, or even unlock your phone by an alternate method. However, a false positive means that a face which is not yours was able to unlock the phone. This is presumably significantly worse.</p>
-<table class="table-no-highlight">
+<table style="width:80%;margin-left:auto;margin-right:auto;">
 <thead>
 <tr>
 <th colspan="4">

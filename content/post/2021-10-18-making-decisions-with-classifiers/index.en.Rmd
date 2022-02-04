@@ -6,11 +6,20 @@ slug: []
 categories: []
 tags: []
 ---
-
 ```{r include=FALSE}
 library(tidyverse)
 ```
-
+<style>
+table {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid grey;
+}
+td {
+   border: 1px solid #DCDCDC;
+}
+</style>
 # TL;DR
 
 - How to balance false positive rates and false negative rates is a problem that confronts anyone who does anything with machine learning, or even predicting more generally
@@ -91,12 +100,12 @@ As discussed above, when we use the classifier to make a prediction, there are f
 <thead><tr><th colspan="4">Classifier Payoff Matrix</th></tr>
 </thead>
 <tbody>
-<tr><td colspan="2" rowspan="2"></td><td colspan="2"><strong>Predicted</strong></td></tr>
-<tr><td>$\hat{Y}=1$</td><td>$\hat{Y}=0$</td></tr>
+<tr><td colspan="2" rowspan="2"></td><td colspan="2" style=""><strong>Predicted</strong></td></tr>
+<tr style="border-bottom: 1px solid blue;"><td>$\hat{Y}=1$</td><td>$\hat{Y}=0$</td></tr>
 <tr><td rowspan="2"><strong>Actual</strong></td><td>$Y=1$</td><td>$u_{TP}$</td><td>$u_{FN}$</td></tr><tr><td>$Y=0$</td><td>$u_{FP}$</td><td>$u_{TN}$</td></tr></tbody>
 </table>
 
-The utilities associated with each outcome can vary significantly by domain. Fo instance, if the classifier is a COVID-19 test, then we might attach a higher cost to a false negative than to a false positive. While both are certainly costly, the damage done by a false positive is likely confined to the individual, who may be forced to unnecessarily quarantine—whereas, a false negative may lead the individual to infect others.
+The utilities associated with each outcome can vary significantly by domain. For instance, if the classifier is a COVID-19 test, then we might attach a higher cost to a false negative than to a false positive. While both are certainly costly, the damage done by a false positive is likely confined to the individual, who may be forced to unnecessarily quarantine—whereas, a false negative may lead the individual to infect others.
 
 <table class="table-no-highlight">
 <thead><tr><th colspan="4">Hypothetical COVID-19 Test Payoff Matrix</th></tr>
@@ -115,7 +124,7 @@ The utilities associated with each outcome can vary significantly by domain. Fo 
 
 On the other hand, many for many applications a false positive might be significantly more costly than a false negative. For example, imagine the model behind Face ID on an iPhone. A false negative means that the model incorrectly fails to identify your face as a match to what you've stored. This causes annoyance; you may have to scan again, or even unlock your phone by an alternate method. However, a false positive means that a face which is not yours was able to unlock the phone. This is presumably significantly worse.
 
-<table class="table-no-highlight">
+<table style="width:80%;margin-left:auto;margin-right:auto;">
 <thead><tr><th colspan="4">Face ID Payoff Matrix</th></tr>
 </thead>
 <tbody>

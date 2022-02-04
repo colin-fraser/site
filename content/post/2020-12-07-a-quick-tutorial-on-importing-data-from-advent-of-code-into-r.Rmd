@@ -3,7 +3,7 @@ title: A quick tutorial on importing data from _Advent Of Code_ into R
 author: ~
 date: '2020-12-12'
 slug: a-quick-tutorial-on-importing-data-from-advent-of-code-into-r
-categories: []
+categories: [r-tutorial]
 tags: [advent-of-code, code-tutorial, Rstats]
 ---
 

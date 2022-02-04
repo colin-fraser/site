@@ -1,8 +1,7 @@
 ---
 title: Recreating The Bad White House Chart In ggplot2
-author: Colin Fraser
 date: '2022-01-29'
-slug: []
+slug: recreating-the-bad-white-house-chart
 categories:
   - r-tutorial
 tags:
@@ -23,11 +22,11 @@ blogdown::shortcode("tweet", "1486773908502024192")
  
 Unless the White House is drawing charts manually in PowerPoint or something (which, to be honest, it seems like they probably are), it would actually very hard to make a chart that does this. Most plotting software works hard to make sure that plot axes are drawn to some scale, and that that scale doesn't change midway through the axis. Continuing on riffing as we like to do on Twitter, I tweeted that in ggplot2, it might look something like this.
 
-<blockquote class="twitter-tweet" data-conversation="none"><p lang="tl" dir="ltr">gdp_plot +<br> scale_y_propaganda()</p>&mdash; Colin Fraser  (@colin_fraser) <a href="https://twitter.com/colin_fraser/status/1486774482052141056?ref_src=twsrc%5Etfw">January 27, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet tw-align-cente" data-conversation="none"><p lang="tl" dir="ltr">gdp_plot +<br> scale_y_propaganda()</p>&mdash; Colin Fraser  (@colin_fraser) <a href="https://twitter.com/colin_fraser/status/1486774482052141056?ref_src=twsrc%5Etfw">January 27, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 Curiosity then took over, and I began to wonder how one would actually go about creating the `scale_y_propaganda()` function. It turns out that it is possible, and although you have to really shoehorn it in there, ggplot2 is flexible enough to do it relatively straightforwardly. In recreating the plot I also learned a thing or two about how ggplot2 axis labeling works, so I thought it might be worth writing up a little thing about it.
 
-**Note:** _Although I use the term "propaganda" a lot in this piece, it is tongue-in-cheek and I am not accusing anyone of malicious wrongdoing of any kind in the creation of the original plot. The point of this post is not to make any kind of political statement; it's just to do kind of a wacky R tutorial and learn something about ggplot. I completely buy that it was an error due to a failure to proofread as they later stated._
+**Note:** _Although I use the term "propaganda" a lot in this piece, it is tongue-in-cheek and I am not accusing anyone of malicious wrongdoing of any kind in the creation of the original plot. The point of this post is not to make any kind of political statement; it's just to do kind of a wacky R tutorial and learn something about `ggplot`. I completely buy that it was an error due to a failure to proofread as they later stated._
 
 ```{r echo=FALSE}
 blogdown::shortcode("tweet", "1486838940707524617")
@@ -39,7 +38,8 @@ _It's a little hard for me to imagine how an error like this would be made, but 
 
 I found a time series of the US annual GDP growth rate from World Bank.
 
-<iframe src="https://data.worldbank.org/share/widget?end=2020&indicators=NY.GDP.MKTP.KD.ZG&locations=US&start=1961&view=chart" width='450' height='300' frameBorder='1' scrolling="no" ></iframe>
+<iframe src="https://data.worldbank.org/share/widget?end=2020&indicators=NY.GDP.MKTP.KD.ZG&locations=US&start=1961&view=chart" width='450' height='300' frameBorder='1' scrolling="no" style="margin: 0 auto;"></iframe>
+
 
 It doesn't have 2021, so I just stuck that onto the end. I'll spare you the hassle of recreating the dataset on your own; here's a block of code that recreates the data that I work with here.
 ```{r}
@@ -59,7 +59,7 @@ df <- tibble(
 
 The first step in recreating the Bad Chart is to understand it, so that we can describe it to ggplot2. In ggplot2, we think about data visualization as mapping numeric variables to the aesthetic dimensions of the `geom`s. In this case, we're going to work with a bar chart ([`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)), with the year mapped to the horizontal position, and the height of the bars mapped to the GDP growth variable. But somehow, at `gdp_growth`=5, the mapping changes to double the rate at which height increases with GDP growth.
 
-```
+<pre><code class="nohighlight">
 6.0 \  
 5.5  | - height increases at 2 units per GDP growth percentage point
 5.0 /
@@ -69,7 +69,8 @@ The first step in recreating the Bad Chart is to understand it, so that we can d
 1.0   |
 0     |
 -1.0 /
-```
+</code>
+</pre>
 
 The most obvious way to describe this relationship is using a piecewise linear function. Letting $p(x)$ represent the propagandized bar height for a `gdp_growth` of `x`, we can write:
 
