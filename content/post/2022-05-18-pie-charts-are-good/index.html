@@ -10,7 +10,7 @@ output: html_document
 
 
 
-<p>In R, if you run <code>?pie</code>, you get a stern talking to.</p>
+<p>In R, if you run <code>?pie</code>, you get a stern talking-to.</p>
 <pre class="text"><code>&gt; ?pie
 [...]
 Note:
@@ -52,11 +52,11 @@ pie(c(Sky = 78, &quot;Sunny side of pyramid&quot; = 17, &quot;Shady side of pyra
 <p>Since pairwise comparison and ranking is easier with the bar chart, the bar chart is clearly better, right?</p>
 <p>No! Not always! In some cases, pie charts are still good—and superior, in fact, to bar charts.</p>
 </div>
-<div id="the-good-thing-about-bar-charts" class="section level1">
-<h1>The good thing about bar charts</h1>
+<div id="the-good-thing-about-pie-charts" class="section level1">
+<h1>The good thing about pie charts</h1>
 <p>A data visualization is good insofar as it helps the reader efficiently perform relevant queries.
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<p>A line graph is usually a good way to visualize a time series because helps the reader answer queries like</p>
+<p>A line graph is usually a good way to visualize a time series because helps the reader perform queries like</p>
 <ul>
 <li>Where is the maximum of the series?</li>
 <li>Where is the minimum?</li>
@@ -64,6 +64,7 @@ pie(c(Sky = 78, &quot;Sunny side of pyramid&quot; = 17, &quot;Shady side of pyra
 <li>Where is the fastest decrease?</li>
 <li>Does the series increase or decrease overall?</li>
 </ul>
+<p>Of course, the line graph also fails for certain queries as well. For example, it doesn’t do very well at telling the reader what the average value is over a time period. If that’s an important query, you might want to use a different graph.</p>
 <p>The bar chart is very good for certain common queries.</p>
 <ul>
 <li>Which category is the biggest?</li>
@@ -75,7 +76,7 @@ pie(c(Sky = 78, &quot;Sunny side of pyramid&quot; = 17, &quot;Shady side of pyra
 <li>About what fraction of the total is category B?</li>
 <li>Do F and B together make up a majority of the total?</li>
 <li>What’s the smallest set of categories that it takes to make up over two thirds of the total?</li>
-<li>What’s larger: F and J, or B and E?</li>
+<li>What’s larger: J, I and H together, or A, G, D, and E together?</li>
 </ul>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>Looking at the bar chart again, these queries are, in my opinion, basically impossible to answer at a glance. Pairwise comparisons are easy, but to add categories together requires the reader to mentally stack the boxes on top of each other, at which point the visualization itself is not helping very much. Compare to the pie chart.</p>

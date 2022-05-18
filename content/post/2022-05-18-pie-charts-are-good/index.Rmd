@@ -15,7 +15,7 @@ theme_set(colinlib::theme1('none'))
 
 
 
-In R, if you run `?pie`, you get a stern talking to.
+In R, if you run `?pie`, you get a stern talking-to.
 
 ```text
 > ?pie
@@ -89,7 +89,7 @@ Since pairwise comparison and ranking is easier with the bar chart, the bar char
 
 No! Not always! In some cases, pie charts are still good—and superior, in fact, to bar charts.
 
-# The good thing about bar charts
+# The good thing about pie charts
 
 A data visualization is good insofar as it helps the reader efficiently perform relevant queries.
 ```{r}
@@ -99,13 +99,15 @@ qplot(x = 1:20, y = 1:20 + rnorm(20), geom = 'line') +
   labs(y = NULL, x = 'Time')
 ```
 
-A line graph is usually a good way to visualize a time series because helps the reader answer queries like
+A line graph is usually a good way to visualize a time series because helps the reader perform queries like
 
 - Where is the maximum of the series?
 - Where is the minimum?
 - Where is the fastest increase?
 - Where is the fastest decrease?
 - Does the series increase or decrease overall?
+
+Of course, the line graph also fails for certain queries as well. For example, it doesn't do very well at telling the reader what the average value is over a time period. If that's an important query, you might want to use a different graph. 
 
 The bar chart is very good for certain common queries.
 
@@ -118,7 +120,7 @@ However, there is a certain class of queries that the bar chart fails spectacula
 - About what fraction of the total is category B?
 - Do F and B together make up a majority of the total?
 - What's the smallest set of categories that it takes to make up over two thirds of the total?
-- What's larger: F and J, or B and E?
+- What's larger: J, I and H together, or A, G, D, and E together?
 
 ```{r}
 barplot(sort(v, T), yaxt = 'n')
@@ -130,7 +132,7 @@ Looking at the bar chart again, these queries are, in my opinion, basically impo
 pie(sort(v, decreasing = TRUE))
 ```
 
-We can instantly see at a glance that B and F are pretty close to a quarter each of the total, and that B and F together _do_ make up more than half of the total. This is because, while making fine comparisons between arbitrary angles might be hard, there are certain angle comparisons that are straightforward and automatic. I think the most intuitive of these is a comparison to 180 degrees, which corresponds to finding the majority of the pie. It's easy and intuitive to see at a glance that the angle formed by B and F adds to more than 180. Perhaps slightly less immediately obvious—but still relatively obvious in my opinion—are comparisons to 90 degrees. It's easy for me to see at a glance that J + I + H > 90 degrees, whereas A + G + D + E < 90 degrees; meaning that J, I, and H together make up slightly over a quarter of the total, while A, G, D, and E make up less.
+We can instantly see at a glance that B and F are pretty close to a quarter each of the total, and that B and F together _do_ make up more than half of the total. This is because, while making fine comparisons between arbitrary angles might be hard, there are certain angle comparisons that are straightforward and automatic. I think the most intuitive of these is a comparison to 180 degrees, which corresponds to finding the majority of the pie. It's easy and intuitive to see at a glance that the angle formed by B and F adds to more than 180. Perhaps slightly less immediately obvious—but still relatively obvious in my opinion—are comparisons to 90 degrees. It's easy for me to see at a glance that J + I + H > 90 degrees, whereas A + G + D + E < 90 degrees; meaning that J, I, and H together make up slightly over a quarter of the total, while A, G, D, and E make up less. 
 
 # It's good to use pie charts when they are the right tool for the job
 
