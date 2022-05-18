@@ -1,0 +1,94 @@
+---
+title: Pie Charts Are Good
+author: R package build
+date: '2022-05-18'
+slug: indexRmd
+categories: []
+tags: []
+output: html_document
+---
+
+
+
+<p>In R, if you run <code>?pie</code>, you get a stern talking to.</p>
+<pre class="text"><code>&gt; ?pie
+[...]
+Note:
+
+     Pie charts are a very bad way of displaying information.  The eye
+     is good at judging linear measures and bad at judging relative
+     areas.  A bar chart or dot chart is a preferable way of displaying
+     this type of data.
+
+     Cleveland (1985), page 264: “Data that can be shown by pie charts
+     always can be shown by a dot chart.  This means that judgements of
+     position along a common scale can be made instead of the less
+     accurate angle judgements.” This statement is based on the
+     empirical investigations of Cleveland and McGill as well as
+     investigations by perceptual psychologists.</code></pre>
+<p>Then it gives you some example code for drawing a cute pyramid.</p>
+<pre class="r"><code>## Another case showing pie() is rather fun than science:
+## (original by FinalBackwardsGlance on http://imgur.com/gallery/wWrpU4X)
+pie(c(Sky = 78, &quot;Sunny side of pyramid&quot; = 17, &quot;Shady side of pyramid&quot; = 5),
+    init.angle = 315, col = c(&quot;deepskyblue&quot;, &quot;yellow&quot;, &quot;yellow3&quot;), border = FALSE)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>Are pie charts really only good for drawing pyramids?</p>
+<div id="the-bad-thing-about-pie-charts" class="section level1">
+<h1>The bad thing about pie charts</h1>
+<p>In a standard pie chart, you’re mapping some numbers onto angles of circular sectors. The mapping is such that the resulting angles are proportional to the numbers, and add to 360. This creates a bunch of circular sectors that all fit together into a complete circle.</p>
+<pre class="r"><code>pie(c(A = 4, B = 5, C = 6))</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>What’s bad here is that sometimes people are not so good at comparing angles. For example, it may not be immediately obvious to a reader that C is larger then B in the above plot. Heights or lengths are much easier to visually distinguish between for most people.</p>
+<pre class="r"><code>barplot(c(A = 4, B = 5, C = 6), yaxt = &#39;n&#39;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>It gets worse the more values you have.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>It’s not easy here to quickly rank these categories from largest to smallest, or to make pairwaise comparisons. Compare to the bar chart with the same set of values.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>You can make things a little bit better for the pie chart by putting the slices in decreasing order.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>But as much as this helps the pie chart, it helps the bar chart even more.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Since pairwise comparison and ranking is easier with the bar chart, the bar chart is clearly better, right?</p>
+<p>No! Not always! In some cases, pie charts are still good—and superior, in fact, to bar charts.</p>
+</div>
+<div id="the-good-thing-about-bar-charts" class="section level1">
+<h1>The good thing about bar charts</h1>
+<p>A data visualization is good insofar as it helps the reader efficiently perform relevant queries.
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>A line graph is usually a good way to visualize a time series because helps the reader answer queries like</p>
+<ul>
+<li>Where is the maximum of the series?</li>
+<li>Where is the minimum?</li>
+<li>Where is the fastest increase?</li>
+<li>Where is the fastest decrease?</li>
+<li>Does the series increase or decrease overall?</li>
+</ul>
+<p>The bar chart is very good for certain common queries.</p>
+<ul>
+<li>Which category is the biggest?</li>
+<li>Which category is the smallest?</li>
+<li>Is category X bigger or smaller than category Y?</li>
+</ul>
+<p>However, there is a certain class of queries that the bar chart fails spectacularly at, and which the pie chart does very well. These are queries that involve quickly summing subsets of the categories and comparing the subsets.</p>
+<ul>
+<li>About what fraction of the total is category B?</li>
+<li>Do F and B together make up a majority of the total?</li>
+<li>What’s the smallest set of categories that it takes to make up over two thirds of the total?</li>
+<li>What’s larger: F and J, or B and E?</li>
+</ul>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Looking at the bar chart again, these queries are, in my opinion, basically impossible to answer at a glance. Pairwise comparisons are easy, but to add categories together requires the reader to mentally stack the boxes on top of each other, at which point the visualization itself is not helping very much. Compare to the pie chart.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>We can instantly see at a glance that B and F are pretty close to a quarter each of the total, and that B and F together <em>do</em> make up more than half of the total. This is because, while making fine comparisons between arbitrary angles might be hard, there are certain angle comparisons that are straightforward and automatic. I think the most intuitive of these is a comparison to 180 degrees, which corresponds to finding the majority of the pie. It’s easy and intuitive to see at a glance that the angle formed by B and F adds to more than 180. Perhaps slightly less immediately obvious—but still relatively obvious in my opinion—are comparisons to 90 degrees. It’s easy for me to see at a glance that J + I + H &gt; 90 degrees, whereas A + G + D + E &lt; 90 degrees; meaning that J, I, and H together make up slightly over a quarter of the total, while A, G, D, and E make up less.</p>
+</div>
+<div id="its-good-to-use-pie-charts-when-they-are-the-right-tool-for-the-job" class="section level1">
+<h1>It’s good to use pie charts when they are the right tool for the job</h1>
+<p>People get weirdly dogmatic about stuff. <a href="https://www.businessinsider.com/pie-charts-are-the-worst-2013-6">From Business Insider</a>:</p>
+<div class="figure">
+<img src="images/Screen%20Shot%202022-05-18%20at%2011.02.36%20AM.png" alt="" />
+<p class="caption">A screenshot from Business Insider calling pie charts “The Worst Chart In The World”</p>
+</div>
+<p>Whether a data visualization is useful is a function of whether it helps the reader perform the relevant queries at a glance. What those “relevant queries” are is a decision that the analyst has to make. Sometimes you want to provide quick pairwise comparisons between magnitudes, in which case a pie chart is probably unhelpful relative to a bar chart. Other times you want to group magnitudes together and compare the groups, in which case pie charts are great.</p>
+<p>It’s fine.</p>
+</div>
