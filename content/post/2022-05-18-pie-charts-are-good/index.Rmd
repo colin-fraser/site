@@ -136,10 +136,10 @@ We can instantly see at a glance that B and F are pretty close to a quarter each
 
 # It's good to use pie charts when they are the right tool for the job
 
-People get weirdly dogmatic about stuff. [From Business Insider](https://www.businessinsider.com/pie-charts-are-the-worst-2013-6):
+People get weirdly dogmatic about stuff.
 
-![A screenshot from Business Insider calling pie charts "The Worst Chart In The World"](images/Screen Shot 2022-05-18 at 11.02.36 AM.png)
+![](images/piehate.png)
 
-Whether a data visualization is useful is a function of whether it helps the reader perform the relevant queries at a glance. What those "relevant queries" are is a decision that the analyst has to make. Sometimes you want to provide quick pairwise comparisons between magnitudes, in which case a pie chart is probably unhelpful relative to a bar chart. Other times you want to group magnitudes together and compare the groups, in which case pie charts are great.
+Whether a data visualization is useful is a function of whether it helps the reader perform the relevant queries at a glance. What those "relevant queries" are is a decision that the analyst has to make. Sometimes you want to provide quick pairwise comparisons between magnitudes, in which case a pie chart is probably unhelpful relative to a bar chart. Other times you want to group magnitudes together and compare the groups, in which case pie charts are great. Data visualization isn't a neutral activity; authors create data visualizations to communicate, inform, and persuade. There's no one-size-fits-all rule about the best or only way to do that.
 
-It's fine.
+It's fine. Use pie charts. If anyone yells at you send them this post.
