@@ -132,11 +132,13 @@ Looking at the bar chart again, these queries are, in my opinion, basically impo
 pie(sort(v, decreasing = TRUE))
 ```
 
-We can instantly see at a glance that B and F are pretty close to a quarter each of the total, and that B and F together _do_ make up more than half of the total. This is because, while making fine comparisons between arbitrary angles might be hard, there are certain angle comparisons that are straightforward and automatic. I think the most intuitive of these is a comparison to 180 degrees, which corresponds to finding the majority of the pie. It's easy and intuitive to see at a glance that the angle formed by B and F adds to more than 180. Perhaps slightly less immediately obvious—but still relatively obvious in my opinion—are comparisons to 90 degrees. It's easy for me to see at a glance that J + I + H > 90 degrees, whereas A + G + D + E < 90 degrees; meaning that J, I, and H together make up slightly over a quarter of the total, while A, G, D, and E make up less. 
+We can instantly see at a glance that B and F are pretty close to a quarter each of the total, and that B and F together make up more than half of the total. While making fine comparisons between arbitrary angles might be hard, there are certain angle comparisons that are straightforward and automatic. I think the most intuitive of these is a comparison to 180 degrees, which corresponds to finding the majority of the pie. It's easy and intuitive to see at a glance that the angle formed by B and F adds to more than 180. Similarly, by starting at the largest section and working around the pie clockwise, you can easily find the smallest set of categories that makes up any fraction you want—at least approximately (it helps that the slices are in descending order of size).
+
+If you want to empower the reader to perform queries about the sizes of category subsets relative to the total, a pie chart is your best friend and a bar chart sucks.
 
 # It's good to use pie charts when they are the right tool for the job
 
-People get weirdly dogmatic about stuff.
+People get weirdly dogmatic about this stuff.
 
 ![](images/piehate.png)
 
