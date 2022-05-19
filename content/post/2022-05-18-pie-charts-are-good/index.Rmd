@@ -67,7 +67,7 @@ v <- c(A = 4, B = 15, D = 3, E = 1, F = 14, G = 3.5, H = 4.5, I = 5, J = 5.5)
 pie(v)
 ```
 
-It's not easy here to quickly rank these categories from largest to smallest, or to make pairwaise comparisons. Compare to the bar chart with the same set of values.
+It's not easy here to quickly rank these categories from largest to smallest, or to make pairwise comparisons. Compare to the bar chart with the same set of values.
 
 ```{r}
 barplot(v, yaxt = 'n')
