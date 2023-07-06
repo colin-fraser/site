@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Colin Fraser">
+<meta name="dcterms.date" content="2016-08-26">
+
+<title>site - The Treachery of Leakage</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">site</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-to-avoid-letting-a-model-cheat-on-you-and-break-your-heart" id="toc-how-to-avoid-letting-a-model-cheat-on-you-and-break-your-heart" class="nav-link active" data-scroll-target="#how-to-avoid-letting-a-model-cheat-on-you-and-break-your-heart">How to avoid letting a model cheat on you and break your heart</a>
+  <ul class="collapse">
+  <li><a href="#when-is-a-dataset-leaky" id="toc-when-is-a-dataset-leaky" class="nav-link" data-scroll-target="#when-is-a-dataset-leaky">When is a dataset leaky?</a></li>
+  <li><a href="#freedom-of-information" id="toc-freedom-of-information" class="nav-link" data-scroll-target="#freedom-of-information">Freedom of Information</a></li>
+  <li><a href="#theres-no-such-thing-as-a-time-machine" id="toc-theres-no-such-thing-as-a-time-machine" class="nav-link" data-scroll-target="#theres-no-such-thing-as-a-time-machine">There’s no such thing as a time machine</a></li>
+  <li><a href="#what-can-you-do" id="toc-what-can-you-do" class="nav-link" data-scroll-target="#what-can-you-do">What can you do?</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">The Treachery of Leakage</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Colin Fraser </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 26, 2016</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="how-to-avoid-letting-a-model-cheat-on-you-and-break-your-heart" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-avoid-letting-a-model-cheat-on-you-and-break-your-heart">How to avoid letting a model cheat on you and break your heart</h2>
+<p>There are a lot of ways to screw up when you’re trying to do data science. Some of them are very technical. Leakage is not one of those very technical screw-ups. In fact, you hardly have to know anything about mathematics or statistics or computer science at all to understand the basic premise of leakage. However, it is one of the sneakiest, most sinister, and widespread mistakes a data scientist can make. <em>The Handbook of Statistical Analysis and Data Mining Applications</em> calls leakage one of the top ten data mining mistakes. I might put it at number one.</p>
+<p>The most fascinating thing about leakage—in a sort of can’t-take-my-eyes-off-the-car-crash kind of a way—is the betrayal. The broken promises. The heartbreak. Your model performs way better than you expect it to in the test set. It’s almost too good to be true. A part of you knows that no one model should have all that power, and yet, the numbers are right in front of you, showing you that you can predict the stock market with 90% accuracy or perfectly predict what product online customers will buy next. You know that you should think about this but the temptation to simply pat yourself on the back for building the world’s greatest data mining algorithm is too great. Your eyes turn into dollar signs. You’ll be famous. You’re the greatest data scientist of all time. You’re a hero.</p>
+<p>But when you release your model into the wild, something awful happens. Not only does the model perform worse than it did in your test runs — you thought that might happen — it falls flat on its face. It doesn’t make a single accurate prediction. In fact, in the most insidious cases of leakage, the model actually performs worse than flipping a coin, and you’d have been better off not building it at all. The model that you trained and tested for hours, that made all these promises to you about giant AUCs and tiny RMSEs and whatever other gauntlet of evaluation criteria you threw at it, is spitting in your face. It lied to you. It played you. Why?</p>
+<p>And what’s frustrating is this: the culprit is usually an obvious little mistake that you made right at the very beginning of the project. You can spend five hundred hours building and tuning some fancy algorithm that leverages all of the state-of-the-art machine learning tools that we have available today, and it will all be for nothing if you screw up and allow data leakage into your training data from the start.</p>
+<section id="when-is-a-dataset-leaky" class="level3">
+<h3 class="anchored" data-anchor-id="when-is-a-dataset-leaky">When is a dataset leaky?</h3>
+<p>Machine learning experts have struggled a little bit to come up with a single formal definition of leakage, and perhaps it is best understood first by example. This is a modified version of an example that is presented in <em><a href="http://dl.acm.org/citation.cfm?id=2020496">Leakage in Data Mining: Formulation, Detection, and Avoidance</a></em>, which has many more examples and ideas on this topic if you’re interested. Suppose you’re a data scientist working at some kind of online store, and you’re trying to build a model to predict, based on past purchases, whether a customer is likely to buy jewelry. You gather a massive dataset containing purchase histories for every single customer who has ever shopped at the store, along with their total spend on each of the three product categories that the store sells. Maybe it looks something like this:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">CUSTOMER</th>
+<th style="text-align: left;">JEWELRY</th>
+<th style="text-align: left;">MOVIES</th>
+<th style="text-align: left;">ELECTRONICS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">11123</td>
+<td style="text-align: left;">1003.23</td>
+<td style="text-align: left;">24.99</td>
+<td style="text-align: left;">1594.95</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">11124</td>
+<td style="text-align: left;">0.00</td>
+<td style="text-align: left;">96.45</td>
+<td style="text-align: left;">0.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11125</td>
+<td style="text-align: left;">58.12</td>
+<td style="text-align: left;">0.00</td>
+<td style="text-align: left;">0.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">11126</td>
+<td style="text-align: left;">0.00</td>
+<td style="text-align: left;">549.20</td>
+<td style="text-align: left;">190.67</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11127</td>
+<td style="text-align: left;">8.23</td>
+<td style="text-align: left;">2400.10</td>
+<td style="text-align: left;">523.45</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">…</td>
+</tr>
+</tbody>
+</table>
+<p>Using this dataset, your plan is to build a model which predicts whether a customer buys jewelry as a function of their spending on movies and electronics. You’ve just committed leakage. You’re already hooped. You’ve built a leaky dataset, and any model that you train on this data, no matter how many tens of hours you put into boosting and bagging and deep learning and validating and cross-validating and whatever else you can imagine, is doomed to betray you from the start. In fact, in many cases, the better your model performs in testing, the worse it will in real life. Such is the treachery of leakage.</p>
+<p>Can you see why? It has to do with customer 11125.</p>
+<p>Customer 11125 has 0 spend on movies and 0 spend on electronics. If the store only sells jewelry, movies, and electronics, then the only way that customer 11125 can possibly be in the dataset is if he bought jewelry. Due to the way that the data was collected and formatted, the condition of having 0 spend on movies and electronics logically implies the condition of having bought jewelry.</p>
+<p>Any half decent model will learn this little tidbit and use it to make perfect predictions about the customers with 0 spend on movies and electronics. And if there are a lot of those customers in the data, then your model will make a whole lot of perfect predictions in testing. And that will look pretty good.</p>
+<p>But it’s a mirage. Again, the condition of having positive spend on jewelry is logically implied by the condition of having 0 spend on electronics and movies in this dataset. The model correctly identifies that customers who must have bought jewelry bought jewelry. This is an unhelpful identification.</p>
+<p>Information is in some sense <em>leaking</em> from the features — information that the model has no right to see. There’s some kind of giveaway in the data about the outcomes that you’re trying to predict, and the model uses that giveaway to cheat and make better predictions than would be possible in real life. You model has learned something, but the thing that it learned is a quirk of the data and not something about the customers that you’re actually trying to model.</p>
+</section>
+<section id="freedom-of-information" class="level3">
+<h3 class="anchored" data-anchor-id="freedom-of-information">Freedom of Information</h3>
+<p>What information does your model have the right to see? That can be a tricky question to answer, but it is the key spotting and correcting leakage. Leakage is present when your features contain information that your model should not legitimately be allowed to use. But legitimacy is not always obvious, or even unambiguously defined. For instance, consider the case of a classifier that looks at an image and decides whether it contains a wolf or a dog. You train it on some images like these.</p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p>Your classifier seems to do quite well, identifying most wolves and most dogs in your test set. However, on further investigation (perhaps with a little help from the LIME technique described in <a href="http://arxiv.org/pdf/1602.04938v1.pdf">the paper that I stole this example from</a>), you determine that your model has simply decided that a “wolf” is a thing on a white background and a “dog” is a thing on a green background. The correct prediction is fully specified by the background color of the image. Is this leakage?</p>
+<p>That’s a little bit of a hard question. It is undoubtedly true that the color of the background of an image can help to predict the foreground, and humans performing this same classification task probably use the background as a feature in their own assessments. The background is a legitimate feature that rational observer would use to determine the content of an image.</p>
+<p></p>
+<p>The answer to whether this is a leakage problem or not depends on how you expect your model to generalize. If you expect that the images that your model will be looking at have the property that all of the wolf images will have white backgrounds and all of the dog images won’t, then run with the one you’ve got. It works just fine. On the other hand, if you expect your model to know that a Chihuahua on a blanket is not a wolf, then you do have a leakage problem at the data collection stage. Some quirk about your data collection process gave the background of the image too much predictive power, and your model is using this quirk of the data to cheat on its predictions.</p>
+</section>
+<section id="theres-no-such-thing-as-a-time-machine" class="level3">
+<h3 class="anchored" data-anchor-id="theres-no-such-thing-as-a-time-machine">There’s no such thing as a time machine</h3>
+<p>The accidental introduction of time-travel into the data is probably the most common source of leakage in machine learning. Due to the way that data is often stored and aggregated, data that are generated at different times may be stored in the same place. A general rule might be: if X happened after Y, you shouldn’t build a model that uses X to predict Y. Claudia Perlich calls this the No Time Machine Condition (NTMC). A model that determines whether it rains at 9:00 AM as a function of whether the road is wet at 9:05 AM might be very accurate, but it will also be very useless.</p>
+<p>Violations of NTMC are usually harder to spot than using the wet road to predict rain. Imagine you’re a data scientist at some kind of SaaS company and you’re trying to build a model to predict customer churn (that is, to predict which customers will cancel their subscriptions). I have helpfully assembled a dataset for you, with an indicator variable marking whether each customer cancelled their subscription in 2015, along with some aggregated statistics for each customer for the year.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">CUSTOMER</th>
+<th style="text-align: left;">HELP_DESK_CALLS_2015</th>
+<th style="text-align: left;">DOWNTIME_MINS_2015</th>
+<th style="text-align: left;">CHURNED</th>
+<th style="text-align: left;">…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">45220</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">1293</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: left;">…</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">45221</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: left;">…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">45222</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">43</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: left;">…</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">45223</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">1001</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: left;">…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">45224</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">6298</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: left;">…</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">…</td>
+<td style="text-align: left;">…</td>
+</tr>
+</tbody>
+</table>
+<p><code>CUSTOMER</code> is the customer number, <code>HELP_DESK_CALLS_2015</code> is the total number of times that the customer called into the help desk in 2015, <code>DOWNTIME_MINS_2015</code> is the total number of minutes that the customer spent with their product not working properly in 2015, and <code>CHURNED</code> has a value of <code>TRUE</code> if and only if that customer churned at some point in 2015.</p>
+<p>Can you spot the leakage?</p>
+<p>We have violated NTMC. The variable <code>CHURNED</code> indicates whether a customer cancels their account at any point in the year. Our features, <code>HELP_DESK_CALLS_2015</code> and <code>DOWNTIME_MINS_2015</code> are yearly totals which are, by definition, only available at the end of the year. There’s no way that we could possibly know the values of these variables before the churn event takes place, so our model has no business using them to predict churn. There is no such thing as a time machine.</p>
+<p>“Well,” I might reply, with a crazed look in my eye that says <em>don’t make me redo this data collection</em>, “at least we have a model. Maybe there’s some kind of leakage problem with some of the variables, but it’s better than nothing.”</p>
+<p>Is it?</p>
+<p>Consider the relationship between <code>DOWNTIME_MINS_2015</code> and <code>CHURNED</code> in the data. <code>DOWNTIME_MINS_2015</code> is the aggregate total number of minutes that the product was down for the customer in 2015. Consider a customer who churns on January 1, 2015. Her <code>DOWNTIME_MINS_2015</code> is probably quite low — maybe 0. After all, she’s not even a customer for a single whole day in 2015, so she doesn’t have a very long time to accumulate downtime minutes. If there are many customers like this who cancel early in the year, then the data might contain many examples of churners with small numbers for <code>DOWNTIME_MINS_2015</code>. The model can exploit this pattern in the data to identify customers with low downtime minutes as churners.</p>
+<p>But this seems like it’s probably the exact opposite of reality! The data collection process results in a negative relationship between the variables <code>DOWNTIME_MINS_2015</code> and <code>CHURNED</code>, but the real-life process that relates real-life customer churn to real-life downtime minutes could very well have a positive relationship between those two variables! This results in the perverse outcome where the more likely your model says a customer is to churn, the less likely they really are to churn! Your “predictive model” is not only making inaccurate predictions, it is making predictions which are systematically wrong. You’re anti-predicting! Your churn prediction model predicts non-churn! Data leakage has created a model which truly is worse than having no model at all, all the while performing outstandingly well in backtesting.</p>
+<p>Such is the treachery of leakage.</p>
+</section>
+<section id="what-can-you-do" class="level3">
+<h3 class="anchored" data-anchor-id="what-can-you-do">What can you do?</h3>
+<p>I’m going to go out on a limb and claim that most sources of leakage are violations of NTMC, and modelers should be vigilant in ensuring that they are not accidentally introducing time travel into their models. Predictive modelling is usually (but not always) about using today’s data to predict what will happen tomorrow, but since training data is almost always collected after the fact, it is very easy to overlook the temporal sequence of the events that generate the data. This oversight can be huge.</p>
+<p>In NTMC cases, the fix is straightforward, at least in principle: somehow or another, your dataset needs a time dimension. In the example of the online store, if the dataset had been split into two time periods, where purchases (including jewelry) in time period 1 are used to predict whether a customer purchases jewelry in time period 2, the leakage problem disappears. Moreover, it’s usually the case that the more time information you can provide, the better. If the dataset in the churn prediction model could be rearranged into a panel format, where we have multiple observations across time for each customer, not only could the leakage issue be resolved, but a much wider array of potential features and models could be considered.</p>
+<p>The single most important thing that you can do to prevent data leakage from seeping into your models is to understand the process that generates the data, and how that process relates to the process that you’re actually trying to simulate in order to form predictions. The whole point of modelling is to learn things about some process out there in the real world, and in some sense to approximate that real-world process. But models don’t see the real-world process. They see the data. Leakage happens when there is some systematic correlation between features and outcomes in the data that either does not exist or is not observable in the real world. In order to spot that deceptive correlation, it is crucial to understand the data that you are working with. How is it collected? How is it aggregated? What are the criteria for being included in this sample?</p>
+<p>This level of understanding is not always easy to obtain in many modern data science contexts, where data is collected from disparate sources, possibly with the involvement of multiple people or teams, many of whom won’t have the answers. But when a deep understanding of the data generation process is achieved, it usually makes leakage problems almost obvious, and the fix becomes apparent.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
