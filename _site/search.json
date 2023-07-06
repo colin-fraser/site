@@ -1,9 +1,37 @@
 [
   {
+    "objectID": "posts/test-post/index.html",
+    "href": "posts/test-post/index.html",
+    "title": "Test post",
+    "section": "",
+    "text": "This is a test post.\n\\[E = mc^2 + AI\\]"
+  },
+  {
+    "objectID": "posts/2023-07-06-aposttotesttheopenargument/index.html",
+    "href": "posts/2023-07-06-aposttotesttheopenargument/index.html",
+    "title": "A post to test the open argument",
+    "section": "",
+    "text": "This is yet another test post, this time testing the open argument."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Colin Fraser",
+    "section": "",
+    "text": "About this site"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "site",
+    "title": "Posts",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+    "text": "a test post\n\n\n\n\n\n\n\n\n\n\n\n\nJul 6, 2023\n\n\nColin Fraser\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/2023-07-06-a-test-post/index.html",
+    "href": "posts/2023-07-06-a-test-post/index.html",
+    "title": "a test post",
+    "section": "",
+    "text": "This is a test post with some math\n\\[E = mc^2 + AI\\]"
   }
 ]

@@ -1,5 +1,11 @@
 ---
-title: "About"
+title: "Colin Fraser"
+about:
+  template: jolla
+  links:
+    - icon: twitter
+      text: twitter
+      href: https://twitter.com/colin_fraser
 ---
 
 About this site

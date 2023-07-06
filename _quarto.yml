@@ -7,13 +7,29 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: about.qmd
+        text: About
+    right: 
+      - icon: envelope
+        href: mailto://colin.r.fraser@gmail.com
+      - icon: twitter
+        href: https://twitter.com/colin_fraser
+      - icon: linkedin
+        href: https://linkedin.com/in/colin-fraser/
+      - icon: medium
+        href: https://medium.com/@colin.fraser
+      - icon: github
+        href: https://github.com/colin-fraser
+      - text: threads
+        href: https://www.threads.net/@colinfraser
+  site-url: colin-fraser.net
 
 format:
   html:
-    theme: cosmo
+    theme: simplex
     css: styles.css
     toc: true
 
-
+links:
+  twitter: https://twitter.com/colin-fraser
 
