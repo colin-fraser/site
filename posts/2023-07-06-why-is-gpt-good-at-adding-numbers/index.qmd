@@ -1,0 +1,33 @@
+---
+title: "The unreasonable effectiveness of ChatGPT at adding numbers"
+date: 2023-07-06
+author: Colin Fraser
+categories:
+  - GPT Experiments
+  - AI
+execute:
+  freeze: true
+---
+
+One of the thing that vexes me the most about GPT-\* is how it can possibly do math. I feel quite strongly that this should be impossible. LLMs are supposed paste together snippets of text from their training data into coherent-looking nonsense that may occasionally, by coincidence, make sense. If I ask the chat bot a math problem that does not occur in the training data, I strongly expect that it should not be able to provide the right answer unless that math problem happens to appear in the training data. And yet, I've observed in my messing around with these things that they seem unreasonably good at certain kinds of math problems that I would expect them not to be. And I'm not talking about tough ones; I'm just talking about basic arithmetic, like adding numbers.
+
+![Correct!](chatgpt_adding.png){fig-alt="ChatGPT correctly adding 93322 and 20339443"}
+
+In the above screenshot ChatGPT correctly gives the sum of a pair of numbers that I picked out of thin air. How did it do this? I can imagine a few hypotheses.
+
+1. The *Strong Stochastic Parrot Hypothesis* holds that the LLM can only produce the right answer as long as that problem occurs in its training data.
+2. The *Emergent Computation Hypothesis* holds that LLMs have some *emergent* ability to add numbers. By this I mean that the LLM is executing some computation that it has not been explicitly programmed to perform.
+3. The *OpenAI Funny Business Hypotheses* holds that OpenAI is plugging ChatGPT into some other calculator on the back end that handles math problems for the language model.
+
+How can I tell which of these it is? After all, the training dataset for the GPT models is famously large. Maybe it does happen to contain the fact that 93,322 + 20,339,443 = 20,432,765. Without OpenAI opening its training data to the public for inspection, there's really no way to check.
+
+But we don't actually need to look at the training data to falsify the Strong Stochastic Parrot Hypothesis. For any individual math problem that we ask GPT to perform, there's no way to tell if it shows up in the training data. But we _can_ put an upper bound on the number of math problems that the training data can possibly contain. Although the training data is big, the set of possible math problems is much bigger, and we can easily find a finite set of math problems that is larger than the training data.
+
+For example, consider the set of additions $a+b$ with $a$ and $b$ both between 1 and 10 million. There are 10 million times 10 million = $10^{14}$ of those. I don't know how many addition problems there are in the GPT training data, but it has to be a lot less than that. As a wild upper bound, suppose the training data contains a trillion unique addition problems (this is an impossibly high estimate considering that [GPT-3 was trained on fewer than a trillion _tokens_](https://en.wikipedia.org/wiki/GPT-3#GPT-3.5), most of which obviously do not represent addition facts). Then if you chose a random addition problem from that set, the probability that that problem would be in the training data would be 1%.
+
+The Strong Stochastic Parrot Hypothesis therefore has a testable hypothesis. If you choose a random addition problem in that range, if the SSPH holds, then the language model should be right 1% of the time. And recall that this number comes from an assumption that there are a trillion math problems in the training data; in reality this number is much smaller, and so the 1% should really be much lower (really it should be essentially zero).
+
+So let's try it! I generated 1,000 addition problems $a+b=c$, with $a$ and $b$ chosen at random from between 1 and 10 million, and send them to GPT-3 and GPT-4 through the API. To add a little spice, I tried two different prompts.
+
+
+

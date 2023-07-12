@@ -70,9 +70,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -162,7 +162,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="AI">AI <span class="quarto-category-count">(1)</span></div><div class="category" data-category="GPT Experiments">GPT Experiments <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -190,6 +190,13 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
 <div class="quarto-post image-right" data-index="0" data-listing-date-sort="1688601600000" data-listing-file-modified-sort="1688671418442" data-listing-reading-time-sort="0.06">
+<div class="thumbnail">
+<a href="./posts/2023-07-06-a-test-post/index.html">
+<div class="thumbnail-image">
+
+</div>
+</a><p><a href="./posts/2023-07-06-a-test-post/index.html"></a></p>
+</div>
 <div class="body">
 <a href="./posts/2023-07-06-a-test-post/index.html">
 <h3 class="no-anchor listing-title">
@@ -205,6 +212,44 @@ This is a test post with some math
 </div>
 <div class="metadata">
 <a href="./posts/2023-07-06-a-test-post/index.html">
+<div class="listing-date">
+Jul 6, 2023
+</div>
+<div class="listing-author">
+Colin Fraser
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="GPT Experiments,AI" data-listing-date-sort="1688601600000" data-listing-file-modified-sort="1688692250995" data-listing-reading-time-sort="1.47">
+<div class="thumbnail">
+<p><a href="./posts/2023-07-06-why-is-gpt-good-at-adding-numbers/index.html"> <img src="./posts/2023-07-06-why-is-gpt-good-at-adding-numbers/chatgpt_adding.png" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/2023-07-06-why-is-gpt-good-at-adding-numbers/index.html">
+<h3 class="no-anchor listing-title">
+The unreasonable effectiveness of ChatGPT at adding numbers
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('GPT Experiments'); return false;">
+GPT Experiments
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('AI'); return false;">
+AI
+</div>
+</div>
+<a href="./posts/2023-07-06-why-is-gpt-good-at-adding-numbers/index.html">
+<div class="listing-description">
+One of the thing that vexes me the most about GPT-* is how it can possibly do math. I feel quite strongly that this should be impossible. LLMs are supposed paste together…
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2023-07-06-why-is-gpt-good-at-adding-numbers/index.html">
 <div class="listing-date">
 Jul 6, 2023
 </div>
