@@ -25,6 +25,9 @@ website:
   site-url: colin-fraser.net
   google-analytics: "G-6QW9PMVM0W"
 
+execute:
+  freeze: auto
+
 format:
   html:
     theme: simplex
