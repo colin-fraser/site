@@ -23,6 +23,7 @@ website:
       - text: threads
         href: https://www.threads.net/@colinfraser
   site-url: colin-fraser.net
+  google-analytics: "G-6QW9PMVM0W"
 
 format:
   html:
