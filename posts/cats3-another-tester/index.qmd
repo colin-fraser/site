@@ -1,0 +1,10 @@
+---
+title: "another tester"
+date: cats3
+author: Colin Fraser
+categories:
+- test1
+- test post
+---
+
+

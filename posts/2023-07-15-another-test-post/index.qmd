@@ -2,8 +2,54 @@
 title: "another test post"
 date: 2023-07-15
 author: Colin Fraser
-description: a test posts
+categories: test post
 ---
 
 
-Just a test.
+# Introduction
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce euismod eleifend est, a posuere diam interdum vel. In sit amet placerat justo. Sed euismod, velit ac tristique tincidunt, purus nunc eleifend lorem, nec auctor metus tellus id ligula. Nullam fermentum turpis non ex varius, sit amet lacinia metus tempus. 
+
+## The Problem
+
+Suspendisse at nunc varius, pulvinar turpis at, rutrum est. Sed nec magna ut augue posuere feugiat. Cras vel ex libero. In hac habitasse platea dictumst. Proin venenatis risus neque, vel rutrum orci ullamcorper at. Donec dignissim arcu et enim consectetur, vitae scelerisque ex tincidunt.
+
+```python
+def calculate_sum(a, b):
+    return a + b
+
+result = calculate_sum(2, 3)
+print(result)  # Output: 5
+```
+
+## The Solution
+
+Praesent suscipit rhoncus dolor, nec consequat metus consectetur a. Integer feugiat semper augue, nec tristique quam aliquam vel. Donec rhoncus mauris eget magna hendrerit, a semper elit fermentum. Ut pulvinar lorem mi, nec sagittis lectus scelerisque at.
+
+```python
+def calculate_product(a, b):
+    return a * b
+
+result = calculate_product(2, 3)
+print(result)  # Output: 6
+```
+
+## Implementation Details
+
+Vestibulum tempus ex lectus, vitae pharetra massa rhoncus id. Maecenas auctor ligula nec felis bibendum, vitae feugiat velit interdum. Sed pellentesque scelerisque ligula, id malesuada justo interdum id.
+
+```python
+def greet(name):
+    return f"Hello, {name}!"
+
+message = greet("John")
+print(message)  # Output: Hello, John!
+```
+
+## Conclusion
+
+In conclusion, lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consequat, ante ut cursus lacinia, sapien erat gravida velit, at cursus nulla turpis eu urna. Quisque nec iaculis justo. Vivamus ut aliquet nisl.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce euismod eleifend est, a posuere diam interdum vel. In sit amet placerat justo. Sed euismod, velit ac tristique tincidunt, purus nunc eleifend lorem, nec auctor metus tellus id ligula. Nullam fermentum turpis non ex varius, sit amet lacinia metus tempus.
+
+I hope this example helps you get started with your blog post!

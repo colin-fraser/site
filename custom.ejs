@@ -1,12 +1,30 @@
 ```{=html}
 <% for (const item of items) { %>
-<div class="quarto-post">
+  <!-- Start of post -->
+  <div class="quarto-post">
+    <!-- Clickable link to the post -->
     <a href="<%- item.path %>">
-    <h3 class="no-anchor listing-title">
-    <%= item.title %>
-    </h3>
-    <div class="listing-date metadata"><%= item.date %></div>
+      <!-- Start of post title -->
+      <h3 class="no-anchor listing-title">
+        <%= item.title %> <!-- The actual post title -->
+      </h3>
+      <!-- End of post title -->
+       <!-- Start of post categories -->
+    <% if ('categories' in item && Array.isArray(item.categories)) { %> 
+      <div class="listing-categories">
+        <% for (const category of item.categories) { %>
+          <!-- Display each category -->
+          <div class="listing-category" onclick="window.quartoListingCategory('<%=category%>'); return false;"><%= category %></div>
+        <% } %>
+      </div>
+    <% } %>
+      <!-- End of post categories -->
+      <!-- Start of post date -->
+      <div class="listing-date metadata"><%= item.date %></div> <!-- The actual post date -->
     </a>
-</div>
+    <!-- End of post date -->
+  </div>
+  <!-- End of post -->
 <% } %>
+
 ```
