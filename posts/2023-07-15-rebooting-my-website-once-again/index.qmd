@@ -1,0 +1,7 @@
+---
+title: "Rebooting my website once again"
+date: 2023-07-15
+author: Colin Fraser
+---
+
+I've been meaning for ages to reboot this website using [Quarto](https://quarto.org/) rather than Blogdown, and this weekend I've finally gotten around to it. Unfortunately porting things over from the old site isn't 100% as straightforward as I'd hoped, so I will be doing that slowly over time.
