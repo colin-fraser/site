@@ -7,6 +7,13 @@
     "text": "This is a test post with some math\n\\[E = mc^2 + AI\\]"
   },
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Posts",
+    "section": "",
+    "text": "another test post\n    \n    Jul 15, 2023\n    \n\n\n    \n    \n    a test post\n    \n    Jul 6, 2023\n    \n\n\nNo matching items"
+  },
+  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "Colin Fraser",
@@ -14,10 +21,10 @@
     "text": "About this site"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Posts",
+    "objectID": "posts/2023-07-15-another-test-post/index.html",
+    "href": "posts/2023-07-15-another-test-post/index.html",
+    "title": "another test post",
     "section": "",
-    "text": "a test post\n\n\n\n\n\n\n\n\n\n\n\n\nJul 6, 2023\n\n\nColin Fraser\n\n\n\n\n\n\nNo matching items"
+    "text": "Just a test."
   }
 ]

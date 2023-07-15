@@ -1,0 +1,12 @@
+```{=html}
+<% for (const item of items) { %>
+<div class="quarto-post">
+    <a href="<%- item.path %>">
+    <h3 class="no-anchor listing-title">
+    <%= item.title %>
+    </h3>
+    <div class="listing-date metadata"><%= item.date %></div>
+    </a>
+</div>
+<% } %>
+```

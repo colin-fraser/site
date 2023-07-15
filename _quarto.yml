@@ -20,9 +20,7 @@ website:
         href: https://medium.com/@colin.fraser
       - icon: github
         href: https://github.com/colin-fraser
-      - text: threads
-        href: https://www.threads.net/@colinfraser
-  site-url: colin-fraser.net
+  site-url: https://colin-fraser.net
   google-analytics: "G-6QW9PMVM0W"
 
 execute:
@@ -33,6 +31,11 @@ format:
     theme: simplex
     css: styles.css
     toc: true
+    layout:
+      title-block-style: none
+      title-block-banner: true
+    template-partials: 
+      - partials/title-block.html
 
 links:
   twitter: https://twitter.com/colin-fraser

@@ -1,0 +1,9 @@
+---
+title: "another test post"
+date: 2023-07-15
+author: Colin Fraser
+description: a test posts
+---
+
+
+Just a test.

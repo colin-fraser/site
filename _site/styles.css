@@ -1,1 +1,9 @@
 /* css styles */
+
+div.quarto-post {
+    display: flex;
+    gap: 2em;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
