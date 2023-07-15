@@ -44,9 +44,13 @@ write_post <- function(dir_path, title, date, author, categories) {
 }
 
 create_git_branch <- function(slug) {
-  git_output <- system(paste("git checkout -b", slug), intern = TRUE)
-  if (length(git_output) > 0 && any(grepl("error:", git_output))) {
-    warning("Git command failed with error: ", paste(git_output, collapse = "\n"))
+  if (askYesNo(paste0("Do you want to create a new branch called ", slug, "?\n"))) {
+    git_output <- system(paste("git checkout -b", slug), intern = TRUE)
+    if (length(git_output) > 0 && any(grepl("error:", git_output))) {
+      warning("Git command failed with error: ", paste(git_output, collapse = "\n"))
+    }
+  } else {
+    warning("Cancelled branch creation")
   }
 }
 
