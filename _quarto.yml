@@ -4,11 +4,6 @@ project:
 website:
   title: "Colin Fraser"
   navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - href: about.qmd
-        text: About
     right: 
       - icon: envelope
         href: mailto://colin.r.fraser@gmail.com
@@ -30,12 +25,7 @@ format:
   html:
     theme: simplex
     css: styles.css
-    toc: true
-    layout:
-      title-block-style: none
-      title-block-banner: true
-    template-partials: 
-      - partials/title-block.html
+    toc: false
 
 links:
   twitter: https://twitter.com/colin-fraser

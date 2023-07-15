@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://colin-fraser.net/posts/2023-07-15-another-test-post/index.html</loc>
-    <lastmod>2023-07-15T22:39:02.477Z</lastmod>
-  </url>
-  <url>
-    <loc>https://colin-fraser.net/posts/2023-07-06-a-test-post/index.html</loc>
-    <lastmod>2023-07-15T22:40:35.382Z</lastmod>
-  </url>
-  <url>
     <loc>https://colin-fraser.net/index.html</loc>
-    <lastmod>2023-07-15T22:49:00.635Z</lastmod>
-  </url>
-  <url>
-    <loc>https://colin-fraser.net/about.html</loc>
-    <lastmod>2023-07-15T22:41:02.360Z</lastmod>
-  </url>
-  <url>
-    <loc>https://colin-fraser.net/posts/cats3-another-tester/index.html</loc>
-    <lastmod>2023-07-15T22:42:47.835Z</lastmod>
+    <lastmod>2023-07-15T23:12:12.139Z</lastmod>
   </url>
 </urlset>

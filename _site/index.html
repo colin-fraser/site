@@ -70,9 +70,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-project','listing-website','listing-execute','listing-format','listing-links','listing-language','listing-title','listing-date','listing-author','listing-categories','listing-path','listing-outputHref','listing-date-modified','listing-description','listing-filename','listing-file-modified','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-date-modified-sort'] },{ data: ['listing-file-modified-sort'] },{ data: ['listing-reading-time-sort'] }],
+      valueNames: ['listing-title','listing-date','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-project","listing-website","listing-execute","listing-format","listing-links","listing-language","listing-title","listing-date","listing-author","listing-categories","listing-path","listing-outputHref","listing-date-modified","listing-description","listing-filename","listing-file-modified","listing-reading-time"],
+      searchColumns: ["listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -121,16 +121,6 @@ gtag('config', 'G-6QW9PMVM0W', { 'anonymize_ip': true});
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
-    <a class="nav-link active" href="./index.html" rel="" target="" aria-current="page">
- <span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./about.html" rel="" target="">
- <span class="menu-text">About</span></a>
-  </li>  
-</ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
     <a class="nav-link" href="mailto://colin.r.fraser@gmail.com" rel="" target=""><i class="bi bi-envelope" role="img">
@@ -169,14 +159,24 @@ gtag('config', 'G-6QW9PMVM0W', { 'anonymize_ip': true});
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="test post">test post <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(0)</span></div></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header">
-<h1 class="title display-7">Posts</h1>
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Posts</h1>
+</div>
 
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
 
 </header>
 
@@ -184,45 +184,10 @@ gtag('config', 'G-6QW9PMVM0W', { 'anonymize_ip': true});
 
 
 
-<div class="quarto-listing quarto-listing-container-custom" id="listing-listing">
-  <!-- Start of post -->
-  <div class="quarto-post">
-    <!-- Clickable link to the post -->
-    <a href="./posts/2023-07-15-another-test-post/index.html">
-      <!-- Start of post title -->
-      <h3 class="no-anchor listing-title">
-        another test post <!-- The actual post title -->
-      </h3>
-      <!-- End of post title -->
-       <!-- Start of post categories -->
-      <div class="listing-categories">
-          <!-- Display each category -->
-          <div class="listing-category" onclick="window.quartoListingCategory('test post'); return false;">test post</div>
-      </div>
-      <!-- End of post categories -->
-      <!-- Start of post date -->
-      <div class="listing-date metadata">Jul 15, 2023</div> <!-- The actual post date -->
-    </a>
-    <!-- End of post date -->
-  </div>
-  <!-- End of post -->
-  <!-- Start of post -->
-  <div class="quarto-post">
-    <!-- Clickable link to the post -->
-    <a href="./posts/2023-07-06-a-test-post/index.html">
-      <!-- Start of post title -->
-      <h3 class="no-anchor listing-title">
-        a test post <!-- The actual post title -->
-      </h3>
-      <!-- End of post title -->
-       <!-- Start of post categories -->
-      <!-- End of post categories -->
-      <!-- Start of post date -->
-      <div class="listing-date metadata">Jul 6, 2023</div> <!-- The actual post date -->
-    </a>
-    <!-- End of post date -->
-  </div>
-  <!-- End of post -->
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+
+</div>
 <div class="listing-no-matching d-none">
 No matching items
 </div>
