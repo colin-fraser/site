@@ -3,7 +3,6 @@ title: "Posts"
 listing:
   contents: posts
   sort: "date desc"
-#  template: custom.ejs
   type: default
   categories: true
   feed: true
