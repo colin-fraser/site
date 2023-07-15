@@ -4,6 +4,13 @@
     "href": "index.html",
     "title": "Posts",
     "section": "",
-    "text": "No matching items"
+    "text": "Rebooting my website once again\n\n\n\n\n\n\n\n\n\nJul 15, 2023\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/2023-07-15-rebooting-my-website-once-again/index.html",
+    "href": "posts/2023-07-15-rebooting-my-website-once-again/index.html",
+    "title": "Rebooting my website once again",
+    "section": "",
+    "text": "I’ve been meaning for ages to reboot this website using Quarto rather than Blogdown, and this weekend I’ve finally gotten around to it. Unfortunately porting things over from the old site isn’t 100% as straightforward as I’d hoped, so I will be doing that slowly over time."
   }
 ]

@@ -10,6 +10,22 @@
 <atom:link href="https://colin-fraser.net/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.3.353</generator>
-<lastBuildDate>Sat, 15 Jul 2023 23:12:12 GMT</lastBuildDate>
+<lastBuildDate>Sat, 15 Jul 2023 07:00:00 GMT</lastBuildDate>
+<item>
+  <title>Rebooting my website once again</title>
+  <dc:creator>Colin Fraser</dc:creator>
+  <link>https://colin-fraser.net/posts/2023-07-15-rebooting-my-website-once-again/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<p>I’ve been meaning for ages to reboot this website using <a href="https://quarto.org/">Quarto</a> rather than Blogdown, and this weekend I’ve finally gotten around to it. Unfortunately porting things over from the old site isn’t 100% as straightforward as I’d hoped, so I will be doing that slowly over time.</p>
+
+
+
+ ]]></description>
+  <guid>https://colin-fraser.net/posts/2023-07-15-rebooting-my-website-once-again/index.html</guid>
+  <pubDate>Sat, 15 Jul 2023 07:00:00 GMT</pubDate>
+</item>
 </channel>
 </rss>
