@@ -12,6 +12,35 @@
 <generator>quarto-1.3.353</generator>
 <lastBuildDate>Sat, 15 Jul 2023 07:00:00 GMT</lastBuildDate>
 <item>
+  <title>The Hot Hand Fallacy Fallacy</title>
+  <dc:creator>Colin Fraser</dc:creator>
+  <link>https://colin-fraser.net/posts/2023-07-15-the-hot-hand-fallacy-fallacy/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<p>Flip a coin <img src="https://latex.codecogs.com/png.latex?N"> times, and consider the events <img src="https://latex.codecogs.com/png.latex?H_1,%20%5Cdots,%20H_N"> where each event <img src="https://latex.codecogs.com/png.latex?H_i"> is the event that the <img src="https://latex.codecogs.com/png.latex?i">-th coin came up heads. It’s a fair coin, so we have <img src="https://latex.codecogs.com/png.latex?P(H_1)=%5Cdots=P(H_N)"> which I’ll denote simply as <img src="https://latex.codecogs.com/png.latex?p">. Coin flips are also independent, so we have <img src="https://latex.codecogs.com/png.latex?P(H_i%20%7C%20H_j)=p"> for all <img src="https://latex.codecogs.com/png.latex?i%5Cneq%20j">.</p>
+<p>The key here is that the estimator is not estimating <img src="https://latex.codecogs.com/png.latex?P(H_%7Bi+1%7D%20%7C%20H_i)">; it’s estimating something subtly different. It’s estimating the outcome of the following procedure.</p>
+<ol type="1">
+<li>Flip the coins</li>
+<li>Randomly select a coin that follows a heads</li>
+<li>Record the outcome of that coin</li>
+</ol>
+<p>But that random selection in step (2) is itself correlated with the outcome of the selected coin. For example, suppose we flip 100 coins and, out of the first 99 of them, 49 come up heads. Now we randomly select one of the 49 coins that follow those 49 heads and look at its outcome.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AP(H_%7B30%7D%7CH_%7B29%7D,Z=49)=%5Cfrac%7BP(Z=49%7CH_%7B29%7D,H_%7B30%7D)%7D%7BP(Z=49%7CH_%7B29%7D)%7DP(H_%7B30%7D%7CH_%7B29%7D)%0A"></p>
+<p>The key is that <img src="https://latex.codecogs.com/png.latex?Z"> is not independent from <img src="https://latex.codecogs.com/png.latex?H_%7B29%7D"> and <img src="https://latex.codecogs.com/png.latex?H_%7B30%7D">. The outcomes of each coin influence how many heads come up in the first place, and thus influence the probability that they are selected by this procedure. Moreover, the above equation tells us precisely what the bias will be for this 30th coin; what we’re <em>trying</em> to estimate is exactly <img src="https://latex.codecogs.com/png.latex?P(H_%7B30%7D%7CH_%7B29%7D)">, but this procedure yields that number multiplied by <img src="https://latex.codecogs.com/png.latex?%5Cfrac%7BP(Z=49%7CH_%7B29%7D,H_%7B30%7D)%7D%7BP(Z=49%7CH_%7B29%7D)%7D">.</p>
+<p>These conditional probabilities are actually pretty straightforward to reason out. <img src="https://latex.codecogs.com/png.latex?Z"> is the number of heads out of <img src="https://latex.codecogs.com/png.latex?99"> independent flips, so <img src="https://latex.codecogs.com/png.latex?Z%7CH_%7B29%7D"> is the number of heads out of <img src="https://latex.codecogs.com/png.latex?98"> independent flips, plus one. Similarly, <img src="https://latex.codecogs.com/png.latex?Z%7CH_%7B29%7D,H_%7B30%7D"> is the number of heads out of <img src="https://latex.codecogs.com/png.latex?97"> independent flips, plus two. These are just other binomial distributions. Writing <img src="https://latex.codecogs.com/png.latex?f_%7Bk%7D(z)"> as the probability mass function of a binomial distribution with parameters <img src="https://latex.codecogs.com/png.latex?p"> and <img src="https://latex.codecogs.com/png.latex?k">, we can therefore write:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Balign%7D%0A%5Cfrac%7BP(Z=49%7CH_%7B29%7D,H_%7B30%7D)%7D%7BP(Z=49%7CH_%7B29%7D)%7Dp%20&amp;=%20%5Cfrac%7Bf_%7B97%7D(47)%7D%7Bf_%7B98%7D(48)%7Dp%20%5C%5C%0A&amp;=%20%5Cfrac%7B%7B97%20%5Cchoose%2047%7D%20p%5E%7B47%7D(1-p)%5E%7B50%7D%7D%7B%7B98%20%5Cchoose%2048%7D%20p%5E%7B48%7D(1-p)%5E%7B50%7D%7Dp%20%5C%5C%0A&amp;=%20%5Cfrac%7B%7B97%20%5Cchoose%2047%7D%7D%7B%7B98%20%5Cchoose%2048%7D%7D%20%5C%5C%0A&amp;=%0A%5Cfrac%7B%0A%5Cfrac%7B97%5Ctimes%2096%20%5Ctimes%20%5Cdots%20%5Ctimes%2052%20%5Ctimes%2051%7D%7B47%5Ctimes%20%5Cdots%20%5Ctimes%202%20%5Ctimes%201%7D%0A%7D%7B%0A%5Cfrac%7B98%5Ctimes%2097%20%5Ctimes%20%5Cdots%20%5Ctimes%2052%20%5Ctimes%2051%7D%7B48%5Ctimes%2047%20%5Ctimes%20%5Cdots%20%5Ctimes%202%20%5Ctimes%201%7D%0A%7D%5C%5C%0A&amp;=%20%5Cfrac%7B48%7D%7B98%7D%20%5C%5C%0A&amp;%5Capprox%200.49%0A%5Cend%7Balign%7D%0A"></p>
+<p>This is, crucially, less than <img src="https://latex.codecogs.com/png.latex?1/2">.</p>
+
+
+
+ ]]></description>
+  <category>Math</category>
+  <guid>https://colin-fraser.net/posts/2023-07-15-the-hot-hand-fallacy-fallacy/index.html</guid>
+  <pubDate>Sat, 15 Jul 2023 07:00:00 GMT</pubDate>
+</item>
+<item>
   <title>Rebooting my website once again</title>
   <dc:creator>Colin Fraser</dc:creator>
   <link>https://colin-fraser.net/posts/2023-07-15-rebooting-my-website-once-again/index.html</link>

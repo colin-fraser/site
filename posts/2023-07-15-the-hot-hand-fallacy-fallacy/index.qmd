@@ -1,0 +1,42 @@
+---
+title: "The Hot Hand Fallacy Fallacy"
+date: 2023-07-15
+author: Colin Fraser
+categories: Math
+---
+
+Flip a coin $N$ times, and consider the events $H_1, \dots, H_N$ where each event $H_i$ is the event that the $i$-th coin came up heads. It's a fair coin, so we have $P(H_1)=\dots=P(H_N)$ which I'll denote simply as $p$. Coin flips are also independent, so we have $P(H_i | H_j)=p$ for all $i\neq j$.
+
+The key here is that the estimator is not estimating $P(H_{i+1} | H_i)$; it's estimating something subtly different. It's estimating the outcome of the following procedure.
+
+1.  Flip the coins
+2.  Randomly select a coin that follows a heads
+3.  Record the outcome of that coin
+
+But that random selection in step (2) is itself correlated with the outcome of the selected coin. For example, suppose we flip 100 coins and, out of the first 99 of them, 49 come up heads. Now we randomly select one of the 49 coins that follow those 49 heads and look at its outcome.
+
+$$
+P(H_{30}|H_{29},Z=49)=\frac{P(Z=49|H_{29},H_{30})}{P(Z=49|H_{29})}P(H_{30}|H_{29})
+$$
+
+The key is that $Z$ is not independent from $H_{29}$ and $H_{30}$. The outcomes of each coin influence how many heads come up in the first place, and thus influence the probability that they are selected by this procedure. Moreover, the above equation tells us precisely what the bias will be for this 30th coin; what we're *trying* to estimate is exactly $P(H_{30}|H_{29})$, but this procedure yields that number multiplied by $\frac{P(Z=49|H_{29},H_{30})}{P(Z=49|H_{29})}$.
+
+These conditional probabilities are actually pretty straightforward to reason out. $Z$ is the number of heads out of $99$ independent flips, so $Z|H_{29}$ is the number of heads out of $98$ independent flips, plus one. Similarly, $Z|H_{29},H_{30}$ is the number of heads out of $97$ independent flips, plus two. These are just other binomial distributions. Writing $f_{k}(z)$ as the probability mass function of a binomial distribution with parameters $p$ and $k$, we can therefore write:
+
+$$
+\begin{align}
+\frac{P(Z=49|H_{29},H_{30})}{P(Z=49|H_{29})}p &= \frac{f_{97}(47)}{f_{98}(48)}p \\
+&= \frac{{97 \choose 47} p^{47}(1-p)^{50}}{{98 \choose 48} p^{48}(1-p)^{50}}p \\
+&= \frac{{97 \choose 47}}{{98 \choose 48}} \\ 
+&= 
+\frac{
+\frac{97\times 96 \times \dots \times 52 \times 51}{47\times \dots \times 2 \times 1}
+}{
+\frac{98\times 97 \times \dots \times 52 \times 51}{48\times 47 \times \dots \times 2 \times 1}
+}\\ 
+&= \frac{48}{98} \\ 
+&\approx 0.49
+\end{align}
+$$
+
+This is, crucially, less than $1/2$.

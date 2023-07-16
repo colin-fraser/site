@@ -2,10 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://colin-fraser.net/index.html</loc>
-    <lastmod>2023-07-15T23:45:10.758Z</lastmod>
+    <lastmod>2023-07-16T01:20:31.545Z</lastmod>
   </url>
   <url>
     <loc>https://colin-fraser.net/posts/2023-07-15-rebooting-my-website-once-again/index.html</loc>
     <lastmod>2023-07-15T23:46:15.972Z</lastmod>
+  </url>
+  <url>
+    <loc>https://colin-fraser.net/posts/2023-07-15-the-hot-hand-fallacy-fallacy/index.html</loc>
+    <lastmod>2023-07-16T01:20:31.110Z</lastmod>
   </url>
 </urlset>
