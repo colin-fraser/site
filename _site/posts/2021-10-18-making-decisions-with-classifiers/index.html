@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Colin Fraser">
+<meta name="dcterms.date" content="2021-10-18">
+
+<title>Colin Fraser - Making Decisions With Classifiers</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-6QW9PMVM0W"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-6QW9PMVM0W', { 'anonymize_ip': true});
+</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Colin Fraser</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto://colin.r.fraser@gmail.com"><i class="bi bi-envelope" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/colin_fraser"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/colin-fraser/"><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://medium.com/@colin.fraser"><i class="bi bi-medium" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/colin-fraser"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Making Decisions With Classifiers</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Colin Fraser </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 18, 2021</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="tldr" class="level1">
+<h1>TL;DR</h1>
+<ul>
+<li>How to balance false positive rates and false negative rates is a problem that confronts anyone who does anything with machine learning, or even predicting more generally</li>
+<li>In this post, I explore how to make an optimal choice of FPR and FNR given your relative valuation of a false positive and a false negative</li>
+<li>I found it surprising that the optimal choice is determined <em>not only</em> by your preferences over false positives and false negatives, but also by the probability distribution of the positive class</li>
+<li>Specifically, I show that if <span class="math inline">\(\pi\)</span> is the prevalence of the positive class and <span class="math inline">\(u_{TP}, u_{TN}, u_{FP}, u_{FN}\)</span> are utilities associated with True Positives, True Negatives, False Positives, and False Negatives, then you should choose a point on the ROC curve which satisfies</li>
+</ul>
+<p><span class="math display">\[\text{ROC Slope} = \frac{1-\pi}{\pi} \frac{u_{TN}-u_{FP}}{u_{TP}-u_{FN}}\]</span></p>
+<ul>
+<li>I go through a worked example of how one might hypothetically go about applying this rule</li>
+<li>I also show how you can use this rule to derive your implicit preferences if you know the ROC slope and prevalence of the positive class</li>
+</ul>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>In a recent Slack thread at my work, a question was posed about whether we should prefer precision to accuracy. A long discussion ensued which eventually shifted to discussing the tradeoff between types of errors in predictive models. It’s fairly well known that there is a trade-off between preventing false positives and allowing false negatives. Metaphorically, you can cast a very wide net, and you’ll catch a lot of fish, but also a lot of boots. Or you can fish with a spear, which will get you a lot less boots, but also a lot less fish. Casting a wide net gets you high recall, but the price you pay is a high false positive rate. Spearfishing gets you a much lower false positive rate, but lower recall, too.</p>
+<p>This tradeoff is everywhere. In almost any situation where you are using some automated process to identify some class of thing, you’ll be faced with this tradeoff. This applies to systems that make guesses about whether your login attempt to a website is fraudulent, whether your image is contained in a photograph, whether your Facebook post is against Facebook’s community standards, whether you’re likely to renew your cell phone contract, and in all kinds of other ways that we’re not even aware of. In each of these cases, the engineers building the systems have to made a decision about how many false positives they want to permit.</p>
+<p>It’s easy to see that this tradeoff always exists. You could stop all fraudulent logins to a website by preventing any user from ever signing on—this would get you 100% recall, but it would also get you a 100% false positive rate. You could achieve a 0% false positive rate by never flagging any signin attempt as fraudulent, then you’d have a 0% true positive rate. If you’re building the fraudulent signin detector, you have to pick somewhere in between.</p>
+<p>It’s intuitive—and correct—that the best point for you will depend on your preferences over false positives and false negatives. If false positives are expensive, you should opt for a lower false positive rate; and vice versa. However, the conversation often just ends there. I’ve personally not seen (and I went looking) precise guidance on how to actually choose the best point along that continuum. This is what sent me on a quest to learn more about how to choose the best point along that frontier.</p>
+</section>
+<section id="definitions-and-notation" class="level1">
+<h1>Definitions and notation</h1>
+<p>Let <span class="math inline">\(Y\in\{0,1\}\)</span> be the real world event about which we are making predictions, and <span class="math inline">\(\hat{Y}\in\{0,1\}\)</span> the prediction made by our binary classifier. When a classifier predicts that a unit is positive, I’ll say that the unit has been <em>flagged</em>. When a unit is flagged, there are two possibilities: either the unit is actually a positive, in which case we have a <strong>true positive</strong>, or the unit is actually a negative, in which case we have a <strong>false positive</strong>. Similarly, when a unit is not flagged, we end up either with a <strong>true negative</strong> or a <strong>false negative</strong>. This is summarized by the <a href="https://en.wikipedia.org/wiki/Confusion_matrix">confusion matrix</a>.</p>
+<section id="prevalence" class="level3">
+<h3 class="anchored" data-anchor-id="prevalence">Prevalence</h3>
+<p>The prevalence of the event is the frequency with which it occues. Formally, the prevalence of <span class="math inline">\(Y\)</span> is equal to <span class="math inline">\(P(Y=1)\)</span>. Since <span class="math inline">\(Y\)</span> is a binary random variable, this can also be expressed as <span class="math inline">\(E[Y]\)</span>. I will denote prevalence by <span class="math inline">\(\pi\)</span>.</p>
+</section>
+<section id="true-positive-rate-false-positive-rate-and-the-roc-curve" class="level3">
+<h3 class="anchored" data-anchor-id="true-positive-rate-false-positive-rate-and-the-roc-curve">True Positive Rate, False Positive Rate, and the ROC Curve</h3>
+<p>Every classifier, and indeed every machine learning model or predictive process, makes mistakes. When deciding whether to use a model, you need to balance the expected benefit of the correct predictions against the expected cost of the mistakes. One way to conceptualize these rates that I’ll use for the rest of this post is the True Positive Rate (TPR) and the False Positive Rate (FPR). TPR is the probability that the classifier correctly flags a randomly selected positive case, and FPR is the probability that the classifier <em>incorrectly</em> flags a randomly selected negative case.</p>
+<p><span class="math display">\[
+\begin{align}
+\text{TPR} &amp;= P(\hat{Y}=1|Y=1) \\
+\text{FPR} &amp;= P(\hat{Y}=1|Y=0) \\
+\end{align}
+\]</span></p>
+<p>FPR is often also referred to as the Type I error rate and denoted by the Greek letter <span class="math inline">\(\alpha\)</span>. I’ll follow that convention here. TPR also has another name: recall. For that reason I will denote TPR by the letter <span class="math inline">\(r\)</span>. (TPR is also sometimes referred to as the “sensitivity” of the classifier).</p>
+</section>
+<section id="the-roc-curve" class="level3">
+<h3 class="anchored" data-anchor-id="the-roc-curve">The ROC Curve</h3>
+<p>In practice, it is often possible to tune a model in order to obtain a desired FPR and TPR. A typical way that this can be done is when the model outputs a score. Choosing to predict positive when the score is above some threshold <span class="math inline">\(t\)</span> will lead to a certain pair of TPR and FPR. Varying <span class="math inline">\(t\)</span> will lead to different corresponding pairs of TPR and FPR. Plotting TPR as a function of FPR gives the <a href="https://en.wikipedia.org/wiki/Receiver_operating_characteristic">Receiver Operating Characteristic (ROC) curve</a>, which is frequently used in the evaluation of machine learning models.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The figure above shows the ROC curve for two hypothetical models. It is common to plot the line <span class="math inline">\(y=x\)</span> on ROC plots—this represents the theoretical worst possible model, equivalent to simply flipping a coin. Models that outperform random guessing occupy the space above the 45-degree line. A theoretical perfect model would live at the point <span class="math inline">\((0,1)\)</span>: a model that flags every positive (TPR=1), while never incorrectly flagging a negative (FPR=0). In this case, the orange model is strictly better than the purple model, because at any given FPR, it can achieve a higher TPR. The closer the ROC curve is to the point (0,1), the better the model performs overall.</p>
+</section>
+<section id="utility-and-expected-utility" class="level2">
+<h2 class="anchored" data-anchor-id="utility-and-expected-utility">Utility and Expected Utility</h2>
+<section id="costs-and-benefits-of-predicting" class="level3">
+<h3 class="anchored" data-anchor-id="costs-and-benefits-of-predicting">Costs and Benefits of Predicting</h3>
+<p>As discussed above, when we use the classifier to make a prediction, there are four potential outcomes, which I’ll denote by <span class="math inline">\(TP\)</span>, <span class="math inline">\(TN\)</span>, <span class="math inline">\(FP\)</span>, <span class="math inline">\(FN\)</span>. Each of these outcomes has some cost or benefit associated with it, which I’ll describe as utilities, <span class="math inline">\(u_{TP}\)</span>, <span class="math inline">\(u_{TN}\)</span>, <span class="math inline">\(u_{FP}\)</span>, <span class="math inline">\(u_{FN}\)</span>. This utility function is reminiscent of a Payoff Matrix from elementary game theory.</p>
+
+<table class="table-no-highlight">
+<thead>
+<tr>
+<th colspan="4">
+Classifier Payoff Matrix
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="2" rowspan="2">
+</td>
+<td colspan="2">
+<strong>Predicted</strong>
+</td>
+</tr>
+<tr>
+<td>
+<span class="math inline">\(\hat{Y}=1\)</span>
+</td>
+<td>
+<span class="math inline">\(\hat{Y}=0\)</span>
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+<strong>Actual</strong>
+</td>
+<td>
+<span class="math inline">\(Y=1\)</span>
+</td>
+<td>
+<span class="math inline">\(u_{TP}\)</span>
+</td>
+<td>
+<span class="math inline">\(u_{FN}\)</span>
+</td>
+</tr>
+<tr>
+<td>
+<span class="math inline">\(Y=0\)</span>
+</td>
+<td>
+<span class="math inline">\(u_{FP}\)</span>
+</td>
+<td>
+<span class="math inline">\(u_{TN}\)</span>
+</td>
+</tr>
+</tbody>
+
+</table>
+<p>The utilities associated with each outcome can vary significantly by domain. Fo instance, if the classifier is a COVID-19 test, then we might attach a higher cost to a false negative than to a false positive. While both are certainly costly, the damage done by a false positive is likely confined to the individual, who may be forced to unnecessarily quarantine—whereas, a false negative may lead the individual to infect others.</p>
+
+<table class="table-no-highlight">
+<thead>
+<tr>
+<th colspan="4">
+Hypothetical COVID-19 Test Payoff Matrix
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="2" rowspan="2">
+</td>
+<td colspan="2">
+<strong>Predicted</strong>
+</td>
+</tr>
+<tr>
+<td>
+<span class="math inline">\(\hat{Y}=1\)</span>
+</td>
+<td>
+<span class="math inline">\(\hat{Y}=0\)</span>
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+<strong>Actual</strong>
+</td>
+<td>
+<span class="math inline">\(Y=1\)</span>
+</td>
+<!-- TP -->
+<td>
+<span class="math inline">\(1\)</span>
+</td>
+<!-- FN -->
+<td>
+<span class="math inline">\(-10\)</span>
+</td>
+</tr>
+<tr>
+<td>
+<span class="math inline">\(Y=0\)</span>
+</td>
+<!-- FP -->
+<td>
+<span class="math inline">\(-1\)</span>
+</td>
+<!-- TN  -->
+<td>
+<span class="math inline">\(1\)</span>
+</td>
+</tr>
+</tbody>
+
+</table>
+<p>On the other hand, many for many applications a false positive might be significantly more costly than a false negative. For example, imagine the model behind Face ID on an iPhone. A false negative means that the model incorrectly fails to identify your face as a match to what you’ve stored. This causes annoyance; you may have to scan again, or even unlock your phone by an alternate method. However, a false positive means that a face which is not yours was able to unlock the phone. This is presumably significantly worse.</p>
+
+<table class="table-no-highlight">
+<thead>
+<tr>
+<th colspan="4">
+Face ID Payoff Matrix
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="2" rowspan="2">
+</td>
+<td colspan="2">
+<strong>Predicted</strong>
+</td>
+</tr>
+<tr>
+<td>
+<span class="math inline">\(\hat{Y}=1\)</span>
+</td>
+<td>
+<span class="math inline">\(\hat{Y}=0\)</span>
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+<strong>Actual</strong>
+</td>
+<td>
+<span class="math inline">\(Y=1\)</span>
+</td>
+<!-- TP -->
+<td>
+<span class="math inline">\(1\)</span>
+</td>
+<!-- FN -->
+<td>
+<span class="math inline">\(-1\)</span>
+</td>
+</tr>
+<tr>
+<td>
+<span class="math inline">\(Y=0\)</span>
+</td>
+<!-- FP -->
+<td>
+<span class="math inline">\(-10\)</span>
+</td>
+<!-- TN  -->
+<td>
+<span class="math inline">\(1\)</span>
+</td>
+</tr>
+</tbody>
+
+</table>
+</section>
+<section id="expected-utility" class="level3">
+<h3 class="anchored" data-anchor-id="expected-utility">Expected Utility</h3>
+<p>We can combine the entries in the payoff matrix to obtain an <em>expected utility</em> <span class="math inline">\(U\)</span> of making a prediction. This represents the average overall benefit or cost that we expect to receive (or incur) by using the model for prediction.</p>
+<p><span class="math display">\[U = P(TP)u_{TP} + P(TN)u_{TN} + P(FP)u_{FP} + P(FN)u_{FN} \]</span></p>
+<p>It is useful to rewrite this in terms of more commonly used classifier evaluation metrics. To do this, I’ll show how each probability in this term can be expressed as a combination of the prevalence <span class="math inline">\(\pi\)</span>, the TPR <span class="math inline">\(r\)</span>, and the FPR <span class="math inline">\(\alpha\)</span>.</p>
+</section>
+<section id="prediction-outcome-probability-identities" class="level3">
+<h3 class="anchored" data-anchor-id="prediction-outcome-probability-identities">Prediction Outcome Probability Identities</h3>
+<p><span class="math inline">\(P(TP) = r \pi\)</span>. This is easily derivable from the definition.</p>
+<p><span class="math display">\[\begin{align}P(TP) &amp;= P(\hat{Y}=1,Y=1) \\
+&amp;=P(\hat{Y}=1|Y=1)P(Y=1) \\
+&amp;=r\pi
+\end{align}
+\]</span> This makes some intuitive sense as well: the probability of a True Positive is equal to the rate at which the model correctly flags positives, multiplied by the prevalence of positives.</p>
+<p><span class="math inline">\(P(TN) = (1-\pi)(1-\alpha)\)</span>. This can also be derived from the definitions.</p>
+<p><span class="math display">\[\begin{align}P(TN) &amp;= P(\hat{Y}=0,Y=0) \\
+&amp;=P(\hat{Y}=0|Y=0)P(Y=0) \\
+&amp;=\left(1-P(\hat{Y}=1|Y=0)\right)(1-\pi) \\
+&amp;=(1-\alpha)(1-\pi)
+\end{align}
+\]</span></p>
+<p>This is similar. It says that the probability of a True Negative is equal to the probability of <em>not</em> mis-flagging a negative, which is <span class="math inline">\(1-\alpha\)</span>, multiplied by the probability of a negative, <span class="math inline">\(1-\pi\)</span>.</p>
+<p><span class="math inline">\(P(FP) = \alpha(1-\pi)\)</span></p>
+<p><span class="math display">\[\begin{align}P(FP) &amp;= P(\hat{Y}=1,Y=0) \\
+&amp;=P(\hat{Y}=1|Y=0)P(Y=0) \\
+&amp;=\alpha(1-\pi)
+\end{align}
+\]</span> This one is simple, it says that the probability of a false positive is the False Positive Rate multiplied by the prevalence of negatives.</p>
+<p><span class="math inline">\(P(FN) = (1-r)\pi\)</span></p>
+<p><span class="math display">\[
+\begin{align}
+P(FN) &amp;= P(\hat{Y}=0,Y=1) \\
+&amp;= P(\hat{Y}=0|Y=1)P(Y=1) \\
+&amp;= [1-P(\hat{Y}=1|Y=1)]P(Y=1) \\
+&amp;= (1-r)\pi
+\end{align}
+\]</span></p>
+<p>Similarly, this says that the probability of a False Negative is equal to the probability of failing to flag a positive, <span class="math inline">\(1-r\)</span>, multiplied by the prevalence of positives.</p>
+</section>
+</section>
+</section>
+<section id="maximizing-expected-utility-along-the-roc-curve" class="level1">
+<h1>Maximizing Expected Utility Along the ROC Curve</h1>
+<p>Using the identities from the last section, we can rewrite the expected utility as follows.</p>
+<p><span class="math display">\[
+U=\pi u_{TP}r(\alpha) + \pi u_{FN}(1-r(\alpha)) + (1-\pi)u_{FP}\alpha  + (1-\pi)u_{TN}(1-\alpha)
+\]</span></p>
+<p>Given an ROC curve, a payoff matrix, and a prevalence, this allows us to plot the expected utility of a prediction alongside the ROC curve. The following plot shows a hypothetical ROC curve (parameterized as <span class="math inline">\(r=\sqrt{2\alpha-\alpha^2}\)</span> for simplicity) along with the expected utility at each point when prevalence is 0.5.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>To find the point along the ROC curve where expected utility is maximized, we can take the derivative of expected utility with respect to <span class="math inline">\(\alpha\)</span>, and find the point where it’s equal to 0 (assuming that the ROC curve is well-behaved, i.e.&nbsp;looks something like the characteristic bow-shape, is monotonic, etc.).</p>
+<p><span class="math display">\[\frac{dU}{d\alpha} = \pi (u_{TP} - u_{FN})r'(\alpha) + (1-\pi)(u_{TN}-u_{FP}) \]</span></p>
+<p>Setting this expression equal to <span class="math inline">\(0\)</span> and solving for <span class="math inline">\(r'(\alpha)\)</span> gives an interesting condition for the utility-maximizing point.</p>
+<p><span class="math display">\[r'(\alpha) = \frac{1-\pi}{\pi}\frac{u_{TN}-u_{FP}}{u_{TP}-u_{FN}}\]</span></p>
+<p>This equation tells us what must be true about the slope of the ROC curve at the point which maximizes the expected utility. Since well-behaved ROC curves look similar to each other, this gives us some heuristics that will be true for most models.<img src="images/ROC1.png" class="img-fluid"></p>
+<p>The ROC curve starts steep and becomes flat. Thus, when the right hand side of this equation is large, then the optimal point is somewhere on the left side of the ROC curve, where the curve is steep and the false positive rate is low. Conversely, when the right hand side is small, then the optimal point is somewhere on the right side of the ROC curve, where the FPR is high and the curve is flatter.</p>
+<p>The utility term in this expression can be simplified further by reframing the utility function. The numerator <span class="math inline">\(u_{TN}-u_{FP}\)</span> can be understood as the cost incurred by switching from a TN to a FP. In other words, it’s the marginal cost of incorrectly flagging a negative. I’ll call this the Marginal Cost of a False Positive (MCFP). Similarly, the denominator <span class="math inline">\(u_{TP}-u_{FN}\)</span> can be understood as the marginal cost of incorrectly failing to flag a positive, or the Marginal Cost of a False Negative (MCFN). To further simplify the expression, I’ll give this ratio MCFP/MCFN a name: the <em>Error Exchange Rate</em> (EER). This ratio represents the number of false positives that you would be willing to give up in order to prevent a false negative. In these terms, the optimality condition becomes</p>
+<p><span class="math display">\[
+\begin{align}r'(\alpha) &amp;=\text{ROC slope} \\ &amp;=
+\frac{1-\text{prevalence}}{\text{prevalence}}\frac{\text{Marginal Cost of a False Positive}}{\text{Marginal Cost of a False Negative}} \\ &amp;=\frac{1-\pi}{\pi}\frac{MCFP}{MCFN} \\ &amp;=\text{odds}(Y=0) \times EER
+\end{align}\]</span></p>
+<section id="key-point-the-optimal-point-on-the-roc-curve-is-partly-determined-by-prevalence" class="level2">
+<h2 class="anchored" data-anchor-id="key-point-the-optimal-point-on-the-roc-curve-is-partly-determined-by-prevalence">Key Point: The optimal point on the ROC curve is partly determined by prevalence</h2>
+<p>One of the primary determinants of the optimal point along the ROC curve is the prevalence of the positive class. I always thought that the optimal choice of classifier would be determined solely by preferences over false positives and false negatives, but on reflection it makes sense: you should optimize with respect to your relative valuation of errors <em>and</em> with respect to the expected volume of errors that will be produced by your choice. This latter aspect is not determined by your valuation over errors, but rather by how common negatives are in the data.</p>
+<p>Since the optimality condition sets the slope of the ROC curve <em>proportional</em> to the odds of a negative, the optimal slope as a function of prevalence always has the same shape. Differences in the valuation of errors simply scale the function vertically.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>To help understand how this manifests, the following plot shows a hypothetical ROC curve (defined as <span class="math inline">\(r(\alpha)=\sqrt{2\alpha - \alpha^2}\)</span>, which is just a quarter-circle with radius 1 centered at (1,0)) along with the expected utilities and optimal points assuming the same utilities, but different prevalences. For simplicity I assume that EER=1, but alternative EERs would produce similar qualitative results.</p>
+<p>(Fun calculus exercise: show that these assumptions imply that the optimal recall as a function of prevalence is equal to <span class="math inline">\(\alpha^* = \frac{2\pi^2 - \sqrt{2\pi ^4 - 6\pi ^3 + 7\pi^2 - 4\pi + 1}}{2\pi^2 - 2\pi + 1}\)</span>)</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Although this exercise is contrived (by me), I still found the results a little surprising when I first went through this. Since it’s well known that ROC curves are “better” the closer they get to the point (1,0), I would have expected that when we are indifferent between a false positive and a false negative, the optimal point should be at the point along the ROC curve that is closest to the point (1,0). But this is only true in the specific case where prevalence is 0.5. In general, the optimal point can be anywhere along the ROC curve—further to the left when prevalence is low, and further to the right when prevalence is high.</p>
+<section id="the-optimal-point-on-the-roc-curve-is-determined-by-your-preferences" class="level3">
+<h3 class="anchored" data-anchor-id="the-optimal-point-on-the-roc-curve-is-determined-by-your-preferences">The optimal point on the ROC curve is determined by your preferences</h3>
+<p>The preferences, of course, also determine the optimal point along the ROC curve. The optimal point is fully determined by the prevalence and your EER, so you don’t actually even need to fully specify all four utility values—you just need to know the EER ratio.</p>
+<p>The EER is the number of false positives you would need to prevent in order to allow a single false negative. If this is greater than 1, it’s because a false positive is costlier to you than a false negative, and vice versa. It can be challenging to come up with an exact value for this, but it can be instructive to try out some values, plug them in, and see what it does to the optimal ROC point.</p>
+</section>
+<section id="putting-it-together" class="level3">
+<h3 class="anchored" data-anchor-id="putting-it-together">Putting it together</h3>
+<p>To choose the optimal point on the ROC curve, you need a prevalence and an EER. Since the function for deriving the optimal ROC slope from the prevalence and EER is pretty simple, it’s possible to derive some simple heuristics for developing intuition about optimal classifiers. When prevalence is low, <span class="math inline">\((1-\pi)/\pi\)</span> is high. If EER is also high, then the optimal slope is given by a big number times a big number, which is a big number. This implies that for low prevalence and high EER, the optimal point will be somewhere towards the left side of the ROC curve, where it’s steep. A similar argument can be made when prevalence is high and EER is low.</p>
+
+<table style="all: revert;">
+<tbody>
+<tr>
+<td colspan="2" rowspan="2">
+</td>
+<td colspan="2">
+EER
+</td>
+</tr>
+<tr>
+<td>
+High
+</td>
+<td>
+Low
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+Prevalence
+</td>
+<td>
+High
+</td>
+<td>
+Depends
+</td>
+<td>
+High Recall, Low Precision
+</td>
+</tr>
+<tr>
+<td>
+Low
+</td>
+<td>
+Low Recall, High Precision
+</td>
+<td>
+Depends
+</td>
+</tr>
+</tbody>
+
+</table>
+<p>These rules of thumb do make some intuitive sense. When EER is high, it means that a False Positive is costlier than a False Negative. When prevalence is low, it means that there are lots of opportunities for false positives. So when both of those things are true, we should definely choose a classifier that produces a minimal volume of false positives—which would be one with high precision and low recall.</p>
+<p>On the other hand, suppose we have high EER but also high prevalence, so we are in the top left quadrant. In this case, a false positive is costlier than a false negative, but there aren’t as many opportunities for false positives. There’s not enough information to determine whether we should choose higher precision or higher recall here; we’ll need to see the specific value.</p>
+</section>
+</section>
+</section>
+<section id="worked-example" class="level1">
+<h1>Worked Example</h1>
+<section id="deriving-implied-preferences" class="level2">
+<h2 class="anchored" data-anchor-id="deriving-implied-preferences">Deriving implied preferences</h2>
+<p>Throughout this piece, I’ve assumed that we have readily available values for the costs and benefits of hits and errors. In practice, this is rare. In most of my experience with machine learning applications, classifier thresholds have been chosen on the basis of an intuitive sense about the relative costs of errors, but without actually explicitly defining those costs and performing these assessments.</p>
+<p>In these cases, it may be a useful exercise to apply these rules in the other direction: rather than taking the utility function and prevalence to select the optimal point along the ROC curve, we might assume that we’ve chosen the optimal point already, and use that point and the prevalence to derive the implied EER.</p>
+<p>As an example, suppose you’ve got a model for predicting customer churn. Based on gut feeling, you’ve calibrated the model to have a 10% false positive rate, which gets 44% recall. Suppose further that the population customer churn rate is 5%.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can use this information to calculate the EER that’s implied by these numbers. The trickiest part here is determining the slope of the ROC curve at the point we’ve selected. For this example I cheated a little bit by specifically contriving a nice ROC curve <span class="math inline">\(r = \sqrt{2\alpha - \alpha^2}\)</span>. It’s (relatively) easy to apply some calculus 101 and determine that the slope of that curve at <span class="math inline">\(\alpha=0.1\)</span> is about 2.06. In real life, it will be a little bit harder to find this slope, and the best approach for doing this might be the subject of a future post. But anyway, if we have the slope, then we just plug the numbers into the optimality condition to derive our implied relative valuation of False Positives and False Negatives.</p>
+<p><span class="math display">\[
+\begin{align}
+r'(\alpha) &amp;= \text{odds}(Y=0) \times EER \\
+2.06 &amp;= \frac{1-5\%}{5\%} \times EER \\
+EER &amp;= \frac{2.06}{19} = 0.108
+\end{align}
+\]</span></p>
+<p>An EER of less than 1 implies that we value false negatives more highly than false positives; in particular, it means that a false negative is worth about <span class="math inline">\(1/1.08\approx 9\)</span> false negatives. Now we might take a step back and think about whether this makes sense for our particular application. Does this valuation make sense?</p>
+</section>
+<section id="finding-an-optimal-point-given-explicit-preferences" class="level2">
+<h2 class="anchored" data-anchor-id="finding-an-optimal-point-given-explicit-preferences">Finding an optimal point given explicit preferences</h2>
+<p>Suppose we use these predictions to send out a promotional offer to customers who we think are likely to churn. In this case, it might be feasible to explicitly price false positives and false negatives (this is, of course, rare!).</p>
+<p>Say that the regular price of our service is \$1,000, and the promotional offer gives the customer \$100 off. Let’s also suppose that a customer who wasn’t going to cancel anyway would always take the offer if we give it to them, but a customer who would otherwise leave takes the offer half the time This is enough information to price the outcomes. A true positive means we send the offer to a customer who would have canceled. Half the time they take it, and the other half the cancel, so we get <span class="math inline">\(U_{TP}=.5\times 900=450\)</span>. A true negative means we correctly withhold the offer from a customer who pays full price, so <span class="math inline">\(U_{TN}=1000\)</span>. A false positive means we send the offer to a customer who was going to stay anyway, so <span class="math inline">\(U_{FP}=900\)</span>, and finally a false negative means we miss sending the offer to a customer who leaves which gives us <span class="math inline">\(U_{FN}=0\)</span>.</p>
+
+<table class="table-no-highlight">
+<thead>
+<tr>
+<th colspan="4">
+Churn Model Payoff Matrix
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="2" rowspan="2">
+</td>
+<td colspan="2">
+<strong>Predicted</strong>
+</td>
+</tr>
+<tr>
+<td>
+<span class="math inline">\(\hat{Y}=1\)</span>
+</td>
+<td>
+<span class="math inline">\(\hat{Y}=0\)</span>
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+<strong>Actual</strong>
+</td>
+<td>
+<span class="math inline">\(Y=1\)</span>
+</td>
+<!-- TP -->
+<td>
+<span class="math inline">\(450\)</span>
+</td>
+<!-- FN -->
+<td>
+<span class="math inline">\(0\)</span>
+</td>
+</tr>
+<tr>
+<td>
+<span class="math inline">\(Y=0\)</span>
+</td>
+<!-- FP -->
+<td>
+<span class="math inline">\(900\)</span>
+</td>
+<!-- TN  -->
+<td>
+<span class="math inline">\(1000\)</span>
+</td>
+</tr>
+</tbody>
+
+</table>
+<p>From here we can determine our actual EER:</p>
+<p><span class="math display">\[EER = \frac{MCFP}{MCFN} = \frac{1000-900}{450-0}=0.222\]</span> Since this differs from our implied EER, we’ve chosen a suboptimal point along the ROC curve. We should choose a point according to the optimality condition <span class="math inline">\(r'(\alpha) = \frac{1-\pi}{\pi} \times EER = 19 \times 0.222 = 4.22\)</span>. Since we are currently at a point where the slope is 2.06, we need to move along the curve towards a steeper region—which, given the shape of the curve, will be further to the left, where the false positive rate is lower.</p>
+<p>The way to interpret this is that we are currently permitting too many false positives. Even though a single false positive is <em>less</em> costly (\$100) than a single false negative (\$450), since the prevalence is quite low, there are way more opportunities for false positives than false negatives. To account for this, we have to limit the false positive rate at the expense of recall.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>This type of result was a little bit surprising and counterintuitive to me when I first came across it. Intuitively I feel like if a false negative is more costly than a false positive, then I should be willing to give up some false positives in order in order to get a high recall. But in this example, we have a case where false negatives are costlier than false positives, and yet the optimal recall is only 0.03. The reason, again, is that it is not simply the relative valuation of false positives and false negatives that determines the total expected utility, <em>but also their relative frequencies</em>—which is determined by prevalence. Even if a single false positive doesn’t cost very much, a flood of false positives can add up. If my classifier is permitting a flood of false positives, I might be able to do better by choosing a lower false positive rate at the expense of permitting some false negatives.</p>
+</section>
+</section>
+<section id="the-complicated-real-world" class="level1">
+<h1>The Complicated Real World</h1>
+<p>My purpose in going through all of this was to build my intuition and derive some heuristics for thinking about the TPR/FPR tradeoffs in typical cases. However, there is a lot left out. I won’t address these points here, but I want to at least acknowledge them.</p>
+<section id="uncertainty-and-randomness" class="level2">
+<h2 class="anchored" data-anchor-id="uncertainty-and-randomness">Uncertainty and Randomness</h2>
+<p>In real life, you don’t actually know the <em>real</em> ROC curve, if such a thing is even well-defined. Models are evaluated on some test dataset, and the ROC curve displayes statistical estimates of the FPR and TPR with respect to the population from which the validation set is sampled. If you get a new test set, you’ll get a new ROC curve. If the test set is sampled from the population on which the model will be running, then the resulting ROC curve and other model diagnostic statistics should be representative of what will be observed online. However, this often isn’t the case: it’s often desirable to sample cases which is are representative of the population, but which exemplify certain edge cases or ambiguous cases that you want the model to learn. In this case, the ROC and prevalence measured in the test set may not give a good representation of the actual tradeoffs that you face when selecting a point along the ROC curve.</p>
+<p>But even if the test set is representative of the population, we are still subject to uncertainty: it’s impossible to know the <em>true</em> TPR and FPR of your model. You can only know the performance on a sample of data, and you have to hope that this is a good estimate of its performance on the full population. Of course, there are ways to quantify your uncertainty and account for this—that’s basically the fundamental probablem of statistics—but it’s not at all <em>obvious</em> how. I don’t address this here, but it’ll probably make a good topic for some future hypothetical post.</p>
+</section>
+<section id="roc-curves-arent-that-nice" class="level2">
+<h2 class="anchored" data-anchor-id="roc-curves-arent-that-nice">ROC curves aren’t that nice</h2>
+<p>To make things straightforward (and partly out of some nostalgia for Calculus 101), I’ve worked with nice smooth ROC curves somewhat idealized for doing calculus with. In real life, ROC curves are derived from empirical data, and are drawn with step functions, meaning all the calculus stuff I’ve been doing here goes out the window.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Roccurves.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">By <a href="https://en.wikipedia.org/wiki/User:BOR" class="extiw" title="en:User:BOR">BOR</a> at the <a href="https://en.wikipedia.org/wiki/" class="extiw" title="w:">English-language Wikipedia</a>, <a href="http://creativecommons.org/licenses/by-sa/3.0/" title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=10714489">Link</a></figcaption><p></p>
+</figure>
+</div>
+<p>It will be less straightforward to determine the optimal point along one of these real-world empirical ROC curves than what I’ve shown here, and how exactly to do it could be the subject of some future post. Nonetheless, the general intuition and principles should apply. When False Positives are expensive and prevalence is low, we should choose a point towards the left; when they are cheap and prevalence is high, we should choose a point towards the right. Holding everything else equal, when prevalence goes up, the optimal recall also goes up, and vice versa. But that brings me to the next complication.</p>
+</section>
+<section id="everything-else-isnt-equal" class="level2">
+<h2 class="anchored" data-anchor-id="everything-else-isnt-equal">Everything Else Isn’t Equal</h2>
+<p>I’ve mentioned a few times that holding everything else equal, when prevalence goes down then we should choose a point further to the left on the ROC curve. However, in a certain sense, this statement doesn’t actually make any sense. When prevalence changes, the TPR and FPR will also change—meaning, the ROC itself will change. It would actually be very unusual to see prevalence shift but keep the ROC entirely unchanged.</p>
+<p>The point here isn’t to develop a general theory about the relationship between ROC’s, prevalence, and utility (maybe one day but not today), but simply to figure out how to think about a specific but very common case: you have a ROC curve, and you have (implicit or explicit) preferences over false positives and false negatives, and you need to choose a point along the ROC curve. This piece provides a way to conceptualize this problem, but doesn’t really explore what happens if the prevalence changes.</p>
+</section>
+<section id="constant-marginal-utility-is-probably-not-realistic-at-scale" class="level2">
+<h2 class="anchored" data-anchor-id="constant-marginal-utility-is-probably-not-realistic-at-scale">Constant marginal utility is probably not realistic at scale</h2>
+<p>One of the implicit assumptions I use throughout this post is that marginal utility is constant with respect to the number of predictions made. For instance, in the worked example I assume that every false positive has a net cost of \$100, so 1 false positive costs \$100, 100 false positives costs \$10,000, and a million false positives costs a hundred million dollars.</p>
+<p>This is probably not realistic, and depending on the application, it probably becomes less and less realistic as you scale up. Suppose we have a model that prevents a user from signing in if it predicts that the sign-in attempt is fraudulent. A single false positive probably creates some annoyance for the user, and might cost us in terms of however much it costs to provide support to unlock the user’s account. But after three or four false positives, the user’s annoyance might boil over into a decision to stop trying to sign in at all, costing us an active user in the long term. In this case, the cost of a first false positive is somehow less than the cost of the second or third false positives. This type of cost function is not represented at all by this model, and could also be a topic for some future post.</p>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>Going through this exercise was extremely helpful for me. I don’t think I really had a strong intuition about this particular problem until I took the time to do this. It makes a lot of sense that we should choose a high precision classifier when false positives are expensive, and high recall when they are cheap, but the degree to which this is mediated by the underlying distribution of the positive class was not obvious to me at all prior to this adventure. I hope some other people out there feel similarly and that this can be a useful starting point for figuring out how to deal with classifiers in production when there are real costs to errors.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
