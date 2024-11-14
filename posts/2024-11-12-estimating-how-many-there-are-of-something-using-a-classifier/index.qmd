@@ -59,7 +59,7 @@ fig_1 <- function(alpha = .7, beta = .2, wrapwidth = 70) {
   caption <- glue::glue(stringr::str_wrap("This figure is drawn using the specific values α={alpha} and β={beta}, but the basic shape of this graph will resemble this graph for any imperfect labeler: a straight line segment from (0, β) to (1,α). The most important observation about this is that the apparent prevalence line is always flatter than 45°; the apparent prevalence is 'squished' between α and β. If α=β, this becomes a horizontal line, so the apparent prevalence becomes completely disconnected from the actual prevalence. The shaded regions indicate the direction of bias due the label error at different levels of true prevalence.", width = wrapwidth))
   eq_point <- beta / (1 - (alpha - beta))
   ggplot() +
-    geom_function(fun = \(x) beta + (alpha - beta) * x, aes(color = "Imperfect Labeler"), linewidth = 1) + 
+    geom_function(fun = \(x) beta + (alpha - beta) * x, aes(color = "Imperfect labeler"), linewidth = 1) + 
     coord_fixed() +
     geom_hline(yintercept = 0) + 
     geom_vline(xintercept = 0) +
@@ -77,7 +77,7 @@ fig_1 <- function(alpha = .7, beta = .2, wrapwidth = 70) {
     scale_y_continuous(breaks = c(0, beta, eq_point, alpha, 1), limits = c(0, 1),
                        labels = c("0", expression(beta), expression(mu * "'"), expression(alpha), 1)) +
     scale_x_continuous(breaks = c(0, eq_point, 1), limits = c(0, 1), labels = c("0", expression(mu * "'"), "1")) +
-    labs(y = "Estimated prevalence ℓ", x = "Actual prevalence μ", color = "Labeler", fill = "Direction of bias", title = "Apparent versus actual prevalence", caption = caption) +
+    labs(y = "Apparent prevalence ℓ", x = "Actual prevalence μ", color = "Labeler", fill = "Direction of bias", title = "Apparent versus actual prevalence", caption = caption) +
     theme_minimal() +
     theme(panel.grid = element_blank(), plot.caption.position = 'plot',
           plot.caption = element_text(hjust=0)) +
@@ -135,7 +135,7 @@ Nonetheless it does provide some interesting alternative ways of looking at this
 
 This also provides a way of thinking about how the quantifier bias relates to the precision-recall trade-off. For a high precision labeler, the ratio $\alpha/\pi$ is small, and so the apparent prevalence will understate the true prevalence. It makes sense. A high precision classifier only produces apparent positives when it's very sure, overlooking less certain cases, leading to an underestimation of the true prevalence. The opposite is true for a high recall labeler: $\alpha/\pi$ is large, and so $\ell > \mu$. With a high recall labeler we are casting a wide net, including many actual negatives in our estimation of prevalence.
 
-### Some references on this from the literature
+### Some discussion and proposed solutions from the literature
 
 When the source of the imperfect labels is a machine learning model, the problem of estimating the true prevalence has sometimes been called [Quantification](https://en.wikipedia.org/wiki/Quantification_(machine_learning))—a secret third brother of the classical supervised tasks of Regression and Classification. In this context, the naive approach using $\ell$ as a proxy for the true prevalence has been called the "Classify And Count" method by Forman (2008), who proposes an alternative method which corrects the bias, appropriately called the "Adjusted Classify-And-Count" (ACC) method. Given $\alpha$ and $\beta$, the ACC estimator is obtained by simply solving the equation $\ell = \beta + (\alpha - \beta) \mu$ for $\mu$, leading to:
 
