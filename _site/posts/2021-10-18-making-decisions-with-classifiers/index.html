@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.475">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Colin Fraser">
 <meta name="dcterms.date" content="2021-10-18">
 
-<title>Colin Fraser - Making Decisions With Classifiers</title>
+<title>Making Decisions With Classifiers – Colin Fraser</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,7 +19,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
 </style>
@@ -47,7 +47,13 @@ ul.task-list li input[type="checkbox"] {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -56,8 +62,10 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-6QW9PMVM0W"></script>
@@ -70,7 +78,35 @@ gtag('js', new Date());
 gtag('config', 'G-6QW9PMVM0W', { 'anonymize_ip': true});
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -79,46 +115,48 @@ gtag('config', 'G-6QW9PMVM0W', { 'anonymize_ip': true});
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Colin Fraser</span>
     </a>
   </div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="mailto://colin.r.fraser@gmail.com"><i class="bi bi-envelope" role="img">
+    <a class="nav-link" href="mailto://colin.r.fraser@gmail.com"> <i class="bi bi-envelope" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/colin_fraser"><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/colin_fraser"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://linkedin.com/in/colin-fraser/"><i class="bi bi-linkedin" role="img">
+    <a class="nav-link" href="https://linkedin.com/in/colin-fraser/"> <i class="bi bi-linkedin" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://medium.com/@colin.fraser"><i class="bi bi-medium" role="img">
+    <a class="nav-link" href="https://medium.com/@colin.fraser"> <i class="bi bi-medium" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/colin-fraser"><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/colin-fraser"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -157,7 +195,9 @@ gtag('config', 'G-6QW9PMVM0W', { 'anonymize_ip': true});
   </div>
   
 
+
 </header>
+
 
 <section id="tldr" class="level1">
 <h1>TL;DR</h1>
@@ -203,7 +243,11 @@ gtag('config', 'G-6QW9PMVM0W', { 'anonymize_ip': true});
 <p>In practice, it is often possible to tune a model in order to obtain a desired FPR and TPR. A typical way that this can be done is when the model outputs a score. Choosing to predict positive when the score is above some threshold <span class="math inline">\(t\)</span> will lead to a certain pair of TPR and FPR. Varying <span class="math inline">\(t\)</span> will lead to different corresponding pairs of TPR and FPR. Plotting TPR as a function of FPR gives the <a href="https://en.wikipedia.org/wiki/Receiver_operating_characteristic">Receiver Operating Characteristic (ROC) curve</a>, which is frequently used in the evaluation of machine learning models.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The figure above shows the ROC curve for two hypothetical models. It is common to plot the line <span class="math inline">\(y=x\)</span> on ROC plots—this represents the theoretical worst possible model, equivalent to simply flipping a coin. Models that outperform random guessing occupy the space above the 45-degree line. A theoretical perfect model would live at the point <span class="math inline">\((0,1)\)</span>: a model that flags every positive (TPR=1), while never incorrectly flagging a negative (FPR=0). In this case, the orange model is strictly better than the purple model, because at any given FPR, it can achieve a higher TPR. The closer the ROC curve is to the point (0,1), the better the model performs overall.</p>
@@ -213,7 +257,6 @@ gtag('config', 'G-6QW9PMVM0W', { 'anonymize_ip': true});
 <section id="costs-and-benefits-of-predicting" class="level3">
 <h3 class="anchored" data-anchor-id="costs-and-benefits-of-predicting">Costs and Benefits of Predicting</h3>
 <p>As discussed above, when we use the classifier to make a prediction, there are four potential outcomes, which I’ll denote by <span class="math inline">\(TP\)</span>, <span class="math inline">\(TN\)</span>, <span class="math inline">\(FP\)</span>, <span class="math inline">\(FN\)</span>. Each of these outcomes has some cost or benefit associated with it, which I’ll describe as utilities, <span class="math inline">\(u_{TP}\)</span>, <span class="math inline">\(u_{TN}\)</span>, <span class="math inline">\(u_{FP}\)</span>, <span class="math inline">\(u_{FN}\)</span>. This utility function is reminiscent of a Payoff Matrix from elementary game theory.</p>
-
 <table class="table-no-highlight">
 <thead>
 <tr>
@@ -264,10 +307,8 @@ Classifier Payoff Matrix
 </td>
 </tr>
 </tbody>
-
 </table>
 <p>The utilities associated with each outcome can vary significantly by domain. Fo instance, if the classifier is a COVID-19 test, then we might attach a higher cost to a false negative than to a false positive. While both are certainly costly, the damage done by a false positive is likely confined to the individual, who may be forced to unnecessarily quarantine—whereas, a false negative may lead the individual to infect others.</p>
-
 <table class="table-no-highlight">
 <thead>
 <tr>
@@ -322,10 +363,8 @@ Hypothetical COVID-19 Test Payoff Matrix
 </td>
 </tr>
 </tbody>
-
 </table>
 <p>On the other hand, many for many applications a false positive might be significantly more costly than a false negative. For example, imagine the model behind Face ID on an iPhone. A false negative means that the model incorrectly fails to identify your face as a match to what you’ve stored. This causes annoyance; you may have to scan again, or even unlock your phone by an alternate method. However, a false positive means that a face which is not yours was able to unlock the phone. This is presumably significantly worse.</p>
-
 <table class="table-no-highlight">
 <thead>
 <tr>
@@ -380,7 +419,6 @@ Face ID Payoff Matrix
 </td>
 </tr>
 </tbody>
-
 </table>
 </section>
 <section id="expected-utility" class="level3">
@@ -433,7 +471,11 @@ U=\pi u_{TP}r(\alpha) + \pi u_{FN}(1-r(\alpha)) + (1-\pi)u_{FP}\alpha  + (1-\pi)
 <p>Given an ROC curve, a payoff matrix, and a prevalence, this allows us to plot the expected utility of a prediction alongside the ROC curve. The following plot shows a hypothetical ROC curve (parameterized as <span class="math inline">\(r=\sqrt{2\alpha-\alpha^2}\)</span> for simplicity) along with the expected utility at each point when prevalence is 0.5.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>To find the point along the ROC curve where expected utility is maximized, we can take the derivative of expected utility with respect to <span class="math inline">\(\alpha\)</span>, and find the point where it’s equal to 0 (assuming that the ROC curve is well-behaved, i.e.&nbsp;looks something like the characteristic bow-shape, is monotonic, etc.).</p>
@@ -453,14 +495,22 @@ U=\pi u_{TP}r(\alpha) + \pi u_{FN}(1-r(\alpha)) + (1-\pi)u_{FP}\alpha  + (1-\pi)
 <p>Since the optimality condition sets the slope of the ROC curve <em>proportional</em> to the odds of a negative, the optimal slope as a function of prevalence always has the same shape. Differences in the valuation of errors simply scale the function vertically.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>To help understand how this manifests, the following plot shows a hypothetical ROC curve (defined as <span class="math inline">\(r(\alpha)=\sqrt{2\alpha - \alpha^2}\)</span>, which is just a quarter-circle with radius 1 centered at (1,0)) along with the expected utilities and optimal points assuming the same utilities, but different prevalences. For simplicity I assume that EER=1, but alternative EERs would produce similar qualitative results.</p>
 <p>(Fun calculus exercise: show that these assumptions imply that the optimal recall as a function of prevalence is equal to <span class="math inline">\(\alpha^* = \frac{2\pi^2 - \sqrt{2\pi ^4 - 6\pi ^3 + 7\pi^2 - 4\pi + 1}}{2\pi^2 - 2\pi + 1}\)</span>)</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Although this exercise is contrived (by me), I still found the results a little surprising when I first went through this. Since it’s well known that ROC curves are “better” the closer they get to the point (1,0), I would have expected that when we are indifferent between a false positive and a false negative, the optimal point should be at the point along the ROC curve that is closest to the point (1,0). But this is only true in the specific case where prevalence is 0.5. In general, the optimal point can be anywhere along the ROC curve—further to the left when prevalence is low, and further to the right when prevalence is high.</p>
@@ -472,7 +522,6 @@ U=\pi u_{TP}r(\alpha) + \pi u_{FN}(1-r(\alpha)) + (1-\pi)u_{FP}\alpha  + (1-\pi)
 <section id="putting-it-together" class="level3">
 <h3 class="anchored" data-anchor-id="putting-it-together">Putting it together</h3>
 <p>To choose the optimal point on the ROC curve, you need a prevalence and an EER. Since the function for deriving the optimal ROC slope from the prevalence and EER is pretty simple, it’s possible to derive some simple heuristics for developing intuition about optimal classifiers. When prevalence is low, <span class="math inline">\((1-\pi)/\pi\)</span> is high. If EER is also high, then the optimal slope is given by a big number times a big number, which is a big number. This implies that for low prevalence and high EER, the optimal point will be somewhere towards the left side of the ROC curve, where it’s steep. A similar argument can be made when prevalence is high and EER is low.</p>
-
 <table style="all: revert;">
 <tbody>
 <tr>
@@ -516,7 +565,6 @@ Depends
 </td>
 </tr>
 </tbody>
-
 </table>
 <p>These rules of thumb do make some intuitive sense. When EER is high, it means that a False Positive is costlier than a False Negative. When prevalence is low, it means that there are lots of opportunities for false positives. So when both of those things are true, we should definely choose a classifier that produces a minimal volume of false positives—which would be one with high precision and low recall.</p>
 <p>On the other hand, suppose we have high EER but also high prevalence, so we are in the top left quadrant. In this case, a false positive is costlier than a false negative, but there aren’t as many opportunities for false positives. There’s not enough information to determine whether we should choose higher precision or higher recall here; we’ll need to see the specific value.</p>
@@ -532,7 +580,11 @@ Depends
 <p>As an example, suppose you’ve got a model for predicting customer churn. Based on gut feeling, you’ve calibrated the model to have a 10% false positive rate, which gets 44% recall. Suppose further that the population customer churn rate is 5%.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We can use this information to calculate the EER that’s implied by these numbers. The trickiest part here is determining the slope of the ROC curve at the point we’ve selected. For this example I cheated a little bit by specifically contriving a nice ROC curve <span class="math inline">\(r = \sqrt{2\alpha - \alpha^2}\)</span>. It’s (relatively) easy to apply some calculus 101 and determine that the slope of that curve at <span class="math inline">\(\alpha=0.1\)</span> is about 2.06. In real life, it will be a little bit harder to find this slope, and the best approach for doing this might be the subject of a future post. But anyway, if we have the slope, then we just plug the numbers into the optimality condition to derive our implied relative valuation of False Positives and False Negatives.</p>
@@ -549,7 +601,6 @@ EER &amp;= \frac{2.06}{19} = 0.108
 <h2 class="anchored" data-anchor-id="finding-an-optimal-point-given-explicit-preferences">Finding an optimal point given explicit preferences</h2>
 <p>Suppose we use these predictions to send out a promotional offer to customers who we think are likely to churn. In this case, it might be feasible to explicitly price false positives and false negatives (this is, of course, rare!).</p>
 <p>Say that the regular price of our service is \$1,000, and the promotional offer gives the customer \$100 off. Let’s also suppose that a customer who wasn’t going to cancel anyway would always take the offer if we give it to them, but a customer who would otherwise leave takes the offer half the time This is enough information to price the outcomes. A true positive means we send the offer to a customer who would have canceled. Half the time they take it, and the other half the cancel, so we get <span class="math inline">\(U_{TP}=.5\times 900=450\)</span>. A true negative means we correctly withhold the offer from a customer who pays full price, so <span class="math inline">\(U_{TN}=1000\)</span>. A false positive means we send the offer to a customer who was going to stay anyway, so <span class="math inline">\(U_{FP}=900\)</span>, and finally a false negative means we miss sending the offer to a customer who leaves which gives us <span class="math inline">\(U_{FN}=0\)</span>.</p>
-
 <table class="table-no-highlight">
 <thead>
 <tr>
@@ -604,14 +655,17 @@ Churn Model Payoff Matrix
 </td>
 </tr>
 </tbody>
-
 </table>
 <p>From here we can determine our actual EER:</p>
 <p><span class="math display">\[EER = \frac{MCFP}{MCFN} = \frac{1000-900}{450-0}=0.222\]</span> Since this differs from our implied EER, we’ve chosen a suboptimal point along the ROC curve. We should choose a point according to the optimality condition <span class="math inline">\(r'(\alpha) = \frac{1-\pi}{\pi} \times EER = 19 \times 0.222 = 4.22\)</span>. Since we are currently at a point where the slope is 2.06, we need to move along the curve towards a steeper region—which, given the shape of the curve, will be further to the left, where the false positive rate is lower.</p>
 <p>The way to interpret this is that we are currently permitting too many false positives. Even though a single false positive is <em>less</em> costly (\$100) than a single false negative (\$450), since the prevalence is quite low, there are way more opportunities for false positives than false negatives. To account for this, we have to limit the false positive rate at the expense of recall.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>This type of result was a little bit surprising and counterintuitive to me when I first came across it. Intuitively I feel like if a false negative is more costly than a false positive, then I should be willing to give up some false positives in order in order to get a high recall. But in this example, we have a case where false negatives are costlier than false positives, and yet the optimal recall is only 0.03. The reason, again, is that it is not simply the relative valuation of false positives and false negatives that determines the total expected utility, <em>but also their relative frequencies</em>—which is determined by prevalence. Even if a single false positive doesn’t cost very much, a flood of false positives can add up. If my classifier is permitting a flood of false positives, I might be able to do better by choosing a lower false positive rate at the expense of permitting some false negatives.</p>
@@ -631,7 +685,7 @@ Churn Model Payoff Matrix
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Roccurves.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">By <a href="https://en.wikipedia.org/wiki/User:BOR" class="extiw" title="en:User:BOR">BOR</a> at the <a href="https://en.wikipedia.org/wiki/" class="extiw" title="w:">English-language Wikipedia</a>, <a href="http://creativecommons.org/licenses/by-sa/3.0/" title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=10714489">Link</a></figcaption><p></p>
+<figcaption>By <a href="https://en.wikipedia.org/wiki/User:BOR" class="extiw" title="en:User:BOR">BOR</a> at the <a href="https://en.wikipedia.org/wiki/" class="extiw" title="w:">English-language Wikipedia</a>, <a href="http://creativecommons.org/licenses/by-sa/3.0/" title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=10714489">Link</a></figcaption>
 </figure>
 </div>
 <p>It will be less straightforward to determine the optimal point along one of these real-world empirical ROC curves than what I’ve shown here, and how exactly to do it could be the subject of some future post. Nonetheless, the general intuition and principles should apply. When False Positives are expensive and prevalence is low, we should choose a point towards the left; when they are cheap and prevalence is high, we should choose a point towards the right. Holding everything else equal, when prevalence goes up, the optimal recall also goes up, and vice versa. But that brings me to the next complication.</p>
@@ -682,12 +736,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
     }
-  });
-  clipboard.on('success', function(e) {
+    return false;
+  }
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -719,11 +776,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/colin-fraser\.net");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -733,8 +829,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -746,9 +851,245 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -789,6 +1130,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

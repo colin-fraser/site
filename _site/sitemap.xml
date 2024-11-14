@@ -2,14 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://colin-fraser.net/index.html</loc>
-    <lastmod>2024-01-03T01:08:17.402Z</lastmod>
-  </url>
-  <url>
-    <loc>https://colin-fraser.net/posts/2023-07-15-rebooting-my-website-once-again/index.html</loc>
-    <lastmod>2024-01-03T00:58:52.401Z</lastmod>
+    <lastmod>2024-11-12T20:36:41.877Z</lastmod>
   </url>
   <url>
     <loc>https://colin-fraser.net/posts/2021-10-18-making-decisions-with-classifiers/index.html</loc>
-    <lastmod>2024-01-03T01:10:22.075Z</lastmod>
+    <lastmod>2024-11-12T20:36:41.877Z</lastmod>
+  </url>
+  <url>
+    <loc>https://colin-fraser.net/posts/2024-11-12-estimating-how-many-there-are-of-something-using-a-classifier/index.html</loc>
+    <lastmod>2024-11-14T14:08:52.223Z</lastmod>
+  </url>
+  <url>
+    <loc>https://colin-fraser.net/posts/2023-07-15-rebooting-my-website-once-again/index.html</loc>
+    <lastmod>2024-11-12T20:36:41.877Z</lastmod>
   </url>
 </urlset>
