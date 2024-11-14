@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Colin Fraser">
-<meta name="dcterms.date" content="2023-07-15">
+<meta name="dcterms.date" content="2024-11-12">
 
-<title>Rebooting my website once again – Colin Fraser</title>
+<title>Estimating how many there are of something when labels are sometimes wrong – Colin Fraser</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -78,6 +78,35 @@ gtag('js', new Date());
 gtag('config', 'G-6QW9PMVM0W', { 'anonymize_ip': true});
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -141,7 +170,7 @@ gtag('config', 'G-6QW9PMVM0W', { 'anonymize_ip': true});
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Rebooting my website once again</h1>
+<h1 class="title">Estimating how many there are of something when labels are sometimes wrong</h1>
 </div>
 
 
@@ -158,7 +187,7 @@ gtag('config', 'G-6QW9PMVM0W', { 'anonymize_ip': true});
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 15, 2023</p>
+      <p class="date">November 12, 2024</p>
     </div>
   </div>
   
@@ -170,9 +199,48 @@ gtag('config', 'G-6QW9PMVM0W', { 'anonymize_ip': true});
 </header>
 
 
-<p>I’ve been meaning for ages to reboot this website using <a href="https://quarto.org/">Quarto</a> rather than Blogdown, and this weekend I’ve finally gotten around to it. Unfortunately porting things over from the old site isn’t 100% as straightforward as I’d hoped, so I will be doing that slowly over time.</p>
+<p>Say you want to estimate how much there is of some kind of thing. There’s a big set of things, some of which satisfy some property, and others of which don’t, and you want to know what fraction of them have the property. I’ll call this number the <em>prevalence</em>, or just use the letter <span class="math inline">\(\mu\)</span> to refer to it.</p>
+<p>The most straightforward way to do this in theory would be to look at each thing and tally up how many of them have the property, but there are too many of them for this to be feasible, and observing them perfectly is impossible. Instead, you have some imperfect <em>labeler</em> that assigns a <em>label</em> to each object indicating whether it <em>probably</em> has the property. To add some simple notation, <span class="math inline">\(Y\)</span> be the true value of a randomly selected object, with <span class="math inline">\(Y=1\)</span> indicating that the object has the property and <span class="math inline">\(Y=0\)</span> otherwise, and let <span class="math inline">\(L\)</span> be its label. If <span class="math inline">\(Y=1\)</span>, I’ll call the object an “actual positive”, and if <span class="math inline">\(L = 1\)</span>, I’ll call it an “apparent positive”. The goal is to estimate the <em>true prevalence</em>, the expected value <span class="math inline">\(\mu = E[Y]\)</span>, but you only get to observe <span class="math inline">\(L\)</span>. A natural inclination is to just treat <span class="math inline">\(L\)</span> as a substitute for <span class="math inline">\(Y\)</span>, and estimate the <em>apparent prevalence</em> <span class="math inline">\(\ell = E[L]\)</span> by, for example, looking at the sample average of <span class="math inline">\(L\)</span>. This post is about why that goes wrong.</p>
+<p>The reason that I’m describing this all so abstractly is that this situation can come up in many different ways. Here are a few examples.</p>
+<p>The prevalence <span class="math inline">\(\mu\)</span> could be the fraction of people in a population who carry some disease. You can’t observe every person in the population, and even if you could, you can’t even know for sure whether any person actually has the disease. All you can know is the outcome of some <em>test</em>. The test is imperfect, and occasionally produces false positives and false negatives. In this case, <span class="math inline">\(Y\)</span> describes whether a randomly selected person actually has the disease, and <span class="math inline">\(L\)</span> indicates whether they test positive.</p>
+<p>Here’s another example: maybe <span class="math inline">\(\mu\)</span> is the fraction of examples from some <a href="https://github.com/vectara/hallucination-leaderboard">LLM benchmark</a> which contain a hallucination. Such a benchmark might have thousands of prompts, and so it might be infeasible to manually review them all and assess whether they contain hallucinations. To deal with this, many benchmarks of this type use another LLM—ideally one that is more powerful in some sense—to evaluate whether responses generated by the LLM under evaluation contain hallucinations. But this evaluator LLM itself can be error-prone: it can falsely indicate that hallucination-free text contains hallucinations (a false positive), and vice versa (a false negative).</p>
+<p>Or perhaps <span class="math inline">\(\mu\)</span> is <a href="https://twitter.com/XData/status/1750280284635824485">the amount of discussion on a microblogging app about The Academy Awards</a>. You can’t look at every single post, so instead you count up how many posts contain the string “Oscar”. Of course, this will falsely count posts discussing Oscar The Grouch (false positives), and it will falsely miss posts which don’t refer to the awards by name at all.</p>
+<p>All of these situations are abstractly the same. They all involve trying to estimate some expected value <span class="math inline">\(E[Y]\)</span> by observing examples of possibly imperfect labels <span class="math inline">\(L\)</span>. Again, the natural inclination is to just use an imperfect label <span class="math inline">\(L\)</span> like it’s a true value <span class="math inline">\(Y\)</span>. Even if you’re aware that your labels are imperfect, somehow or another the true positives and false positives might cancel out in the end, leading to something which might be noisy but is at least right on average. This does happen with other forms of measurement error. Unfortunately, it doesn’t happen here.</p>
+<p>To better understand what does happen, we need two important measures of labeler quality: the true positive rate (TPR) and the false positive rate (FPR). The TPR, which I’ll also denote by <span class="math inline">\(\alpha\)</span>, is the probability that an actual positive is correctly labeled. Using the notation above, it can be written as <span class="math inline">\(\alpha = P(L=1|Y=1)\)</span>. When the labels come from a machine learning model, this quantity is also often called the <em>recall</em>, and when it comes from a medical test, it’s called the <em>sensitivity</em>. The FPR, denoted by <span class="math inline">\(\beta\)</span>, is the probability that an actual negative is falsely identified as an apparent positive: <span class="math inline">\(\beta = P(L=1|Y=0)\)</span>.</p>
+<p>These two measures more fully characterize imperfectness of the labeling process. A perfect labeler would have <span class="math inline">\(\alpha = 1\)</span> and <span class="math inline">\(\beta = 0\)</span>. An imperfect labeler will have <span class="math inline">\(\alpha &lt; 1\)</span> and <span class="math inline">\(\beta &gt; 0\)</span>. If the labeler is better than flipping a coin, we must have <span class="math inline">\(\alpha &gt; \beta\)</span>. For the most part I’ll assume that this holds, but it will be interesting to think through what happens if it doesn’t.</p>
+<p>With these defined, it’s pretty straightforward to see that the apparent prevalence <span class="math inline">\(E[L]\)</span> can be written as follows.</p>
+<p><span class="math display">\[\begin{align*}
+\ell &amp;= E[L] \\ &amp;= E[L | Y = 1] P (Y = 1) + E[L|Y = 0] P(Y=0) \\
+&amp;= \alpha \mu + \beta (1-\mu) \\ &amp; = \beta + (\alpha - \beta) \mu
+\end{align*}\]</span></p>
+<p>This is an interesting equation. If we have a perfect labeler with <span class="math inline">\(\alpha = 1\)</span> and <span class="math inline">\(\beta = 0\)</span>, then this says that the estimated prevalence equals the true prevalence, as you’d expect. But otherwise, it’s not. The apparent prevalence ends up differing from the actual prevalence by different amounts depending on <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\alpha\)</span>, and <span class="math inline">\(\beta\)</span>. As a function of <span class="math inline">\(\mu\)</span>, we have a straight line with intercept <span class="math inline">\(\beta\)</span>, and slope <span class="math inline">\(\alpha - \beta\)</span>.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>There is a single point, which I’ve labeled <span class="math inline">\(\mu'\)</span>, at which the actual prevalence is equal to the apparent prevalence, but for every other possible value of prevalence, the apparent prevalence differs. The magnitude and even the direction of this bias can take on a range of different values depending on the true prevalence. In a way, this is a bit disappointing news. It means that unless you have perfect labels, you’re virtually guaranteed to estimate prevalence incorrectly.</p>
+<p>There are a few other bits of insight that we can obtain by studying this graph. For one thing, the relationship between the true and estimated prevalence is always flatter than the 45 degree line. This means that for small values of the actual prevalence (anywhere to the left of <span class="math inline">\(\mu'\)</span>), we will tend to overestimate, and vice versa. If you have some sense of the approximate magnitude of the true prevalence, you can use this as a kind of rule of thumb to guess the direction of the bias, even if you don’t know the true and false positive rates for sure. If you’re trying to measure a very small prevalence with an imperfect test, you’re probably overestimating, and vice versa.</p>
+<p>It also means that this estimation procedure will tend to understate the magnitude of <em>changes</em> in prevalence: when prevalence changes from <span class="math inline">\(\mu_0\)</span> to <span class="math inline">\(\mu_0 + \Delta\)</span>, the estimate will change by <span class="math inline">\((\alpha - \beta)\Delta\)</span>, which is strictly less (in absolute value) than <span class="math inline">\(\Delta\)</span>. The apparent prevalence is squished in between <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. In the extreme case where <span class="math inline">\(\alpha = \beta\)</span>, the line becomes flat, and you’ll end up estimating that prevalence is equal to <span class="math inline">\(\beta\)</span> on average no matter its true value. This is in some way unsurprising: again, when <span class="math inline">\(\alpha = \beta\)</span> the labeler is no better than random, so from that perspective it’s no shock that the labels are uninformative about the true prevalence. Nonetheless, I’ve noticed in the real world that this tends to be a bit unintuitive. It’s tempting to think that labeling process with a high false positive rate and a low true positive rate will lead to estimates which are “directionally correct”, but this is not necessarily true! If the false positive rate is close enough to the true positive rate, the estimate becomes pure noise. In the perverse scenario where the false positive rate is higher than the true positive rate, the slope of the line becomes negative, and increases in the true prevalence lead to <em>decreases</em> in the estimated prevalence, and vice versa. You would hope never to find yourself in this scenario, but it’s not impossible, and it’s good to be aware of this possibility.</p>
+<p>The fact that changes in prevalence are understated by imperfect labels is quite problematic if your project is to track the prevalence of something over time. If you’re tracking the progress of some disease which currently has a small prevalence, for example, it means that small upticks in the estimated prevalence probably indicate larger increases in the underlying true prevalence.</p>
+<p>It also has implications for experimentation. Suppose you are testing some intervention which is intended to change the prevalence. You’ll do this by comparing the prevalence in a test group to the prevalence in a control group. But with imperfect labels, you will underestimate the magnitude of the difference between the two groups.</p>
+<p>When the source of the imperfect labels is a machine learning model, the problem of estimating the true prevalence has sometimes been referred to as <a href="https://en.wikipedia.org/wiki/Quantification_(machine_learning)">Quantification</a>—a neglected brother to the classical supervised tasks of Regression and Classification. In this context, the naive approach of estimating <span class="math inline">\(\ell\)</span> has been called the “Classify And Count” method by Forman (2008), who proposes an alternative method which corrects the bias, appropriately called the “Adjusted Classify-And-Count” (ACC) method. Given <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, the ACC estimator is obtained by simply solving the equation <span class="math inline">\(\ell = \beta + (\alpha - \beta) \mu\)</span> for <span class="math inline">\(\mu\)</span>, leading to:</p>
+<p><span class="math display">\[\hat \mu_{ACC}=\frac{\ell - \beta}{\alpha - \beta}\]</span> This is not the first time this problem has been noticed. Rogan and Gladen (1978) discuss how the prevalence of diseases can be incorrectly estimated when we rely on imperfect tests, and propose the following correction.</p>
+<p><span class="math display">\[\hat \mu _{RG} = \frac{\ell + \text{Specificity} - 1}{\text{Sensitivity} + \text{Specificity} - 1}\]</span> “Specificity” and “sensitivity” are more frequently used to describe medical tests than true and false positive rates, but it turns out this is actually exactly equivalent to the ACC correction. Sensitivity is just a synonym for recall, and the definition of specificity is <span class="math inline">\(P(L=0 | Y = 0)\)</span>, which happens to be equal to <span class="math inline">\(1 - \beta\)</span>. Substituting these in to <span class="math inline">\(\hat \mu_{RG}\)</span>, you get the exact formula for <span class="math inline">\(\hat \mu _{ACC}\)</span>. Funny how things are discovered and rediscovered.</p>
+<p>There’s a lot more to talk about here. There are many other methods which are more sophisticated than the Rogan-Gladen correction, and we haven’t even touched on the notion of a confidence interval here. But I’ll leave those for future posts. In this post I just wanted to frame and identify the problem, which I’ve very rarely seen discussed outside of very specialized contexts.</p>
+<section id="references" class="level3">
+<h3 class="anchored" data-anchor-id="references">References</h3>
+<ul>
+<li><p>Forman G. Quantifying counts and costs via classification. Data Mining and Knowledge Discovery. 2008 Oct;17:164-206.</p></li>
+<li><p>Rogan WJ, Gladen B. Estimating prevalence from the results of a screening test. American journal of epidemiology. 1978 Jan 1;107(1):71-6.</p></li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
