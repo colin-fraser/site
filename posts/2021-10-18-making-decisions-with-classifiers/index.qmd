@@ -2,7 +2,9 @@
 title: "Making Decisions With Classifiers"
 date: 2021-10-18
 author: Colin Fraser
-categories: ['Essay', 'Decision Theory', 'ML']
+categories:
+  - Essay
+  - ML
 ---
 
 ```{r include=FALSE}
@@ -226,7 +228,7 @@ Setting this expression equal to $0$ and solving for $r'(\alpha)$ gives an inter
 
 $$r'(\alpha) = \frac{1-\pi}{\pi}\frac{u_{TN}-u_{FP}}{u_{TP}-u_{FN}}$$
 
-This equation tells us what must be true about the slope of the ROC curve at the point which maximizes the expected utility. Since well-behaved ROC curves look similar to each other, this gives us some heuristics that will be true for most models.![](images/ROC1.png)
+This equation tells us what must be true about the slope of the ROC curve at the point which maximizes the expected utility. Since well-behaved ROC curves look similar to each other, this gives us some heuristics that will be true for most models.
 
 The ROC curve starts steep and becomes flat. Thus, when the right hand side of this equation is large, then the optimal point is somewhere on the left side of the ROC curve, where the curve is steep and the false positive rate is low. Conversely, when the right hand side is small, then the optimal point is somewhere on the right side of the ROC curve, where the FPR is high and the curve is flatter.
 

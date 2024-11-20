@@ -1,11 +1,11 @@
 ---
-title: "`{wrapify}`"
+title: "Wrapify"
 subtitle: "An R package for making API wrappers declaratively"
 date: 2024-11-19
 author: Colin Fraser
-categories: 
-  - Programming
+categories:
   - R
+  - R Package
 ---
 
 I often find myself needing to write functions to make API calls in R. This tends to involve a lot of boilerplate and repetition. The `{wrapify}` package is an attempt to abstract as much as possible of that boilerplate away in a declarative way. The package code is available on [Github](https://github.com/colin-fraser/wrapify/), and the package can be installed with `devtools::install_github("colin-fraser/wrapify")`.

@@ -5,6 +5,7 @@
   text-align: center; /* Center text in cells */
   font-family: Arial, sans-serif; /* Change font style */
   border: 2px solid #444; /* Dark line below the header */
+  margin: 2rem auto;
 }
 
 .table-no-highlight thead th {
