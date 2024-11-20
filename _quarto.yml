@@ -4,9 +4,15 @@ project:
 website:
   title: "Colin Fraser"
   navbar:
+    left:
+      - text: "Posts"
+        href: index.qmd
+      - href: about.qmd
     right: 
       - icon: envelope
-        href: mailto://colin.r.fraser@gmail.com
+        href: mailto:colin@123mail.org
+      - text: "![](/assets/BlueskyLogo.svg){width=19.7px height=19.7px style='vertical-align: middle;'}"
+        href: https://bsky.app/profile/colin-fraser.net
       - icon: twitter
         href: https://twitter.com/colin_fraser
       - icon: linkedin

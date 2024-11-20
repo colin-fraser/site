@@ -1,0 +1,5 @@
+--- 
+title: "About"
+---
+
+I'm a data scientist. I live in Vancouver, BC, and I currently work at Meta in the area of Trust and Safety, and I've been working in this field since early 2020. I write a lot about R, programming, data science topics that may or may not relate to my work, and more recently, about LLMs and AI more generally.
