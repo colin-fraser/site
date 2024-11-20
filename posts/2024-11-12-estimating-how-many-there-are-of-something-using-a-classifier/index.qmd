@@ -2,6 +2,10 @@
 title: "Estimating how many there are of something when you can't see them all perfectly"
 date: 2024-11-14
 author: Colin Fraser
+categories:
+  - Essay
+  - Statistics
+  - ML
 ---
 
 I wrote a tweet recently complaining about how it's hard to estimate how many of what kind of posts there are.

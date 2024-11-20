@@ -2,8 +2,7 @@
 title: "Making Decisions With Classifiers"
 date: 2021-10-18
 author: Colin Fraser
-category: 'Essay'
-tags: ['Long post', 'Decision Theory']
+categories: ['Essay', 'Decision Theory', 'ML']
 ---
 
 ```{r include=FALSE}
@@ -326,7 +325,7 @@ The EER is the number of false positives you would need to prevent in order to a
 
 To choose the optimal point on the ROC curve, you need a prevalence and an EER. Since the function for deriving the optimal ROC slope from the prevalence and EER is pretty simple, it's possible to derive some simple heuristics for developing intuition about optimal classifiers. When prevalence is low, $(1-\pi)/\pi$ is high. If EER is also high, then the optimal slope is given by a big number times a big number, which is a big number. This implies that for low prevalence and high EER, the optimal point will be somewhere towards the left side of the ROC curve, where it's steep. A similar argument can be made when prevalence is high and EER is low.
 
-<table style="all: revert;"><tbody><tr><td colspan="2" rowspan="2"></td><td colspan="2">EER</td></tr><tr><td>High</td><td>Low</td></tr><tr><td rowspan="2">Prevalence</td><td>High</td><td>Depends</td><td>High Recall, Low Precision</td></tr><tr><td>Low</td><td>Low Recall, High Precision</td><td>Depends</td></tr></tbody></table>
+<table class="table-no-highlight"><tbody><tr><td colspan="2" rowspan="2"></td><td colspan="2">EER</td></tr><tr><td>High</td><td>Low</td></tr><tr><td rowspan="2">Prevalence</td><td>High</td><td>Depends</td><td>High Recall, Low Precision</td></tr><tr><td>Low</td><td>Low Recall, High Precision</td><td>Depends</td></tr></tbody></table>
 
 These rules of thumb do make some intuitive sense. When EER is high, it means that a False Positive is costlier than a False Negative. When prevalence is low, it means that there are lots of opportunities for false positives. So when both of those things are true, we should definely choose a classifier that produces a minimal volume of false positives—which would be one with high precision and low recall.
 
