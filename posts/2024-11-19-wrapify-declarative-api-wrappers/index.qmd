@@ -1,0 +1,7 @@
+---
+title: "wrapify: Declarative API wrappers"
+date: 2024-11-19
+author: Colin Fraser
+---
+
+
