@@ -1,5 +1,6 @@
 ---
 title: "Estimating how many there are of something when you can't see them all perfectly"
+subtitle: A brief introduction to _quantification_
 date: 2024-11-14
 author: Colin Fraser
 categories:
