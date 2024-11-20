@@ -5,6 +5,7 @@ author: Colin Fraser
 categories:
   - Essay
   - ML
+description: When you're building a classifier, you face a tradeoff between precision and recall. You can have a high precision classifier which is usually right when it flags a positive, or you can have a high recall classifier which catches most of the positives, and often there is a spectrum in between. This post is about how to choose a point on that spectrum.
 ---
 
 ```{r include=FALSE}
