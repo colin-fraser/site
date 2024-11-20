@@ -6,6 +6,5 @@ listing:
   type: default
   categories: true
   feed: true
-  fields: ['title', 'date', 'categories']
+  fields: ['title', 'date', 'description', 'categories', 'word-count']
 ---
-

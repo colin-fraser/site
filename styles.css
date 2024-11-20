@@ -1,13 +1,5 @@
 /* css styles */
 
-div.quarto-post {
-    display: flex;
-    gap: 2em;
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-}
-
 .table-no-highlight {
   border-collapse: collapse; /* Collapse borders */
   text-align: center; /* Center text in cells */
