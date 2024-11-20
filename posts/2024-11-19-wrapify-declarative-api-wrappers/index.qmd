@@ -1,0 +1,203 @@
+---
+title: "`{wrapify}`"
+subtitle: "An R package for making API wrappers declaratively"
+date: 2024-11-19
+author: Colin Fraser
+categories: programming
+---
+
+I often find myself needing to write functions to make API calls in R. This tends to involve a lot of boilerplate and repetition. The `{wrapify}` package is an attempt to abstract as much as possible of that boilerplate away in a declarative way. The package code is available on [Github](https://github.com/colin-fraser/wrapify/), and the package can be installed with `devtools::install_github("colin-fraser/wrapify")`.
+
+## First example: OpenAI API
+
+Here is the full code for an OpenAI API wrapper which hits the chat completion API.
+
+```{r}
+library(wrapify)
+
+openai_wrapper <- wrapper(
+  base_url = "https://api.openai.com/v1",
+  auth = bearer_auth_type(),
+  env_var_name = "OPENAI_KEY"
+)
+
+chat_message <- super_simple_constructor(content =, role = "user")
+
+chat_completion <- requestor(
+  openai_wrapper,
+  "chat/completions",
+  method = "post",
+  body_args = function_args(
+    messages = ,
+    model = "gpt-3.5-turbo",
+    temperature = NULL
+  )
+)
+```
+
+This creates three things:
+
+- The wrapper object `openai_wrapper` which contains the base configuration for interacting with the OpenAI API, including the base URL, authentication method (bearer token), and where to find the API key (OPENAI_KEY environment variable). This is mostly used internally --- you shouldn't need to touch it.
+- A constructor function `chat_message` that creates properly formatted message objects for the chat API, with a required 'content' parameter and a default role of "user"
+- A requestor function `chat_completion` that makes POST requests to the chat/completions endpoint, with required 'messages' parameter and optional parameters for 'model' (defaulting to "gpt-3.5-turbo") and 'temperature' arguments. These function arguments are specified as `body_args`, meaning that the values will be inserted into the `body` of the resulting request.
+
+The `requestor` function is really the meat of the whole package. This function returns a function that you can call to hit the API. This is a little bit of an unusual way of defining functions if you're not used to it, but the upside is it abstracts away a ton of boilerplate.
+
+To use these objects, you can do something like the following.
+
+```{r}
+messages <- list(
+  chat_message("What is the square root of 10000? Explain your reasoning.")
+)
+chat_completion(messages, temperature = 0.8)
+```
+
+I think this is pretty slick! In just a few lines of code, we have a fully functioning API wrapper.
+
+You can make it a bit more user friendly by supplying an `extractor`. This is a function that takes the `httr2` response object that's retrieved from the API and converts it into some desired format. Here's an example.
+
+```{r}
+library(httr2)
+library(purrr)
+extract_chat_text <- function(resp) {
+  resp |> 
+    resp_body_json() |> 
+    pluck("choices", 1, "message", "content")
+}
+
+chat_completion(messages, temperature = 0.8, .extractor = extract_chat_text)
+```
+
+If you want to set the extractor to run by default without having to specify it, you can do so when you define the requestor function.
+
+```{r}
+chat_completion_with_extractor <- requestor(
+  openai_wrapper,
+  "chat/completions",
+  method = "post",
+  body_args = function_args(
+    messages = ,
+    model = "gpt-3.5-turbo",
+    temperature = NULL,
+    max_completion_tokens = 100  # note <- added this in as well
+  ),
+  extractor = extract_chat_text
+)
+
+# setting temperature = 2 should get us something pretty wacky
+chat_completion_with_extractor(messages, temperature = 2)
+```
+You can always choose not to run the extractor if you don't want to as well. In that case, the raw response object is returned.
+
+```{r}
+chat_completion_with_extractor(messages, temperature = 1, .extract = FALSE)
+```
+You can even choose not to perform the request. This can be useful if you want to create a batch of requests in advance and send them all at once.
+
+```{r}
+chat_completion_with_extractor(messages, temperature = 1, .perform = FALSE)
+```
+## A second example: the Todoist API
+
+I'm a long time user of Todoist, and they also have a developer API which works a little bit differently. Whereas the OpenAI API relies on POST requests with a JSON-formatted body, the Todoist API is a more traditional REST API.
+
+The [developer docs are here](https://developer.todoist.com/rest/v2/). We start by creating the wrapper object.
+
+```{r}
+todoist <- wrapper(
+  "https://api.todoist.com/rest/v2/",
+  auth = bearer_auth_type(),
+  env_var_name = "TODOIST_KEY"
+)
+```
+
+Now let's look at some of the things we can do with this API. To [get all active tasks](https://developer.todoist.com/rest/v2/#tasks), you hit the `"/tasks"` endpoint with optional parameters `project_id`, `section_id`, `label`, etc for filtering. For example if you supply a label, it will return tasks with just that label. Whereas in the previous example the function arguments went in the `body_args` of the requestor, here these will go in the `query_args` as they are query parameters of the GET request. Here's how to set this up (I'll just implement the label filtering).
+
+
+```{r}
+get_tasks <- requestor(
+  todoist,
+  "tasks",
+  query_args = function_args(
+    label = NULL
+  ),
+  # simple extractor to just pick out the id and the content fields of
+  # the response, for demo purposes
+  extractor = \(x) {
+    resp_body_json(x) |> 
+      map(\(y) y[c("id", "content")])
+  }
+)
+get_tasks(label="blog")
+```
+You can get more details on a specific task by hitting the endpoint `tasks/{task_id}`. This kind of situation is handled by the `resource_args` argument in `requestor` as follows.
+
+```{r}
+get_task <- requestor(
+  todoist,
+  "tasks/{task_id}",
+  resource_args = function_args(task_id=),
+  extractor = \(x) {
+    resp_body_json(x)[c("id", "content", "description", "is_completed")]
+  }
+)
+get_task(8604768592)
+```
+
+## Package tools
+
+The intention for this package is to use it to build other packages. In general the idea would be to export all of the requestor functions, but not the `wrapper` object as the end user doesn't have much to do with that. To help with this, there's a helper function `generate_roxygen_comment` that can generate a documentation template for the requestor functions.
+
+```{r}
+generate_roxygen_comment(get_task, title = "Get a task")
+```
+
+Using this, the full code for a `todoist` API package would look like this:
+
+```{r}
+todoist <- wrapper(
+  "https://api.todoist.com/rest/v2/",
+  auth = bearer_auth_type(),
+  env_var_name = "TODOIST_KEY"
+)
+
+#' Get a task
+#' 
+#' Get a task by ID
+#' 
+#' @param task_id the task id
+#' @param .credentials Credentials to use, e.g. an API key
+#' @param .perform Perform the request? If FALSE, an httr2 request object is returned.
+#' @param .extract Extract the data? If FALSE, an httr2::response object is returned
+#' @param .extractor A function which takes an httr2::response object and returns the desired data
+#' 
+#' @return A list with the task data
+#' @export
+get_task <- requestor(
+  todoist,
+  "tasks/{task_id}",
+  resource_args = function_args(task_id=)
+)
+
+#' Get all tasks
+#' 
+#' Get all tasks with optional filters
+#' 
+#' @param label Optionally filter by label
+#' @param .credentials Credentials to use, e.g. an API key
+#' @param .perform Perform the request? If FALSE, an httr2 request object is returned.
+#' @param .extract Extract the data? If FALSE, an httr2::response object is returned
+#' @param .extractor A function which takes an httr2::response object and returns the desired data
+#' 
+#' @return The data on the returned tasks
+#' @export
+get_tasks <- requestor(
+  todoist,
+  "tasks",
+  query_args = function_args(
+    label = NULL
+  )
+)
+```
+
+This is all the code you would need to write to create a todoist API wrapper with those two functions. Again, I think this is pretty slick! It's a very small amount of code that produces fairly powerful output. I've found this to be extremely useful for my own purposes and would love to hear whether others find it similarly useful.
