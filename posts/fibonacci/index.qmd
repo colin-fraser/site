@@ -1,0 +1,75 @@
+---
+title: "Symbolically computing exact Fibonacci numbers"
+format: html
+editor: visual
+---
+
+# Symbolically computing Fibonacci numbers
+
+```{r}
+Z_phi <- function(a, b=0) {
+  structure(list(a = a, b = b), class = "Z_phi")
+}
+
+format.Z_phi <- function(x, ...) {
+  sign <- if (x$b >= 0) '+' else '-'
+  paste0(x$a, sign, x$b, 'ϕ')
+}
+
+print.Z_phi <- function(x, ...) {
+  cat(format(x))
+}
+
+"+.Z_phi" <- function(e1, e2) {
+  Z_phi(e1$a + e2$a, e1$b + e2$b)
+}
+
+"*.Z_phi" <- function(e1, e2) {
+  a <- e1$a
+  b <- e1$b
+  c <- e2$a
+  d <- e2$b
+  Z_phi(a * c + b * d, a * d + b * c + b * d)
+}
+
+phi <- Z_phi(0, 1)
+phi * phi
+```
+
+```{r}
+pow <- function(x, n, one) {
+  if (n == 0) {
+    return (one)
+  }
+  switch(n %% 2 + 1, pow(x * x, n / 2, one), x * pow(x * x, (n-1)/2, one))
+}
+```
+
+```{r}
+sapply(1:50, \(x) pow(phi, x, Z_phi(1))$b)
+```
+
+```{r}
+fib_classic <- function(n) {
+  if (n == 0) {
+    return(0)
+  } else if (n == 1) {
+    return(1)
+  }
+  v <- c(0, 1)
+  while (n > 1) {
+    v <- c(v[2], sum(v))
+    n <- n - 1
+  }
+  v[2]
+}
+
+fib_special <- function(n) {
+  phi <- Z_phi(0, 1)
+  pow(phi, n, Z_phi(1))$b
+}
+```
+
+```{r}
+bench::mark(classic=fib_classic(50), special=fib_special(50))
+```
