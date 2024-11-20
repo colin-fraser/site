@@ -24,6 +24,8 @@ execute:
 format:
   html:
     theme: simplex
+    template-partials: 
+      - custom_partials/title-metadata.html
     css: styles.css
     toc: false
 
