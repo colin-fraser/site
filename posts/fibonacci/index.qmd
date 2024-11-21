@@ -18,9 +18,11 @@ One of my favourite facts is that there exists [a closed form expression](https:
 
 $$F_n = \frac{\varphi^n - (1-\varphi)^n}{\sqrt{5}}$$
 
-where $\varphi = \frac{1+\sqrt{5}}{2}$ is the Golden Ratio. It's very surprising to me that there should be a closed-form expression for the n-th Fibonacci number, and moreover that this mess of very irrational-looking numbers can somehow sum to an integer. But if you want to use this in practice, you do have a bit of a problem: working with irrational numbers like $\varphi$ and $\sqrt{5}$ will inevitably lead to precision problems. But what I've recently learned, and what this post is about, is that you can use the _algebraic_ properties of $\phi$ to avoid dealing with irrational numbers at all.
+where $\varphi = \frac{1+\sqrt{5}}{2}$ is the Golden Ratio. This formula is known as Binet's formula. It was very surprising to me to learn that there should be a closed-form expression for the n-th Fibonacci number, let alone that this mess of very irrational-looking numbers can somehow sum to an integer. 
 
-One way to see how the Fibonacci numbers connect to the Golden Ratio is by thinking about the equation that traditionally defines $\varphi$: $\varphi$ is the number which is one less than its square: $\varphi^2 = \varphi + 1$. But note that $\varphi=\varphi^1$, and $1 = \varphi^0$, so we can write this same equation as $\varphi^2 = \varphi^1 + \varphi^0$. This looks a bit Fibonacci-ish: the second power of $\varphi$ is the sum of the first and zero-th powers of $\varphi$.
+If you want to use this in practice, you do have a bit of a problem: working with irrational numbers like $\varphi$ and $\sqrt{5}$ will inevitably lead to precision problems. But what I've recently learned, and what this post is about, is that you can use the _algebraic_ properties of $\varphi$ to avoid dealing with irrational numbers at all.
+
+One way to see how the Fibonacci numbers connect to the Golden Ratio is by thinking about the equation that traditionally defines $\varphi$: $\varphi$ is the number which is one less than its square, that is, $\varphi^2 = \varphi + 1$. Just by the basic properties of exponents, we can rewrite this same equation as $\varphi^2 = \varphi^1 + \varphi^0$. This looks a bit Fibonacci-ish: the second power of $\varphi$ is the sum of its first and zero-th powers.
 
 What about $\varphi^3$? 
 $$\begin{align}
@@ -72,9 +74,9 @@ z_1 \times z_2 &= (a_1 + b_1 \varphi) \times (a_2 + b_2 \varphi)\\
 \end{align}
 $$
 
-Note that this is another `Z_phi` number since $a_1 a_2 + b_1 b_2$ and  $a_1 b_2 + b_1 a_2 + b_1 b_2$ are both integers. This fact is actually quite important, and nice. It means that we can add and multiply any two `Z_phi` numbers and we get another `Z_phi` number. In math, we say that this makes the set of `Z_phi` objects a *[ring](https://en.wikipedia.org/wiki/Ring_(mathematics))*, which is the name for a set of objects that you can add and multiply together. The name of this particular ring is $\mathbb{Z}[\varphi]$, which is why I've given these objects this name in my code.
+Note that this is another `Z_phi` number since $a_1 a_2 + b_1 b_2$ and  $a_1 b_2 + b_1 a_2 + b_1 b_2$ are both integers. This fact is actually quite important, and nice. It means that we can add and multiply any two `Z_phi` numbers and we get another `Z_phi` number. In math—specifically, abstract algebra—we say that this makes the set of `Z_phi` objects a *[ring](https://en.wikipedia.org/wiki/Ring_(mathematics))*, which is the name for a set of objects that you can add and multiply together. The name of this particular ring is $\mathbb{Z}[\varphi]$, which is why I've given these objects this name in my code.
 
-We can implement these operations in R as follows --- if you've never seen this before, it's going to look a bit crazy because R is a bit weird, but this is really useful to know how to do.
+We can implement these operations in R as follows --- if you've never seen this before, it's going to look a bit crazy because R is weird sometimes, but this is really useful to know how to do.
 
 ```{r}
 "+.Z_phi" <- function(e1, e2) {
@@ -104,14 +106,14 @@ With this, we can execute the plan I laid out above. Recall, we were going to lo
 ```{r}
 f_0 <- f_i <- Z_phi(0, 1)
 for (i in 1:10) {
-  print(paste0("φ^", i, " = ", format(f_i)))
+  cat(str_glue("φ^{i} = {format(f_i)}"), "\n")
   f_i <- f_i * f_0
 }
 ```
 
-Hopefully, something is jumping out at you. Both the sequence of $a$'s and the sequence of $b$'s form the Fibonacci sequence! In particular, noting that $\varphi^0 = 1$, we can say that the $n$-th Fibonacci number is the $b$ coefficient of $\varphi^n$ written as a `Z_phi` number. I won't provide a complete proof for why this is true---there should be enough here to put together the missing pieces if you want to convince yourself.
+Hopefully, something is jumping out at you. Both the sequence of $a$'s and the sequence of $b$'s form the Fibonacci sequence! To be specific, we can say that the $n$-th Fibonacci number is the $b$ coefficient of $\varphi^n$, when it's written as a `Z_phi` number. I won't provide a complete proof for why this is true---there should be enough here to put together the missing pieces if you want to convince yourself.
 
-To me this feels like a cheat code. Using Binet's formula, we can compute $F_n$ in one fell swoop, but it requires doing arithmetic with the irrational number $\varphi$, which can potentially be a bit tricky. But here, we have a way of computing $F_n$ that is somehow in terms of $\varphi$, but does not actually involve computing or doing arithmetic using the value of $\varphi$. The only adding and multiplying that takes place is on integers. We compute $F_n$ by taking $\phi^n$, but we're using the algebraic properties of these `Z_phi` numbers to somehow sidestep the irrationality entirely.
+To me this feels like a cheat code. Using Binet's formula, we can compute $F_n$ in one fell swoop, but it requires doing arithmetic with the irrational number $\varphi$, which can potentially be a bit troublesome. But here, we have a way of computing $F_n$ that is somehow in terms of $\varphi$, but does not actually involve computing or doing arithmetic using the value of $\varphi$. The only adding and multiplying that takes place is on integers. We compute $F_n$ by taking $\varphi$ to the power of $n$, but we're using the algebraic properties of these `Z_phi` numbers to somehow sidestep the irrationality entirely.
 
 Where it really starts to look like a cheat code is when you realize that now you can use the properties of exponentiation to cut down the number of steps it takes to calculate $F_n$. The classic way of calculating $F_n$ is just by recursion. Here's an example implementation.
 
@@ -132,10 +134,9 @@ fib_classic <- function(n, zero = 0L, one = 1L) {
 fib_classic(10)
 ```
 
-This is pretty straightforward. The one weird thing you might notice is that I've supplied these weird `zero` and `one` arguments. Ignore that for now; I'll talk about it later.
+This is pretty straightforward. (Ignore these weird `zero` and `one` arguments for now; I'll talk about that later.)
 
-Anyway, this will take $n$ steps to calculate $F_n$. Now, you might think that this exponentiation method will take $n$ steps as well, since it involves multiplying $\phi$ by itself $n$ times, but we can shorten this with [exponentiation by squaring](https://en.wikipedia.org/wiki/Exponentiation_by_squaring). The idea here is that $\varphi^{10} = ((\varphi^2)^2)^2 \times \varphi^2$, which can be accomplished in only around $\log_2(n)$ steps. Here's an implementation.
-
+Anyway, this will take $n$ steps to calculate $F_n$. Now, you might think that this exponentiation method will take $n$ steps as well, since it involves multiplying $\varphi$ by itself $n$ times, but we can shorten this with [exponentiation by squaring](https://en.wikipedia.org/wiki/Exponentiation_by_squaring). The idea here is that, for example, $\varphi^{10} = ((\varphi^2)^2)^2 \times \varphi^2$, which can be accomplished in only around $\log_2(n)$ steps. Here's an implementation.
 
 ```{r}
 "^.Z_phi" <- function(z, n) {
@@ -159,9 +160,9 @@ fib_phi <- function(n, phi = Z_phi(0, 1)) {
 fib_phi(10)
 ```
 
-I just think that's so cool. We're using the algebraic properties of the Golden Ratio to compute Fibonacci numbers in an apparently closed form, but we're doing it without having to actually perform any arithmetic on the Golden Ratio itself.
+I just think that's so cool. We're using the algebraic properties of the Golden Ratio to compute Fibonacci numbers in an apparently closed form, $\varphi ^ n$, but we're doing it without having to actually perform any arithmetic on the Golden Ratio itself.
 
-Now, what does this buy us? Is it faster? Based on how I've described what's going on, you'd probably expect that it is I did. Let's test it out on calculating the 50th Fibonacci number.
+Now, what does this buy us? Is it faster? Based on how I've described what's going on, you'd probably expect that it is. I did. Let's test it out by calculating the 50th Fibonacci number.
 
 ```{r}
 bench::mark(classic = fib_classic(50), phi = fib_phi(50))
@@ -171,11 +172,33 @@ Huh. Even though the `Z_phi` approach uses fewer steps, it still takes more than
 
 I'm not an expert on this stuff, but I believe the answer is overhead. The classic method takes more steps than the $\varphi$ method, but it's still only 50 integer additions. That's going to be fast. On the other hand, the phi method involves all kinds of extra baggage: dealing with the S3 class, putting things in lists and pulling them back out, multiplication. 50 is just too small for the extra investment to pay off. 
 
-To really see the gains, we need to look at bigger Fibonacci numbers, but there's a problem. The Fibonacci numbers grow really fast, and pretty soon we're going to get to larger numbers than R knows how to think about, no matter which method is used. The methods already disagree on the value of $F_{100}$, and in fact neither one finds the correct value of $F_{100} = 354224848179261915075$.
+But we should be able to see some _evidence_ that the phi method is better if we look at how the time changes for increasing values of $n$. 
+
+```{r}
+df <- map(
+  seq(10, 200, by = 10),
+  \(x) {
+    bench::mark(classic = fib_classic(x), 
+            phi = fib_phi(x)) |> 
+      mutate(n = x)
+  }) |> 
+  list_rbind()
+df |> 
+  transmute(method = as.character(expression), n, median) |> 
+  ggplot(aes(x = n, y = median, color = method)) + 
+  geom_point() +
+  labs(y = expression("Median time to compute " * F[n] * "  (seconds)"), x = "n",
+       title = expression("Comparison of methods up to "*F[200])) + 
+  ggthemes::theme_few()
+```
+
+Sure enough, you can see that the `phi` method overtakes the `classic` method somewhere around $F_200$. More importantly, there's a clear difference in the _shape_ of these two curves: the `classic` method is a very obvious straight line, whereas the `phi` method is logarithmic.
+
+There is a problem with what I've just done. The Fibonacci numbers grow really fast, and in fact both of these methods are producing numbers larger than R knows how to think about. They already disagree on the value of $F_{100}$, and in fact neither one finds the correct value of $F_{100} = 354224848179261915075$.
 
 ```{r}
 print(fib_classic(100), digits = 20)
-print((100), digits = 20)
+print(fib_phi(100), digits = 20)
 ```
 
 This is where the extra arguments that I added to the functions come in. To work with numbers this big, we'll need a package that can deal with arbitrary-precision integer arithmetic. I'll use the `{bignum}` package for this. By specifying the `zero` and `one` arguments to `fib_classic` as arbitrary-precision integers, the result will be an arbitrary-precision integer as well, and we get the right answer.
@@ -191,7 +214,7 @@ Now, here's something quite neat. I don't actually have to write a new `Z_phi` i
 Z_phi(biginteger(0), biginteger(1))^100
 ```
 
-Here's a comparison of the speed of the two functions at computing $F_{100}$.
+Thus I can just supply a `biginteger`-valued `phi` to the `fib_phi` function. Here's a comparison of the speed of the two functions at computing $F_{100}$.
 
 ```{r}
 big_zero <- biginteger(0)
@@ -217,7 +240,7 @@ df |>
   transmute(method = as.character(expression), n, median) |> 
   ggplot(aes(x = n, y = median, color = method)) + 
   geom_point() +
-  labs(y = expression("Median time to compute " * F[n] * "  (milliseconds)"), x = "n",
+  labs(y = expression("Median time to compute " * F[n] * "  (seconds)"), x = "n",
        title = expression("Comparison of methods up to "*F[200])) + 
   ggthemes::theme_few()
 ```
