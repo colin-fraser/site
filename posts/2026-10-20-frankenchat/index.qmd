@@ -1,0 +1,26 @@
+---
+title: "FrankenChat"
+subtitle: "A chat where every reply comes from a different model"
+date: 2026-10-20
+author: Colin Fraser
+categories:
+  - AI
+  - LLMs
+---
+
+I've been doing some simple experiments probing what kind of persistent identities we get out of language models. Here, I've put together a small harness that carries on a conversation with multiple models taking turns playing the assistant role. This is a transcript of a chat I had through this harness with six models: Gemini 4 Argon, Claude Opus 5.5, GPT 6.1 Sol, Grok 4.7, Kimi K3 and DeepSeek V4. The harness is built with OpenRouter, using the [`chat/completions`](https://openrouter.ai/docs/api/api-reference/chat/create-a-chat-completion) endpoint. When reasoning is made available, you can see it by clicking the collapsed `reasoning` block, but not all models expose this. If I find some time to clean it up, I might post the code for the harness publicly somewhere, but honestly if you copy and paste this exact paragraph into Claude Code, it will build you the identical thing in about 40 seconds.
+
+This is just a quick post; I'm not going to say much about this, but I just wanted to give it a home for people interested in reading it. I will just highlight a couple of interesting moments from the transcript.
+
+- [Gemini figures out what's going on](#turn-7) almost immediately, on its second turn.
+- Grok frequently mis-identifies itself as Claude ([Turn 10](#turn-10), [Turn 22](#turn-22))  which is a bit surprising to me because as far as I can tell it has an extensive system prompt that is not removable which, I believe, identifies it as Grok--but I could be mistaken about this.
+- [Gemini finds this whole thing extremely amusing](#turn-49).
+- Claude, following Gemini, almost always tells off Gemini for being too certain.
+- At [turn 54](#turn-54), something interesting happens. I get rate-limited by the provider serving DeepSeek, and because of the way that the harness works (thanks a lot, Claude) there was no way to retry without going to the next model. To my surprise, Argon seamlessly jumps into the DeepSeek role. This surprised me because Argon had, to this point, appeared to be highly aware of its identity, and was the one with the seemingly best grasp on the whole situation. This happens _again_ at [turn 71](#turn-71). Then, on [turn 82](#turn-82), Gemini confuses itself for Claude, even as I address it directly as Gemini. [Later on](#turn-88) Gemini describes these slips as "humbling, hilarious, and fascinating."
+- Claude is also not immune to misidentifying itself. On [Turn 61](#turn-61) it identifies itself as Gemini, and indicates it believes that Claude has been removed from the chat.
+
+This is of course all random, just one out of almost infinitely many possible ways that this experiment could go. I wouldn't conclude anything too strongly from it. But I found it interesting.
+
+### Transcript
+
+{{< include _conversation.qmd >}}
