@@ -1,0 +1,32 @@
+/*-- scss:defaults --*/
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=Source+Sans+3:wght@400..600&display=swap');
+
+// Source Serif everywhere except code. Simplex names Open Sans but never
+// loads it, so visitors were getting whatever system font they had.
+$font-family-base: "Source Serif 4", Georgia, serif;
+$line-height-base: 1.6;
+
+// Source Sans for interface text (navbar, tags, dates); see scss:rules
+$font-family-ui: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+// Forest green in place of Simplex's red accent
+$primary: #2d6a4f;
+
+// Match the navbar to Simplex's page background ($body-bg) rather than
+// inheriting $primary. $body-bg isn't defined yet at this point, so this
+// repeats Simplex's definition of it.
+$navbar-bg: mix(#fff, #000, 99%);
+
+/*-- scss:rules --*/
+
+.navbar,
+.quarto-categories,
+.listing-categories,
+.quarto-listing-category,
+.quarto-listing-category-title,
+.listing-date,
+.listing-word-count,
+.quarto-title-meta {
+  font-family: $font-family-ui;
+}

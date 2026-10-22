@@ -13,8 +13,6 @@ website:
         href: mailto:colin@123mail.org
       - icon: bluesky
         href: https://bsky.app/profile/colin-fraser.net
-      - icon: twitter
-        href: https://twitter.com/colin_fraser
       - icon: linkedin
         href: https://linkedin.com/in/colin-fraser/
       - icon: medium
@@ -29,7 +27,7 @@ execute:
 
 format:
   html:
-    theme: simplex
+    theme: [simplex, custom.scss]
     template-partials:
      - custom_partials/title-metadata.html
     css: styles.css
