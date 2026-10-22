@@ -2,4 +2,7 @@
 title: "About"
 ---
 
-I'm a data scientist. I live in Vancouver, BC, and I currently work at Meta in the area of Trust and Safety, and I've been working in this field since early 2020. I write a lot about R, programming, data science topics that may or may not relate to my work, and more recently, about LLMs and AI more generally.
+I'm a data scientist. I live in Vancouver, BC, and I currently work at Meta in the area of Trust and Safety, and I've been working in this field since early 2020. I write a lot about R, programming, data science topics that may or may not relate to my work. More recently, I wrote a lot about LLMs and AI.
+
+### Where to find me
+I am most active on [Bluesky](https://bsky.app/profile/colin-fraser.net); the best way to find me day-to-day is there. I have published some of my more polished long-form pieces to [Medium](https://medium.com/@colin.fraser). In January of 2026, [I gave up X](https://x.com/colin_fraser/status/2007165420894335407), but I have left my profile up as it sadly contains quite a lot of information that I would like to keep, like old AI experiments that continue to serve as useful historical examples for my contemporary AI research.
