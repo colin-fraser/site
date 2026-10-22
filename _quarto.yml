@@ -11,7 +11,7 @@ website:
     right: 
       - icon: envelope
         href: mailto:colin@123mail.org
-      - text: "![](/assets/BlueskyLogo.svg){width=19.7px height=19.7px style='vertical-align: middle;'}"
+      - icon: bluesky
         href: https://bsky.app/profile/colin-fraser.net
       - icon: twitter
         href: https://twitter.com/colin_fraser
