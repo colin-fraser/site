@@ -18,6 +18,16 @@ $primary: #2d6a4f;
 // repeats Simplex's definition of it.
 $navbar-bg: mix(#fff, #000, 99%);
 
+// Outline joining a code block to its output (see scss:rules). Matches
+// Quarto's light code block fill; !default so custom-dark.scss can override.
+$code-outline: rgba(221, 221, 221, 0.65) !default;
+
+// Category chip colours, shared by the posts list and post pages. These are
+// Quarto's posts-list defaults; custom-dark.scss overrides them.
+$chip-color: #6c757d !default;
+$chip-border: #dee2e6 !default;
+$chip-bg: transparent !default;
+
 /*-- scss:rules --*/
 
 .navbar,
@@ -29,4 +39,214 @@ $navbar-bg: mix(#fff, #000, 99%);
 .listing-word-count,
 .quarto-title-meta {
   font-family: $font-family-ui;
+}
+
+// Separate the site tools (dark-mode toggle, search) from the social links
+// with a faint divider. Desktop only: in the collapsed mobile menu they're
+// already on their own rows.
+@include media-breakpoint-up(lg) {
+  .navbar .quarto-navbar-tools {
+    border-left: 1px solid rgba($navbar-fg, 0.2);
+    margin-left: 0.75rem;
+    padding-left: 0.75rem;
+  }
+}
+
+// Current page in the navbar: plain text colour rather than the accent
+// green. Selector is specific enough to beat Bootstrap's
+// .navbar[data-bs-theme=dark] rule, which Quarto's navbar triggers.
+.navbar .navbar-nav .nav-link.active {
+  color: $body-color;
+}
+
+// Quarto's auto-generated excerpts (posts without a description) can leave
+// empty <code></code> tags behind when truncating, which show as stray
+// grey pills
+.listing-description code:empty {
+  display: none;
+}
+
+// Hover feedback on the posts list, matching the navbar: clickable things
+// turn the accent colour
+div.quarto-post .listing-title a:hover,
+div.quarto-post .metadata a:hover,
+.quarto-listing-category .category:hover,
+.quarto-listing-category-title:hover {
+  color: $primary;
+}
+
+// Category chips on the posts list, and at the top of a post (where Quarto's
+// JS turns them into links to the filtered posts list once the page loads)
+div.quarto-post .listing-categories .listing-category:hover,
+.quarto-title .quarto-categories .quarto-category:hover {
+  color: $primary;
+  border-color: $primary;
+}
+
+// Quarto also wraps each post's excerpt in a link; make it behave as plain
+// text so the title (and date) are the links. With the link ignoring the
+// mouse, the cursor comes from the surrounding div, so give that the usual
+// text cursor.
+div.quarto-post .listing-description {
+  cursor: text;
+
+  a {
+    pointer-events: none;
+  }
+}
+
+// Inline code: monospace in the surrounding text colour, with no fill or
+// purple (Bootstrap's defaults)
+:not(pre) > code:not(.sourceCode) {
+  color: inherit;
+  background-color: transparent;
+  padding: 0;
+}
+
+// Code output: an outlined box attached under the code block that produced
+// it, so the two read as one unit
+.code-copy-outer-scaffold:has(+ .cell-output-stdout, + .cell-output-stderr) div.sourceCode,
+div.sourceCode.cell-code:has(+ .cell-output-stdout, + .cell-output-stderr) {
+  margin-bottom: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.cell-output-stdout pre,
+.cell-output-stderr pre {
+  color: inherit;
+  margin-top: 0;
+  padding: 0.4em;
+  border: 1px solid $code-outline;
+  border-top: 0;
+  border-radius: 0 0 0.25rem 0.25rem;
+
+  // Bootstrap's vertical code padding would space out merged runs of outputs
+  // (below) more loosely than lines in a code block. Horizontal padding
+  // stays, so output text lines up with the code above it.
+  code {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+// Output with no code shown above it (echo: false) gets a full outline
+.cell > .cell-output-stdout:first-child pre,
+.cell > .cell-output-stderr:first-child pre {
+  border-top: 1px solid $code-outline;
+  border-radius: 0.25rem;
+}
+
+// Consecutive outputs (e.g. one message per line from httr2/cli) merge into
+// one box: no bottom edge or gap until the last one in the run
+:is(.cell-output-stdout, .cell-output-stderr):has(+ :is(.cell-output-stdout, .cell-output-stderr)) pre {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+:is(.cell-output-stdout, .cell-output-stderr) + :is(.cell-output-stdout, .cell-output-stderr) pre {
+  padding-top: 0;
+}
+
+// Category chips (posts list and post pages): same size everywhere, with the
+// all-caps text optically centred. Caps have no descenders, so equal padding
+// leaves them sitting high; the extra top padding corrects for that.
+$chip-padding: 0.4em 0.6em 0.3em;
+
+div.quarto-post .listing-categories .listing-category,
+.quarto-title .quarto-categories .quarto-category {
+  color: $chip-color;
+  border: 1px solid $chip-border;
+  background-color: $chip-bg;
+  opacity: 1; // Simplex fades post-page chips to 60%
+  line-height: 1;
+}
+
+div.quarto-post .listing-categories .listing-category {
+  padding: $chip-padding;
+}
+
+// On post pages Quarto's JS wraps the chip text in a link; move the padding
+// onto the link so the whole chip is clickable, as on the posts list
+.quarto-title .quarto-categories .quarto-category {
+  padding: 0;
+
+  a {
+    display: block;
+    padding: $chip-padding;
+  }
+}
+
+// Current page in the navbar still turns green on hover: "Posts" is how you
+// get back to all posts from a category filter
+.navbar .navbar-nav .nav-link.active:hover {
+  color: $primary;
+}
+
+// Navbar alignment. Quarto sets the site name at 1.25x and the search icon
+// at 26px, which made both look bigger and lower than their neighbours.
+// Give the name exactly the same box as the nav links (size, line height,
+// vertical padding): everything is centred in the same row, so identical
+// boxes share a baseline in every browser, without pixel nudges.
+.navbar .navbar-brand {
+  font-size: 1rem;
+  line-height: $line-height-base;
+  padding-top: $nav-link-padding-y;
+  padding-bottom: $nav-link-padding-y;
+}
+
+// Quarto nudges text nav items (not the brand or icons) down with 1px of
+// top padding, which left Posts/About half a pixel below the name; browsers
+// round that to a visible 1px
+.navbar .navbar-nav .nav-item:not(.compact) {
+  padding-top: 0;
+}
+
+.navbar #quarto-search.type-overlay .aa-Autocomplete svg.aa-SubmitIcon {
+  width: 22px;
+  height: 22px;
+  // centre it on the same line as the social and dark-mode icons
+  position: relative;
+  top: -2.5px;
+}
+
+// Posts page: line the "Categories" heading up with the first post's title
+// rather than sitting ~35px above it. Only where the sidebar is beside the
+// posts.
+@include media-breakpoint-up(lg) {
+  #quarto-margin-sidebar .quarto-listing-category-title {
+    margin-top: 2.05rem;
+  }
+}
+
+// Fade hover colours in like the navbar links do (Bootstrap's transition
+// mixin also turns this off for prefers-reduced-motion)
+div.quarto-post .listing-title a,
+div.quarto-post .metadata a,
+div.quarto-post .listing-categories .listing-category,
+.quarto-title .quarto-categories .quarto-category,
+.quarto-listing-category .category,
+.quarto-listing-category-title {
+  @include transition($nav-link-transition);
+}
+
+// Links in body text: keep the green, but with a thin, softened underline
+// set just below the letters, which goes to full strength on hover (no fade,
+// unlike the site's navigation elements). Bootstrap's default hover darkens
+// the colour instead, which barely registers on this green (and lowers
+// contrast in dark mode).
+main.content :is(p, li, dd, td, blockquote, figcaption) a {
+  color: $primary;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: rgba($primary, 0.7);
+
+  &:hover {
+    color: $primary;
+    text-decoration-color: $primary;
+  }
 }

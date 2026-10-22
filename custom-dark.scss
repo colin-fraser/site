@@ -1,0 +1,44 @@
+/*-- scss:defaults --*/
+
+// Dark mode: listed before custom.scss in _quarto.yml so these values win
+// over its light-mode ones; only the colours that flip are set here.
+
+$body-bg: #121212;
+$body-color: #dee2e6;
+
+// Lighter shade of the forest green, readable on the dark background
+$primary: #52b788;
+
+// Match the navbar to the page background, as in light mode
+$navbar-bg: $body-bg;
+
+// Grey navbar links, mirroring light mode's rgba(0, 0, 0, 0.6)
+$navbar-fg: rgba(255, 255, 255, 0.6);
+
+// Code blocks: a dark fill just above the page, in place of the light grey
+// Quarto computes from the light theme
+$code-block-bg: #1e1e1e;
+$code-outline: #2e2e2e;
+
+// Category chips: Quarto's defaults are light-mode colours (dim grey text,
+// bright border). Use readable text, a soft border and a very subtle fill.
+$chip-color: #adb5bd;
+$chip-border: rgba(255, 255, 255, 0.15);
+$chip-bg: rgba(255, 255, 255, 0.05);
+
+/*-- scss:rules --*/
+
+// styles.css hard-codes a light header for these tables
+.table-no-highlight {
+  border-color: #6c757d;
+
+  thead th {
+    background-color: #1e1e1e;
+    color: $body-color;
+    border-bottom-color: #6c757d;
+  }
+
+  tbody td {
+    border-color: #6c757d;
+  }
+}

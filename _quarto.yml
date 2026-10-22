@@ -27,7 +27,10 @@ execute:
 
 format:
   html:
-    theme: [simplex, custom.scss]
+    theme:
+      light: [simplex, custom.scss]
+      dark: [simplex, custom-dark.scss, custom.scss]
+    respect-user-color-scheme: true
     template-partials:
      - custom_partials/title-metadata.html
     css: styles.css
