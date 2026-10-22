@@ -11,3 +11,6 @@
 
 # Local Claude Code state (worktrees etc.)
 /.claude/
+
+# Screenshots from _helpers/shoot
+/_shots/

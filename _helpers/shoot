@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Screenshot a page of the built site in light and dark mode.
+# Usage: _helpers/shoot OUT_PREFIX PAGE_PATH [SCROLL_TO_SELECTOR] [NTH]
+#
+# Keeps its Playwright venv in ~/.cache/site-shots-venv, (re)building it
+# whenever requirements-shots.txt changes; browsers live in ~/.cache/ms-playwright.
+set -euo pipefail
+
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+venv="${XDG_CACHE_HOME:-$HOME/.cache}/site-shots-venv"
+req="$here/requirements-shots.txt"
+
+if ! cmp -s "$req" "$venv/requirements-shots.txt"; then
+  echo "Setting up screenshot venv in $venv ..." >&2
+  python3 -m venv "$venv"
+  "$venv/bin/pip" install -q -r "$req"
+  "$venv/bin/playwright" install chromium
+  cp "$req" "$venv/requirements-shots.txt"
+fi
+
+exec "$venv/bin/python" -I "$here/shoot.py" "$@"
