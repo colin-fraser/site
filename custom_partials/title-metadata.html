@@ -1,21 +1,11 @@
 <div class="quarto-title-meta">
-  
+
   $if(date)$
-  <div>
-    <div class="quarto-title-meta-heading">$labels.published$</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">$date$</p>
-    </div>
-  </div>
+  <p class="date">$date$</p>
   $endif$
 
   $if(date-modified)$
-  <div>
-    <div class="quarto-title-meta-heading">$labels.modified$</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date-modified">$date-modified$</p>
-    </div>
-  </div>
+  <p class="date-modified">$labels.modified$ $date-modified$</p>
   $endif$
-  
+
 </div>

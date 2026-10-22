@@ -18,6 +18,15 @@ $primary: #2d6a4f;
 // repeats Simplex's definition of it.
 $navbar-bg: mix(#fff, #000, 99%);
 
+// A shorter navbar: Simplex pads the bar and its links generously, which made
+// it about 80px tall for one row of text and icons
+$navbar-padding-y: 0.25rem;
+$nav-link-padding-y: 0.5rem;
+
+// Hairline rules (under the navbar, between posts in the list), shared so they
+// match. !default so custom-dark.scss can override.
+$rule-color: rgba(0, 0, 0, 0.1) !default;
+
 // Outline joining a code block to its output (see scss:rules). Matches
 // Quarto's light code block fill; !default so custom-dark.scss can override.
 $code-outline: rgba(221, 221, 221, 0.65) !default;
@@ -151,10 +160,11 @@ div.sourceCode.cell-code:has(+ .cell-output-stdout, + .cell-output-stderr) {
   padding-top: 0;
 }
 
-// Category chips (posts list and post pages): same size everywhere, with the
-// all-caps text optically centred. Caps have no descenders, so equal padding
-// leaves them sitting high; the extra top padding corrects for that.
-$chip-padding: 0.4em 0.6em 0.3em;
+// Category chips (posts list and post pages): same size everywhere, and in
+// the same case as the Categories sidebar rather than Quarto's all-caps.
+// The text box keeps room for descenders, which most tag names don't have,
+// so the extra top padding centres the letters by eye.
+$chip-padding: 0.35em 0.55em 0.25em;
 
 div.quarto-post .listing-categories .listing-category,
 .quarto-title .quarto-categories .quarto-category {
@@ -163,6 +173,8 @@ div.quarto-post .listing-categories .listing-category,
   background-color: $chip-bg;
   opacity: 1; // Simplex fades post-page chips to 60%
   line-height: 1;
+  text-transform: none;
+  font-size: 0.75em;
 }
 
 div.quarto-post .listing-categories .listing-category {
@@ -191,7 +203,18 @@ div.quarto-post .listing-categories .listing-category {
 // Give the name exactly the same box as the nav links (size, line height,
 // vertical padding): everything is centred in the same row, so identical
 // boxes share a baseline in every browser, without pixel nudges.
+// The navbar: one hairline along the bottom in both modes, rather than
+// Simplex's box outline (which was invisible in dark mode)
+.navbar {
+  border: 0;
+  border-bottom: 1px solid $rule-color;
+}
+
+// The site name is set apart from the nav links by weight and full text
+// colour; otherwise it read as just another link.
 .navbar .navbar-brand {
+  font-weight: 600;
+  color: $body-color;
   font-size: 1rem;
   line-height: $line-height-base;
   padding-top: $nav-link-padding-y;
@@ -220,6 +243,10 @@ div.quarto-post .listing-categories .listing-category {
 div.quarto-post.image-right {
   flex-direction: column;
   gap: 0;
+}
+
+div.quarto-post {
+  border-bottom-color: $rule-color;
 }
 
 div.quarto-post .body {
@@ -256,6 +283,13 @@ div.quarto-post .metadata {
 
 div.quarto-post .listing-categories {
   order: 3;
+}
+
+// Post pages: the date (see custom_partials/title-metadata.html) in the same
+// muted grey as the date line on the posts list
+.quarto-title-meta :is(.date, .date-modified) {
+  color: var(--bs-secondary-color);
+  margin-bottom: 0.1em;
 }
 
 div.quarto-post .listing-description {

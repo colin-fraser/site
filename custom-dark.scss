@@ -26,7 +26,17 @@ $chip-color: #adb5bd;
 $chip-border: rgba(255, 255, 255, 0.15);
 $chip-bg: rgba(255, 255, 255, 0.05);
 
+// Hairline rules: Quarto's light grey was near-white here
+$rule-color: rgba(255, 255, 255, 0.12);
+
 /*-- scss:rules --*/
+
+// Plots are rendered on white. Round their corners so they read as cards
+// rather than holes in the page, and dim them slightly to cut the glare.
+main.content :is(.quarto-figure, .cell-output-display) img {
+  border-radius: 0.375rem;
+  filter: brightness(0.9);
+}
 
 // styles.css hard-codes a light header for these tables
 .table-no-highlight {
