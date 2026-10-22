@@ -213,6 +213,56 @@ div.quarto-post .listing-categories .listing-category {
   top: -2.5px;
 }
 
+// Posts list: one column, with the date and word count on a single line
+// under the title, rather than in a wide left column of their own. The
+// metadata isn't inside .body, so .body's contents are lifted into the post's
+// own flex column, where `order` can put the metadata after the title.
+div.quarto-post.image-right {
+  flex-direction: column;
+  gap: 0;
+}
+
+div.quarto-post .body {
+  display: contents;
+}
+
+div.quarto-post .listing-title {
+  order: 1;
+}
+
+div.quarto-post .metadata {
+  order: 2;
+  flex-basis: auto;
+  margin: 0.3rem 0 0.6rem;
+  padding-bottom: 0;
+
+  // Flex (with gap) rather than inline padding, so the line breaks in
+  // Quarto's markup don't add stray spaces around the separator
+  a,
+  .listing-word-count {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+  }
+
+  a {
+    color: var(--bs-secondary-color);
+  }
+
+  .listing-word-count::before {
+    content: "·";
+  }
+}
+
+div.quarto-post .listing-categories {
+  order: 3;
+}
+
+div.quarto-post .listing-description {
+  order: 4;
+  margin-top: 0.25rem;
+}
+
 // Posts page: line the "Categories" heading up with the first post's title
 // rather than sitting ~35px above it. Only where the sidebar is beside the
 // posts.
