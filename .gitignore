@@ -8,3 +8,6 @@
 # Quarto copies these into _site on every render; committed copies go stale
 # and override newer Quarto versions (this broke category filtering)
 /_freeze/site_libs/
+
+# Local Claude Code state (worktrees etc.)
+/.claude/
