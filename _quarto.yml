@@ -34,5 +34,7 @@ format:
     template-partials:
      - custom_partials/title-metadata.html
     css: styles.css
+    grid:
+      body-width: 720px
     toc: false
     encoding: utf-8
